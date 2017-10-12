@@ -45,7 +45,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Evolution\Animal.cs" />
     <Compile Include="Evolution\Simulation.cs" />
+    <Compile Include="Evolution\Species.cs" />
     <Compile Include="MainMenuForm.cs">
       <SubType>Form</SubType>
     </Compile>

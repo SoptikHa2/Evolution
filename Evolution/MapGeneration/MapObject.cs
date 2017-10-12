@@ -10,5 +10,6 @@ namespace Evolution.MapGeneration
     {
         public int x, y;
         public int value;
+        public Evolution.Animal animal;
     }
 }
