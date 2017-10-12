@@ -13,7 +13,7 @@ namespace Evolution
     public partial class SimulationForm : Form
     {
         #region Settings
-        const int FPS = 30;
+        public const int FPS = 30;
         #endregion
 
         private Evolution.Simulation simulation;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Evolution.Evolution
@@ -27,25 +28,32 @@ namespace Evolution.Evolution
         private Species[] species;
         private int width, height;
 
+        private Thread tickThread;
+
         public Simulation(int width = 100, int height = 100)
         {
             this.width = width;
             this.height = height;
             map = new MapGeneration.Map(width, height);
             this.species = InitializeSpecies();
-            Tick();
+            tickThread = new Thread(Tick);
+            tickThread.Name = "Evolution: Simulation Tick Thread";
+            tickThread.Start();
         }
 
         public Species[] InitializeSpecies()
         {
             // ...
-            return new Species[] { new Species() };
+            return new Species[] { new Species("fox", Brushes.Orange) };
         }
 
         public void Tick()
         {
-            //while (true)
+                DateTime lastThreadCall = DateTime.Now;
+            while (true)
             {
+                Thread.Sleep((int)(1000 / SimulationForm.FPS - (DateTime.Now - lastThreadCall).TotalMilliseconds));
+                lastThreadCall = DateTime.Now;
                 for (int i = 0; i < map.map.GetLength(0); i++)
                     for (int j = 0; j < map.map.GetLength(1); j++)
                         map.map[i, j].Tick();
@@ -66,6 +74,16 @@ namespace Evolution.Evolution
                     MapGeneration.MapObject m = map.map[i, j];
                     Brush terrainBrush = getTerrainBrush(m.level);
                     graphics.FillRectangle(terrainBrush, i * lengthOfTile, j * lengthOfTile, lengthOfTile, lengthOfTile);
+                }
+            }
+            // Draw animals
+            for (int spN = 0; spN < species.Length; spN++)
+            {
+                Species sp = species[spN];
+                for (int aN = 0; aN < sp.animals.Length; aN++)
+                {
+                    Animal a = sp.animals[aN];
+                    graphics.FillRectangle(sp.speciesBrush, a.x * lengthOfTile, a.y * lengthOfTile, lengthOfTile, lengthOfTile);
                 }
             }
         }
