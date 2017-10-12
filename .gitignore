@@ -14,16 +14,19 @@
 *.userprefs
 
 # Build results
-#[Dd]ebug/
-#[Dd]ebugPublic/
+[Dd]ebug/
+[Dd]ebugPublic/
 #[Rr]elease/
 #[Rr]eleases/
-#x64/
-#x86/
-#bld/
+x64/
+x86/
+bld/
 #[Bb]in/
-#[Oo]bj/
-#[Ll]og/
+[Oo]bj/
+[Ll]og/
+
+# Allow only release binary
+Evolution/[Bb]in/[Rr]elease/*.config
 
 # Visual Studio 2015 cache/options directory
 .vs/
