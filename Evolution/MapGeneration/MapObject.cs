@@ -9,7 +9,12 @@ namespace Evolution.MapGeneration
     public struct MapObject
     {
         public int x, y;
-        public int value;
-        public Evolution.Animal animal;
+        public int level;
+        public int food;
+
+        public void Tick()
+        {
+            food++;
+        }
     }
 }

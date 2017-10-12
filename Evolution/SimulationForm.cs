@@ -23,7 +23,7 @@ namespace Evolution
         {
             InitializeComponent();
 
-            this.simulation = simulation ?? new Evolution.Simulation();
+            this.simulation = simulation ?? new Evolution.Simulation(100, 100);
 
             mainDrawPictureBox.Image = new Bitmap(mainDrawPictureBox.Width, mainDrawPictureBox.Height);
             drawTimer = new Timer();
@@ -40,7 +40,7 @@ namespace Evolution
 
         private void mainDrawPictureBox_Paint(object sender, PaintEventArgs e)
         {
-            simulation.DrawOnBitmap(e.Graphics);
+            simulation.DrawOnBitmap(e.Graphics, mainDrawPictureBox.Width, mainDrawPictureBox.Height);
         }
     }
 }

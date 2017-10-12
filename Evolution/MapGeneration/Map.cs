@@ -26,7 +26,7 @@ namespace Evolution.MapGeneration
             {
                 for (int j = 0; j < height; j++)
                 {
-                    newMap[i, j] = new MapObject { animal = null, x = i, y = j, value = map[i, j] };
+                    newMap[i, j] = new MapObject { x = i, y = j, level = map[i, j] };
                 }
             }
 

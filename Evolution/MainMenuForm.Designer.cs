@@ -73,6 +73,7 @@
             this.Controls.Add(this.label_heading);
             this.Controls.Add(this.newSimulationButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "MainMenuForm";
             this.Text = "Evolution";
             this.ResumeLayout(false);

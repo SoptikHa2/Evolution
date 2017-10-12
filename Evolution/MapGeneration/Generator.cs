@@ -8,23 +8,24 @@ namespace Evolution.MapGeneration
 {
     public class Generator
     {
-        private Random rnd;
+        private static Random rnd = new Random();
         private int[,] map;
 
         #region Settings
-        private int width = 100;
-        private int height = 100;
-        private int enableNeighbour = 4;
-        private int disableNeighbour = 4;
-        private int smoothLevel = 7;
+        private int width;
+        private int height;
+        private int enableNeighbour;
+        private int disableNeighbour;
+        private int smoothLevel;
+        private const int chanceToGen1 = 68;
         #endregion
 
-        public Generator(int width = 100, int height = 100, string seed = null, int smoothLevel = 7, int enableNeighbour = 4, int disableNeighbour = 4)
+        public Generator(int width = 100, int height = 100, string seed = null, int smoothLevel = 7, int enableNeighbour = 5, int disableNeighbour = 4)
         {
             this.width = width;
             this.height = height;
             this.map = new int[width, height];
-            rnd = String.IsNullOrEmpty(seed) ? new Random() : new Random(seed.GetHashCode());
+            //rnd = //String.IsNullOrEmpty(seed) ? new Random() : new Random(seed.GetHashCode());
             this.smoothLevel = smoothLevel;
             this.enableNeighbour = enableNeighbour;
             this.disableNeighbour = disableNeighbour;
@@ -36,7 +37,7 @@ namespace Evolution.MapGeneration
             RandomNoise();
             Smooth(10);
             GenerateHeightmap();
-            //GenerateDepths();
+            GenerateDepths();
             return map;
         }
 
@@ -49,7 +50,7 @@ namespace Evolution.MapGeneration
             {
                 for (int j = 0; j < height; j++)
                 {
-                    map[i, j] = rnd.Next(2);
+                    map[i, j] = rnd.Next(100) < chanceToGen1 ? 1 : 0;
                 }
             }
         }
@@ -57,7 +58,7 @@ namespace Evolution.MapGeneration
         /// <summary>
         /// Smooth map in [n] cycles
         /// </summary>
-        /// <param name="n">Number of cycles. One is enough, but it usually leavs some lone cells there</param>
+        /// <param name="n">Number of cycles. One is enough, but it usually leaves some lone cells there</param>
         private void Smooth(int n)
         {
             for (int a = 0; a < n; a++)
@@ -188,7 +189,7 @@ namespace Evolution.MapGeneration
             int iter = 0;
 
             // When there is any cell, that hasn't been counted yet
-            while (map.OfType<int>().Where(x => x <= 0).Count() > 0)
+            while (map.OfType<int>().Where(x => x < 0).Count() > 0)
             {
                 // Go thru all cells
                 for (int i = 0; i < width; i++)
