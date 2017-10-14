@@ -35,7 +35,7 @@ namespace Evolution
         private void SimulationForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             // Close all forms 
-            Application.Exit();
+            Environment.Exit(0);
         }
 
         private void mainDrawPictureBox_Paint(object sender, PaintEventArgs e)

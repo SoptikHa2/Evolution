@@ -49,10 +49,12 @@ namespace Evolution.Evolution
 
         public void Tick()
         {
-                DateTime lastThreadCall = DateTime.Now;
+            DateTime lastThreadCall = DateTime.Now;
             while (true)
             {
-                Thread.Sleep((int)(1000 / SimulationForm.FPS - (DateTime.Now - lastThreadCall).TotalMilliseconds));
+                int time = (int)(1000 / SimulationForm.FPS - (DateTime.Now - lastThreadCall).TotalMilliseconds);
+                if (time > 0)
+                    Thread.Sleep(time);
                 lastThreadCall = DateTime.Now;
                 for (int i = 0; i < map.map.GetLength(0); i++)
                     for (int j = 0; j < map.map.GetLength(1); j++)
