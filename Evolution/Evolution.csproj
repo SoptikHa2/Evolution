@@ -46,6 +46,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Evolution\Animal.cs" />
+    <Compile Include="Evolution\Nodes\ConstantNode.cs" />
+    <Compile Include="Evolution\Nodes\EatNode.cs" />
+    <Compile Include="Evolution\Nodes\FoodNode.cs" />
+    <Compile Include="Evolution\Nodes\GoNode.cs" />
+    <Compile Include="Evolution\Nodes\IfNode.cs" />
+    <Compile Include="Evolution\Nodes\Node.cs" />
     <Compile Include="Evolution\Simulation.cs" />
     <Compile Include="Evolution\Species.cs" />
     <Compile Include="MainMenuForm.cs">
@@ -93,8 +99,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Evolution\Nodes\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
