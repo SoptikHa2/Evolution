@@ -9,6 +9,8 @@ namespace Evolution.Evolution.Nodes
     class ConstantNode : Node
     {
         public int value;
+        public const int minValue = -1;
+        public const int maxValue = 3;
 
         public ConstantNode(int value, Animal parentAnimal)
         {

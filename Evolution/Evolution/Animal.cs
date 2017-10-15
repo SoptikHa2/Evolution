@@ -9,11 +9,17 @@ namespace Evolution.Evolution
 {
     public class Animal
     {
+        #region Settings
+        const int startDepth = 3;
+        #endregion
+
         public string name;
         public int x, y;
         public int energy;
         public Node startNode;
         private MapGeneration.Map map;
+
+        private static Random rnd = new Random();
 
         public Animal(string name, MapGeneration.Map map, int x, int y)
         {
@@ -21,24 +27,49 @@ namespace Evolution.Evolution
             this.x = x;
             this.y = y;
             this.map = map;
-            GenerateNodes();
+            GenerateNodes(startDepth);
         }
 
-        public void GenerateNodes()
+        private void GenerateNodes(int depth)
         {
-            startNode = new IfNode(this);
-            Node const0Node = new ConstantNode(0, this);
-            Node getNearestFoodNode = new FoodNode(this);
-            Node goNode = new GoNode(this);
-            Node eatNode = new EatNode(this);
-            Node getDirectionNode = new FoodNode(this);
+            startNode = RandomNode(false);
+            AppendNodesTo(startNode, depth);
+        }
 
-            startNode.children[0] = const0Node;
-            startNode.children[1] = getNearestFoodNode;
-            startNode.children[2] = eatNode;
-            startNode.children[3] = goNode;
+        private void AppendNodesTo(Node node, int maxDepth, int currDepth = 0)
+        {
+            int cd = currDepth;
+            if(cd++ < maxDepth)
+            {
+                int children = node.maximumChildren;
+                for(int i = 0; i < children; i++)
+                {
+                    node.children[i] = RandomNode(true);
+                    if (node.children[i].maximumChildren > 0)
+                        AppendNodesTo(node.children[i], maxDepth, cd);
+                }
+            }
+        }
 
-            goNode.children[0] = getDirectionNode;
+        private Node RandomNode(bool allowNoChildNodes)
+        {
+            int rand = rnd.Next(allowNoChildNodes ? 0 : 1, 5);
+
+            switch (rand)
+            {
+                case 0:
+                    return new ConstantNode(rnd.Next(ConstantNode.minValue, ConstantNode.maxValue + 1), this);
+                case 1:
+                    return new EatNode(this);
+                case 2:
+                    return new FoodNode(this);
+                case 3:
+                    return new GoNode(this);
+                case 4:
+                    return new IfNode(this);
+                default:
+                    throw new Exception("Node type selected by random number does not exist.");
+            }
         }
 
         public void Eval()

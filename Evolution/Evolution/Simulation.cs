@@ -30,7 +30,7 @@ namespace Evolution.Evolution
 
         private Thread tickThread;
 
-        public event EventHandler NextGeneration;
+        public event EventHandler NextTick;
 
         public Simulation(int width = 100, int height = 100)
         {
@@ -63,7 +63,7 @@ namespace Evolution.Evolution
                         map.map[i, j].Tick();
                 for (int i = 0; i < species.Length; i++)
                     species[i].Tick();
-                NextGeneration(this, EventArgs.Empty);
+                NextTick(this, EventArgs.Empty);
             }
         }
 
