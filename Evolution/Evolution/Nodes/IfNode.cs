@@ -10,7 +10,7 @@ namespace Evolution.Evolution.Nodes
     {
         public IfNode(Animal parentAnimal)
         {
-            identifier = "IfNode (>)";
+            identifier = "IfNode";
             minimumChildren = 4;
             maximumChildren = 4;
 

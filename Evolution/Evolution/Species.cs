@@ -11,10 +11,12 @@ namespace Evolution.Evolution
     {
         public Animal[] animals;
         public Brush speciesBrush;
+        public string name;
 
         public Species(string name, MapGeneration.Map map, Brush speciesBrush)
         {
-            animals = new Animal[] { new Animal(name, map, 10, 10), new Animal(name, map, 20, 20), new Animal(name, map, 30, 30), new Animal(name, map, 40, 40), new Animal(name, map, 50, 50) };
+            this.name = name;
+            animals = new Animal[] { new Animal(name + "1", map, 10, 10), new Animal(name + "2", map, 20, 20), new Animal(name + "3", map, 30, 30), new Animal(name + "4", map, 40, 40), new Animal(name + "5", map, 50, 50) };
             this.speciesBrush = speciesBrush;
         }
 

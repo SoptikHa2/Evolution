@@ -8,12 +8,21 @@ namespace Evolution.Evolution.Nodes
 {
     public abstract class Node
     {
-        public string identifier { get; protected set; }
+        public string identifier { get; protected set; } = "Basic Node";
         public int minimumChildren { get; protected set; }
         public int maximumChildren { get; protected set; }
         public Node[] children;
         public Animal parentAnimal;
 
         public abstract int Eval();
+        public override string ToString()
+        {
+            string s = identifier + "(";
+            foreach (Node n in children)
+            {
+                s += n?.ToString();
+            }
+            return s + ")";
+        }
     }
 }

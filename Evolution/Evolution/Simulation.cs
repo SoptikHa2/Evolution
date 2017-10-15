@@ -25,7 +25,7 @@ namespace Evolution.Evolution
         #endregion
 
         private MapGeneration.Map map;
-        private Species[] species;
+        public Species[] species;
         private int width, height;
 
         private Thread tickThread;

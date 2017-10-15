@@ -44,7 +44,7 @@ namespace Evolution.Evolution
                 int children = node.maximumChildren;
                 for(int i = 0; i < children; i++)
                 {
-                    node.children[i] = RandomNode(true);
+                    node.children[i] = RandomNode(cd + 1 == maxDepth);
                     if (node.children[i].maximumChildren > 0)
                         AppendNodesTo(node.children[i], maxDepth, cd);
                 }
@@ -53,7 +53,7 @@ namespace Evolution.Evolution
 
         private Node RandomNode(bool allowNoChildNodes)
         {
-            int rand = rnd.Next(allowNoChildNodes ? 0 : 1, 5);
+            int rand = rnd.Next(allowNoChildNodes ? 0 :3, 5);
 
             switch (rand)
             {
@@ -122,6 +122,11 @@ namespace Evolution.Evolution
             map.map[x, y].food = 0;
             energy += food;
             return food;
+        }
+
+        public override string ToString()
+        {
+            return $"Animal: {name} at {x};{y}, Energy: {energy}, Nodes: " + Environment.NewLine + startNode.ToString();
         }
     }
 }
