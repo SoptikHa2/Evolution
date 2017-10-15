@@ -14,7 +14,7 @@ namespace Evolution.MapGeneration
 
         public void Tick()
         {
-            food++;
+            //food++;
         }
     }
 }

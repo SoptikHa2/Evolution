@@ -18,12 +18,14 @@ namespace Evolution
 
         private Evolution.Simulation simulation;
         private Timer drawTimer;
+        private int generation = 1;
 
         public SimulationForm(Evolution.Simulation simulation = null)
         {
             InitializeComponent();
 
             this.simulation = simulation ?? new Evolution.Simulation(100, 100);
+            this.simulation.NextGeneration += (o, ev) => { this.Invoke((MethodInvoker)delegate () { statusLabel.Text = $"Generation {generation++}"; }); };
 
             mainDrawPictureBox.Image = new Bitmap(mainDrawPictureBox.Width, mainDrawPictureBox.Height);
             drawTimer = new Timer();

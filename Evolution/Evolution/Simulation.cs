@@ -30,6 +30,8 @@ namespace Evolution.Evolution
 
         private Thread tickThread;
 
+        public event EventHandler NextGeneration;
+
         public Simulation(int width = 100, int height = 100)
         {
             this.width = width;
@@ -44,7 +46,7 @@ namespace Evolution.Evolution
         public Species[] InitializeSpecies()
         {
             // ...
-            return new Species[] { new Species("fox", Brushes.Orange) };
+            return new Species[] { new Species("fox", map, Brushes.Orange) };
         }
 
         public void Tick()
@@ -52,15 +54,16 @@ namespace Evolution.Evolution
             DateTime lastThreadCall = DateTime.Now;
             while (true)
             {
-                int time = (int)(1000 / SimulationForm.FPS - (DateTime.Now - lastThreadCall).TotalMilliseconds);
-                if (time > 0)
-                    Thread.Sleep(time);
+                //int time = (int)(1000 / SimulationForm.FPS - (DateTime.Now - lastThreadCall).TotalMilliseconds);
+                //if (time > 0)
+                //Thread.Sleep(time);
                 lastThreadCall = DateTime.Now;
                 for (int i = 0; i < map.map.GetLength(0); i++)
                     for (int j = 0; j < map.map.GetLength(1); j++)
                         map.map[i, j].Tick();
                 for (int i = 0; i < species.Length; i++)
                     species[i].Tick();
+                NextGeneration(this, EventArgs.Empty);
             }
         }
 

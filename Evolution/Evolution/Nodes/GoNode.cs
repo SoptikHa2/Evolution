@@ -8,8 +8,6 @@ namespace Evolution.Evolution.Nodes
 {
     class GoNode : Node
     {
-        public int value;
-
         public GoNode(Animal parentAnimal)
         {
             identifier = "GoNode";

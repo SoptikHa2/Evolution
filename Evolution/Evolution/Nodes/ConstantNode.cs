@@ -12,7 +12,7 @@ namespace Evolution.Evolution.Nodes
 
         public ConstantNode(int value, Animal parentAnimal)
         {
-            identifier = "ConstantNode";
+            identifier = $"ConstantNode ({value})";
             minimumChildren = 0;
             maximumChildren = 0;
 
