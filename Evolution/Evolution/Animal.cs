@@ -7,6 +7,7 @@ using Evolution.Evolution.Nodes;
 
 namespace Evolution.Evolution
 {
+    [Serializable]
     public class Animal
     {
         #region Settings

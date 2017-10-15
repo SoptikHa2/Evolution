@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Evolution.Evolution.Nodes
 {
+    [Serializable]
     public abstract class Node
     {
         public string identifier { get; protected set; } = "Basic Node";

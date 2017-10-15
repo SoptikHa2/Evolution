@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Evolution.Evolution.Nodes
 {
+    [Serializable]
     class ConstantNode : Node
     {
         public int value;

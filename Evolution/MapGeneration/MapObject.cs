@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Evolution.MapGeneration
 {
+    [Serializable]
     public struct MapObject
     {
         public int x, y;

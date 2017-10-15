@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Evolution.Evolution
 {
+    [Serializable]
     public class Simulation
     {
         #region ColorSettings
@@ -23,14 +24,24 @@ namespace Evolution.Evolution
         public const int minBeach = 1;
         public const int minMountain = 5;
         #endregion
+        #region GenerationSettings
+        private const int generationTicks = 100;
+        #endregion
+        #region DrawSettings
+        private const int savedImageWidth = 720;
+        private const int savedImageHeight = 720;
+        #endregion
 
         private MapGeneration.Map map;
         public Species[] species;
         private int width, height;
+        private DateTime dateTimeStarted;
 
+        [NonSerialized]
         private Thread tickThread;
 
         public event EventHandler NextTick;
+        public event EventHandler NextGeneration;
 
         public Simulation(int width = 100, int height = 100)
         {
@@ -41,22 +52,36 @@ namespace Evolution.Evolution
             tickThread = new Thread(Tick);
             tickThread.Name = "Evolution: Simulation Tick Thread";
             tickThread.Start();
+            dateTimeStarted = DateTime.Now;
         }
+
+        public Simulation() { }
 
         public Species[] InitializeSpecies()
         {
-            // ...
-            return new Species[] { new Species("fox", map, Brushes.Orange) };
+            return new Species[] { new Species("fox", map, "orange") };
         }
 
+        private int tick = 0;
+        private int generation = 0;
         public void Tick()
         {
             DateTime lastThreadCall = DateTime.Now;
             while (true)
             {
-                //int time = (int)(1000 / SimulationForm.FPS - (DateTime.Now - lastThreadCall).TotalMilliseconds);
-                //if (time > 0)
-                //Thread.Sleep(time);
+                // If at beginning of generation, save some data
+                if (tick == 0)
+                {
+                    Serializer.SaveSimulation(species, map, new string[] { "log", dateTimeStarted.ToString("dd-MM-yyy--hh-mm-ss"), "Generation " + generation++ }, DateTime.Now.ToString("hh-mm-ss"));
+                    System.IO.File.WriteAllText($"log\\{ dateTimeStarted.ToString("dd-MM-yyy--hh-mm-ss")}\\Generation {generation}\\sim.dat", $"{generation - 1};{dateTimeStarted.ToBinary()}");
+                    string animalSaveData = "";
+                    foreach (Species s in species)
+                        foreach (Animal a in s.animals)
+                            animalSaveData += a.ToString() + Environment.NewLine;
+                    System.IO.File.WriteAllText($"log\\{dateTimeStarted.ToString("dd-MM-yyy--hh-mm-ss")}\\Generation {generation - 1}\\animals.dat", animalSaveData);
+                }
+
+                // Tick all objects
                 lastThreadCall = DateTime.Now;
                 for (int i = 0; i < map.map.GetLength(0); i++)
                     for (int j = 0; j < map.map.GetLength(1); j++)
@@ -64,31 +89,51 @@ namespace Evolution.Evolution
                 for (int i = 0; i < species.Length; i++)
                     species[i].Tick();
                 NextTick(this, EventArgs.Empty);
+
+                // If there is new generation
+                if (tick++ >= generationTicks)
+                {
+                    tick = 0;
+                    foreach (Species s in species)
+                        s.NewGeneration();
+                    NextGeneration(this, EventArgs.Empty);
+
+
+                    // Save image of end of previous generation
+                    Bitmap b = new Bitmap(savedImageWidth, savedImageHeight);
+                    Graphics g = Graphics.FromImage(b);
+                    DrawOnBitmap(g, savedImageWidth, savedImageHeight);
+                    b.Save($"log\\{dateTimeStarted.ToString("dd-MM-yyy--hh-mm-ss")}\\Generation {generation - 1}\\end of generation.png", System.Drawing.Imaging.ImageFormat.Png);
+                }
             }
         }
 
+        private readonly object _lock = new object();
         public void DrawOnBitmap(Graphics graphics, int widthOfDrawArea, int heightOfDrawArea)
         {
-            float lengthOfTile = Math.Min(widthOfDrawArea / (float)width, heightOfDrawArea / (float)height);
+            lock (_lock)
+            {
+                float lengthOfTile = Math.Min(widthOfDrawArea / (float)width, heightOfDrawArea / (float)height);
 
-            // Draw terrain
-            for (int i = 0; i < map.map.GetLength(0); i++)
-            {
-                for (int j = 0; j < map.map.GetLength(1); j++)
+                // Draw terrain
+                for (int i = 0; i < map.map.GetLength(0); i++)
                 {
-                    MapGeneration.MapObject m = map.map[i, j];
-                    Brush terrainBrush = getTerrainBrush(m.level);
-                    graphics.FillRectangle(terrainBrush, i * lengthOfTile, j * lengthOfTile, lengthOfTile, lengthOfTile);
+                    for (int j = 0; j < map.map.GetLength(1); j++)
+                    {
+                        MapGeneration.MapObject m = map.map[i, j];
+                        Brush terrainBrush = getTerrainBrush(m.level);
+                        graphics.FillRectangle(terrainBrush, i * lengthOfTile, j * lengthOfTile, lengthOfTile, lengthOfTile);
+                    }
                 }
-            }
-            // Draw animals
-            for (int spN = 0; spN < species.Length; spN++)
-            {
-                Species sp = species[spN];
-                for (int aN = 0; aN < sp.animals.Length; aN++)
+                // Draw animals
+                for (int spN = 0; spN < species.Length; spN++)
                 {
-                    Animal a = sp.animals[aN];
-                    graphics.FillRectangle(sp.speciesBrush, a.x * lengthOfTile, a.y * lengthOfTile, lengthOfTile, lengthOfTile);
+                    Species sp = species[spN];
+                    for (int aN = 0; aN < sp.animals.Length; aN++)
+                    {
+                        Animal a = sp.animals[aN];
+                        graphics.FillRectangle(new SolidBrush(Color.FromName(sp.speciesColor)), a.x * lengthOfTile, a.y * lengthOfTile, lengthOfTile, lengthOfTile);
+                    }
                 }
             }
         }
