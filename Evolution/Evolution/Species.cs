@@ -15,6 +15,7 @@ namespace Evolution.Evolution
         public string name;
 
         private static Random rnd = new Random();
+        private int animalNumber = 0;
 
         public Species(string name, MapGeneration.Map map, string speciesColor, int numberOfAnimals = 50)
         {
@@ -22,9 +23,9 @@ namespace Evolution.Evolution
             animals = new Animal[numberOfAnimals];
             int mapLengthX = map.map.GetLength(0);
             int mapLengthY = map.map.GetLength(1);
-            for(int i = 0; i < numberOfAnimals; i++)
+            for (int i = 0; i < numberOfAnimals; i++)
             {
-                animals[i] = new Animal(name + i, map, rnd.Next(mapLengthX), rnd.Next(mapLengthY));
+                animals[i] = new Animal(name + animalNumber++, map, rnd.Next(mapLengthX), rnd.Next(mapLengthY));
             }
             this.speciesColor = speciesColor;
         }
@@ -35,15 +36,48 @@ namespace Evolution.Evolution
                 animals[i].Eval();
         }
 
-        public void NewGeneration()
+        public void NewGeneration(MapGeneration.Map map)
         {
-            animals = animals.OrderByDescending(x => x.energy).ToArray();
-            for(int i = 0; i < animals.Length / 2; i++)
+            var animals = this.animals.OrderBy(x => x.energy).ToList();
+            int reqCount = animals.Count;
+
+            // Remove last half
+            animals.RemoveRange(0, reqCount / 2);
+
+            // Breed
+            List<Animal> newOnes = new List<Animal>();
+            while (newOnes.Count < reqCount / 2)
             {
-                int partner = rnd.Next(animals.Length);
-                animals[i].BreedWith(animals[partner]);
+                Animal parent1 = null;
+                Animal parent2 = null;
+
+                int sum = animals.Select(x => x.energy).Sum();
+                int random = rnd.Next(sum);
+
+                for(int i = 0; i < animals.Count; i++)
+                {
+                    if(random < animals[i].energy)
+                    {
+                        parent1 = animals[i];
+                        break;
+                    }
+                    random -= animals[i].energy;
+                }
+                for(int i = 0; i < animals.Count; i++)
+                {
+                    if(random < animals[i].energy)
+                    {
+                        parent2 = animals[i];
+                        break;
+                    }
+                    random -= animals[i].energy;
+                }
+                newOnes.Add(parent1.BreedWith(parent2, map, name + animalNumber++));
             }
             
+            animals.Reverse();
+            animals.AddRange(newOnes);
+            this.animals = animals.ToArray();
         }
 
         public void ResetAnimals(int maxX, int maxY)

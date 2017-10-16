@@ -31,12 +31,13 @@
             this.newSimulationButton = new System.Windows.Forms.Button();
             this.label_heading = new System.Windows.Forms.Label();
             this.loadSimulationButton = new System.Windows.Forms.Button();
+            this.visualiseDataButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // newSimulationButton
             // 
             this.newSimulationButton.Font = new System.Drawing.Font("Segoe UI Semilight", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.newSimulationButton.Location = new System.Drawing.Point(12, 149);
+            this.newSimulationButton.Location = new System.Drawing.Point(12, 130);
             this.newSimulationButton.Name = "newSimulationButton";
             this.newSimulationButton.Size = new System.Drawing.Size(260, 32);
             this.newSimulationButton.TabIndex = 0;
@@ -58,18 +59,30 @@
             // 
             this.loadSimulationButton.Enabled = false;
             this.loadSimulationButton.Font = new System.Drawing.Font("Segoe UI Semilight", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.loadSimulationButton.Location = new System.Drawing.Point(12, 187);
+            this.loadSimulationButton.Location = new System.Drawing.Point(12, 168);
             this.loadSimulationButton.Name = "loadSimulationButton";
             this.loadSimulationButton.Size = new System.Drawing.Size(260, 32);
             this.loadSimulationButton.TabIndex = 2;
             this.loadSimulationButton.Text = "Load Simulation";
             this.loadSimulationButton.UseVisualStyleBackColor = true;
             // 
+            // visualiseDataButton
+            // 
+            this.visualiseDataButton.Enabled = false;
+            this.visualiseDataButton.Font = new System.Drawing.Font("Segoe UI Semilight", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.visualiseDataButton.Location = new System.Drawing.Point(12, 206);
+            this.visualiseDataButton.Name = "visualiseDataButton";
+            this.visualiseDataButton.Size = new System.Drawing.Size(260, 32);
+            this.visualiseDataButton.TabIndex = 3;
+            this.visualiseDataButton.Text = "Visualise Data";
+            this.visualiseDataButton.UseVisualStyleBackColor = true;
+            // 
             // MainMenuForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 231);
+            this.ClientSize = new System.Drawing.Size(284, 250);
+            this.Controls.Add(this.visualiseDataButton);
             this.Controls.Add(this.loadSimulationButton);
             this.Controls.Add(this.label_heading);
             this.Controls.Add(this.newSimulationButton);
@@ -87,6 +100,7 @@
         private System.Windows.Forms.Button newSimulationButton;
         private System.Windows.Forms.Label label_heading;
         private System.Windows.Forms.Button loadSimulationButton;
+        private System.Windows.Forms.Button visualiseDataButton;
     }
 }
 

@@ -92,7 +92,7 @@ namespace Evolution.Evolution
                     // Breed new animals and fire event
                     tick = 0;
                     foreach (Species s in species)
-                        s.NewGeneration();
+                        s.NewGeneration(map);
                     NextGeneration(this, EventArgs.Empty);
 
                     // Add new food to tiles

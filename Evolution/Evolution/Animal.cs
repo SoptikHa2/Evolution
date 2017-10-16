@@ -125,24 +125,26 @@ namespace Evolution.Evolution
             return food;
         }
 
-        public void BreedWith(Animal partner)
+        public Animal BreedWith(Animal partner, MapGeneration.Map map, string newName)
         {
-            BreedNodeTree(partner.startNode);
+            return BreedNodeTree(partner.startNode, new Animal(newName, map, -1, -1));
         }
 
-        private void BreedNodeTree(Node partnerNodeTree)
+        private Animal BreedNodeTree(Node partnerNodeTree, Animal newAnimal)
         {
-            // Get random node from 1st animal tree:
+            Node newTree = Serializer.DeepClone<Node>(startNode) as Node;
+            SetNodeOwnership(newTree, newAnimal);
+
             // Get number of nodes in tree
-            int numberOfNodesInFirstTree = GetNumberOfNodes(startNode);
-            // Get random number:
-            int randomFirstTree = rnd.Next(numberOfNodesInFirstTree);
-            // Get random node from 1st animal tree:
-            Node randomlyChosenFirstTreeNode = GetNode(startNode, randomFirstTree);
+            int numberOfNodesInTree = GetNumberOfNodes(newTree);
+            // Get random number
+            int randomNumber = rnd.Next(numberOfNodesInTree);
+            // Get random node:
+            Node randomlyChosenNode = GetNode(newTree, randomNumber);
 
             // Select node of same type from 2nd tree
             Node randomlyChosenSecondTreeNode = null;
-            List<Node> sameTypeNodes = GetNodesOfType(partnerNodeTree, randomlyChosenFirstTreeNode.GetType());
+            List<Node> sameTypeNodes = GetNodesOfType(partnerNodeTree, randomlyChosenNode.GetType());
             if (sameTypeNodes.Count > 0)
             {
                 int random = rnd.Next(sameTypeNodes.Count);
@@ -155,12 +157,14 @@ namespace Evolution.Evolution
                 int randomSecondTree = rnd.Next(numberOfNodesInSecondTree);
                 randomlyChosenSecondTreeNode = GetNode(partnerNodeTree, randomSecondTree);
             }
-            // Replace deep copies of these nodes
-            Node nodeFromTree1 = Serializer.DeepClone<Node>(randomlyChosenFirstTreeNode) as Node;
-            Node nodeFromTree2 = Serializer.DeepClone<Node>(randomlyChosenSecondTreeNode) as Node;
 
-            randomlyChosenFirstTreeNode = nodeFromTree2;
-            randomlyChosenSecondTreeNode = nodeFromTree1;
+            Node nodeFromTree2 = Serializer.DeepClone<Node>(randomlyChosenSecondTreeNode) as Node;
+            SetNodeOwnership(nodeFromTree2, newAnimal);
+            randomlyChosenNode = randomlyChosenSecondTreeNode;
+
+            newAnimal.startNode = newTree;
+            newAnimal.energy = -1;
+            return newAnimal;
         }
 
         private int GetNumberOfNodes(Node tree)

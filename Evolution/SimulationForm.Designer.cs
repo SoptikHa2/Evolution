@@ -66,7 +66,7 @@
             this.MaximizeBox = false;
             this.Name = "SimulationForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "SimulationForm";
+            this.Text = "Simulation";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SimulationForm_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.mainDrawPictureBox)).EndInit();
             this.ResumeLayout(false);

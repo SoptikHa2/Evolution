@@ -63,8 +63,8 @@ namespace Evolution
                     File.WriteAllText($"log\\{dateTimeStarted.ToString("dd-MM-yyy--HH-mm-ss")}\\Generation {generation - 1}\\species_{species[i].name}.dat",
                         $"Species best energy: {species[i].animals[0].energy}, sum energy: {species[i].animals.Select(x => x.energy).Sum()}{Environment.NewLine}{Environment.NewLine}" +
                         $"Best animal:{Environment.NewLine}{species[i].animals[0].ToString()}{Environment.NewLine}{Environment.NewLine}" +
-                        $"Middle animal:{Environment.NewLine}{species[i].animals[species[i].animals.Length / 2].ToString()}{Environment.NewLine}{Environment.NewLine}" +
-                        $"Worst animal:{Environment.NewLine}{species[i].animals.Last().ToString()}");
+                        $"Middle animal:{Environment.NewLine}{species[i].animals[species[i].animals.Length / 4].ToString()}{Environment.NewLine}{Environment.NewLine}" +
+                        $"Worst animal:{Environment.NewLine}{species[i].animals.Where(x => x.energy != -1).Last().ToString()}");
                 }
             }
             catch (Exception ex)
