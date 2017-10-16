@@ -14,14 +14,14 @@ namespace Evolution
         {
             try
             {
-                SaveSimulation(species, map, new string[] { "log", dateTimeStarted.ToString("dd-MM-yyy--HH-mm-ss"), "Generation " + generation }, DateTime.Now.ToString("hh-mm-ss"));
+                SaveSimulation(species, map, new string[] { "log", dateTimeStarted.ToString("dd-MM-yyy--HH-mm-ss"), "Generation " + generation }, DateTime.Now.ToString("HH-mm-ss"));
                 File.WriteAllText($"log\\{ dateTimeStarted.ToString("dd-MM-yyy--HH-mm-ss")}\\Generation {generation}\\sim.dat", $"{generation};{dateTimeStarted.ToBinary()}");
             }
             catch (Exception ex)
             {
                 if (!Directory.Exists("error"))
                     Directory.CreateDirectory("error");
-                File.AppendAllText($"error\\Error_{dateTimeStarted.ToString("dd - MM - yyy--HH - mm - ss")}_{generation}{Environment.NewLine}{Environment.NewLine}", ex.ToString());
+                File.AppendAllText($"error\\Error_{dateTimeStarted.ToString("dd-MM-yyy--HH-mm-ss")}_{generation}.txt", ex.ToString() + Environment.NewLine + Environment.NewLine);
             }
         }
 
@@ -35,7 +35,7 @@ namespace Evolution
             {
                 if (!Directory.Exists("error"))
                     Directory.CreateDirectory("error");
-                File.AppendAllText($"error\\Error_{dateTimeStarted.ToString("dd - MM - yyy--HH - mm - ss")}_{generation}{Environment.NewLine}{Environment.NewLine}", ex.ToString());
+                File.AppendAllText($"error\\Error_{dateTimeStarted.ToString("dd-MM-yyy--HH-mm-ss")}_{generation}.txt", ex.ToString() + Environment.NewLine + Environment.NewLine);
             }
 
             try
@@ -51,7 +51,7 @@ namespace Evolution
             {
                 if (!Directory.Exists("error"))
                     Directory.CreateDirectory("error");
-                File.AppendAllText($"error\\Error_{dateTimeStarted.ToString("dd - MM - yyy--HH - mm - ss")}_{generation}{Environment.NewLine}{Environment.NewLine}", ex.ToString());
+                File.AppendAllText($"error\\Error_{dateTimeStarted.ToString("dd-MM-yyy--HH-mm-ss")}_{generation}.txt", ex.ToString() + Environment.NewLine + Environment.NewLine);
 
             }
 
@@ -71,7 +71,7 @@ namespace Evolution
             {
                 if (!Directory.Exists("error"))
                     Directory.CreateDirectory("error");
-                File.AppendAllText($"error\\Error_{dateTimeStarted.ToString("dd - MM - yyy--HH - mm - ss")}_{generation}{Environment.NewLine}{Environment.NewLine}", ex.ToString());
+                File.AppendAllText($"error\\Error_{dateTimeStarted.ToString("dd-MM-yyy--HH-mm-ss")}_{generation}.txt", ex.ToString() + Environment.NewLine + Environment.NewLine);
 
             }
         }
