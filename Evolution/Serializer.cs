@@ -10,11 +10,77 @@ namespace Evolution
 {
     public class Serializer
     {
-        public static void SaveSimulation(Evolution.Species[] species, MapGeneration.Map map, string[] dirPath, string fileName)
+        public static void BeforeGenerationSave(Evolution.Species[] species, MapGeneration.Map map, int generation, DateTime dateTimeStarted)
+        {
+            try
+            {
+                SaveSimulation(species, map, new string[] { "log", dateTimeStarted.ToString("dd-MM-yyy--HH-mm-ss"), "Generation " + generation }, DateTime.Now.ToString("hh-mm-ss"));
+                File.WriteAllText($"log\\{ dateTimeStarted.ToString("dd-MM-yyy--HH-mm-ss")}\\Generation {generation}\\sim.dat", $"{generation};{dateTimeStarted.ToBinary()}");
+            }
+            catch (Exception ex)
+            {
+                if (!Directory.Exists("error"))
+                    Directory.CreateDirectory("error");
+                File.AppendAllText($"error\\Error_{dateTimeStarted.ToString("dd - MM - yyy--HH - mm - ss")}_{generation}{Environment.NewLine}{Environment.NewLine}", ex.ToString());
+            }
+        }
+
+        public static void AfterGenerationSave(System.Drawing.Bitmap b, Evolution.Species[] species, int generation, DateTime dateTimeStarted)
+        {
+            try
+            {
+                b.Save($"log\\{dateTimeStarted.ToString("dd-MM-yyy--HH-mm-ss")}\\Generation {generation - 1}\\end of generation.png", System.Drawing.Imaging.ImageFormat.Png);
+            }
+            catch (Exception ex)
+            {
+                if (!Directory.Exists("error"))
+                    Directory.CreateDirectory("error");
+                File.AppendAllText($"error\\Error_{dateTimeStarted.ToString("dd - MM - yyy--HH - mm - ss")}_{generation}{Environment.NewLine}{Environment.NewLine}", ex.ToString());
+            }
+
+            try
+            {
+                // Save all animals log
+                string animalSaveData = "";
+                foreach (Evolution.Species s in species)
+                    foreach (Evolution.Animal a in s.animals)
+                        animalSaveData += a.ToString() + Environment.NewLine;
+                File.WriteAllText($"log\\{dateTimeStarted.ToString("dd-MM-yyy--HH-mm-ss")}\\Generation {generation - 1}\\animals.dat", animalSaveData);
+            }
+            catch (Exception ex)
+            {
+                if (!Directory.Exists("error"))
+                    Directory.CreateDirectory("error");
+                File.AppendAllText($"error\\Error_{dateTimeStarted.ToString("dd - MM - yyy--HH - mm - ss")}_{generation}{Environment.NewLine}{Environment.NewLine}", ex.ToString());
+
+            }
+
+            try
+            {
+                // Generate statistics for each species
+                for (int i = 0; i < species.Length; i++)
+                {
+                    File.WriteAllText($"log\\{dateTimeStarted.ToString("dd-MM-yyy--HH-mm-ss")}\\Generation {generation - 1}\\species_{species[i].name}.dat",
+                        $"Species best energy: {species[i].animals[0].energy}, sum energy: {species[i].animals.Select(x => x.energy).Sum()}{Environment.NewLine}{Environment.NewLine}" +
+                        $"Best animal:{Environment.NewLine}{species[i].animals[0].ToString()}{Environment.NewLine}{Environment.NewLine}" +
+                        $"Middle animal:{Environment.NewLine}{species[i].animals[species[i].animals.Length / 2].ToString()}{Environment.NewLine}{Environment.NewLine}" +
+                        $"Worst animal:{Environment.NewLine}{species[i].animals.Last().ToString()}");
+                }
+            }
+            catch (Exception ex)
+            {
+                if (!Directory.Exists("error"))
+                    Directory.CreateDirectory("error");
+                File.AppendAllText($"error\\Error_{dateTimeStarted.ToString("dd - MM - yyy--HH - mm - ss")}_{generation}{Environment.NewLine}{Environment.NewLine}", ex.ToString());
+
+            }
+        }
+
+        private static void SaveSimulation(Evolution.Species[] species, MapGeneration.Map map, string[] dirPath, string fileName)
         {
             // Check for directories
             string path = "";
-            for(int i = 0; i < dirPath.Length; i++)
+            for (int i = 0; i < dirPath.Length; i++)
             {
                 path += dirPath[i];
                 if (!Directory.Exists(path))

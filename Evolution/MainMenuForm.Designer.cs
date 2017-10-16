@@ -56,6 +56,7 @@
             // 
             // loadSimulationButton
             // 
+            this.loadSimulationButton.Enabled = false;
             this.loadSimulationButton.Font = new System.Drawing.Font("Segoe UI Semilight", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.loadSimulationButton.Location = new System.Drawing.Point(12, 187);
             this.loadSimulationButton.Name = "loadSimulationButton";

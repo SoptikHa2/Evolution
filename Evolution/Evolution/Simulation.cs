@@ -74,17 +74,7 @@ namespace Evolution.Evolution
                 // Save some data at beginning of generation
                 if (tick == 0)
                 {
-                    try
-                    {
-                        Serializer.SaveSimulation(species, map, new string[] { "log", dateTimeStarted.ToString("dd-MM-yyy--HH-mm-ss"), "Generation " + generation }, DateTime.Now.ToString("hh-mm-ss"));
-                        System.IO.File.WriteAllText($"log\\{ dateTimeStarted.ToString("dd-MM-yyy--HH-mm-ss")}\\Generation {generation}\\sim.dat", $"{generation};{dateTimeStarted.ToBinary()}");
-                        
-                    }
-                    catch (Exception ex)
-                    {
-                        System.IO.File.AppendAllText("ERROR.log", ex.ToString() + Environment.NewLine);
-                    }
-                    generation++;
+                    Serializer.BeforeGenerationSave(species, map, generation++, dateTimeStarted);
                 }
 
                 // Tick all objects
@@ -99,6 +89,7 @@ namespace Evolution.Evolution
                 // If there is new generation
                 if (tick++ >= generationTicks)
                 {
+                    // Breed new animals and fire event
                     tick = 0;
                     foreach (Species s in species)
                         s.NewGeneration();
@@ -113,25 +104,10 @@ namespace Evolution.Evolution
                     Bitmap b = new Bitmap(savedImageWidth, savedImageHeight);
                     Graphics g = Graphics.FromImage(b);
                     DrawOnBitmap(g, savedImageWidth, savedImageHeight);
-                    b.Save($"log\\{dateTimeStarted.ToString("dd-MM-yyy--HH-mm-ss")}\\Generation {generation - 1}\\end of generation.png", System.Drawing.Imaging.ImageFormat.Png);
+                    // Save some additional files to log
+                    Serializer.AfterGenerationSave(b, species, generation, dateTimeStarted);
 
-                    // Save all animals log
-                    string animalSaveData = "";
-                    foreach (Species s in species)
-                        foreach (Animal a in s.animals)
-                            animalSaveData += a.ToString() + Environment.NewLine;
-                    System.IO.File.WriteAllText($"log\\{dateTimeStarted.ToString("dd-MM-yyy--HH-mm-ss")}\\Generation {generation - 1}\\animals.dat", animalSaveData);
-
-                    // Generate statistics for each species
-                    for (int i = 0; i < species.Length; i++)
-                    {
-                        System.IO.File.WriteAllText($"log\\{dateTimeStarted.ToString("dd-MM-yyy--HH-mm-ss")}\\Generation {generation - 1}\\species_{species[i].name}.dat",
-                            $"Species best energy: {species[i].animals[0].energy}, sum energy: {species[i].animals.Select(x => x.energy).Sum()}{Environment.NewLine}{Environment.NewLine}" +
-                            $"Best animal:{Environment.NewLine}{species[i].animals[0].ToString()}{Environment.NewLine}{Environment.NewLine}" +
-                            $"Middle animal:{Environment.NewLine}{species[i].animals[species[i].animals.Length / 2].ToString()}{Environment.NewLine}{Environment.NewLine}" +
-                            $"Worst animal:{Environment.NewLine}{species[i].animals.Last().ToString()}");
-                    }
-
+                    // Reset animals energy & position
                     foreach (Species s in species)
                         s.ResetAnimals(width, height);
                 }
