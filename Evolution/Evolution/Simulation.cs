@@ -25,7 +25,7 @@ namespace Evolution.Evolution
         public const int minMountain = 5;
         #endregion
         #region GenerationSettings
-        private const int generationTicks = 100;
+        private const int generationTicks = 50;
         #endregion
         #region DrawSettings
         private const int savedImageWidth = 720;
@@ -36,6 +36,8 @@ namespace Evolution.Evolution
         public Species[] species;
         private int width, height;
         private DateTime dateTimeStarted;
+
+        private static Random rnd = new Random();
 
         [NonSerialized]
         private Thread tickThread;
@@ -69,16 +71,20 @@ namespace Evolution.Evolution
             DateTime lastThreadCall = DateTime.Now;
             while (true)
             {
-                // If at beginning of generation, save some data
+                // Save some data at beginning of generation
                 if (tick == 0)
                 {
-                    Serializer.SaveSimulation(species, map, new string[] { "log", dateTimeStarted.ToString("dd-MM-yyy--hh-mm-ss"), "Generation " + generation++ }, DateTime.Now.ToString("hh-mm-ss"));
-                    System.IO.File.WriteAllText($"log\\{ dateTimeStarted.ToString("dd-MM-yyy--hh-mm-ss")}\\Generation {generation}\\sim.dat", $"{generation - 1};{dateTimeStarted.ToBinary()}");
-                    string animalSaveData = "";
-                    foreach (Species s in species)
-                        foreach (Animal a in s.animals)
-                            animalSaveData += a.ToString() + Environment.NewLine;
-                    System.IO.File.WriteAllText($"log\\{dateTimeStarted.ToString("dd-MM-yyy--hh-mm-ss")}\\Generation {generation - 1}\\animals.dat", animalSaveData);
+                    try
+                    {
+                        Serializer.SaveSimulation(species, map, new string[] { "log", dateTimeStarted.ToString("dd-MM-yyy--HH-mm-ss"), "Generation " + generation }, DateTime.Now.ToString("hh-mm-ss"));
+                        System.IO.File.WriteAllText($"log\\{ dateTimeStarted.ToString("dd-MM-yyy--HH-mm-ss")}\\Generation {generation}\\sim.dat", $"{generation};{dateTimeStarted.ToBinary()}");
+                        
+                    }
+                    catch (Exception ex)
+                    {
+                        System.IO.File.AppendAllText("ERROR.log", ex.ToString() + Environment.NewLine);
+                    }
+                    generation++;
                 }
 
                 // Tick all objects
@@ -98,12 +104,36 @@ namespace Evolution.Evolution
                         s.NewGeneration();
                     NextGeneration(this, EventArgs.Empty);
 
+                    // Add new food to tiles
+                    for (int i = 0; i < map.map.GetLength(0); i++)
+                        for (int j = 0; j < map.map.GetLength(1); j++)
+                            map.map[i, j].food += rnd.Next(6);
 
                     // Save image of end of previous generation
                     Bitmap b = new Bitmap(savedImageWidth, savedImageHeight);
                     Graphics g = Graphics.FromImage(b);
                     DrawOnBitmap(g, savedImageWidth, savedImageHeight);
-                    b.Save($"log\\{dateTimeStarted.ToString("dd-MM-yyy--hh-mm-ss")}\\Generation {generation - 1}\\end of generation.png", System.Drawing.Imaging.ImageFormat.Png);
+                    b.Save($"log\\{dateTimeStarted.ToString("dd-MM-yyy--HH-mm-ss")}\\Generation {generation - 1}\\end of generation.png", System.Drawing.Imaging.ImageFormat.Png);
+
+                    // Save all animals log
+                    string animalSaveData = "";
+                    foreach (Species s in species)
+                        foreach (Animal a in s.animals)
+                            animalSaveData += a.ToString() + Environment.NewLine;
+                    System.IO.File.WriteAllText($"log\\{dateTimeStarted.ToString("dd-MM-yyy--HH-mm-ss")}\\Generation {generation - 1}\\animals.dat", animalSaveData);
+
+                    // Generate statistics for each species
+                    for (int i = 0; i < species.Length; i++)
+                    {
+                        System.IO.File.WriteAllText($"log\\{dateTimeStarted.ToString("dd-MM-yyy--HH-mm-ss")}\\Generation {generation - 1}\\species_{species[i].name}.dat",
+                            $"Species best energy: {species[i].animals[0].energy}, sum energy: {species[i].animals.Select(x => x.energy).Sum()}{Environment.NewLine}{Environment.NewLine}" +
+                            $"Best animal:{Environment.NewLine}{species[i].animals[0].ToString()}{Environment.NewLine}{Environment.NewLine}" +
+                            $"Middle animal:{Environment.NewLine}{species[i].animals[species[i].animals.Length / 2].ToString()}{Environment.NewLine}{Environment.NewLine}" +
+                            $"Worst animal:{Environment.NewLine}{species[i].animals.Last().ToString()}");
+                    }
+
+                    foreach (Species s in species)
+                        s.ResetAnimals(width, height);
                 }
             }
         }

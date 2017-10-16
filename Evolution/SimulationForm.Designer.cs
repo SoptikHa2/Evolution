@@ -30,8 +30,6 @@
         {
             this.mainDrawPictureBox = new System.Windows.Forms.PictureBox();
             this.statusLabel = new System.Windows.Forms.Label();
-            this.animals = new System.Windows.Forms.GroupBox();
-            this.animalInfo = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.mainDrawPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -57,33 +55,11 @@
             this.statusLabel.Text = "Generation 42";
             this.statusLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // animals
-            // 
-            this.animals.Location = new System.Drawing.Point(507, 33);
-            this.animals.Name = "animals";
-            this.animals.Size = new System.Drawing.Size(169, 374);
-            this.animals.TabIndex = 4;
-            this.animals.TabStop = false;
-            this.animals.Text = "Animals";
-            // 
-            // animalInfo
-            // 
-            this.animalInfo.AutoSize = true;
-            this.animalInfo.Location = new System.Drawing.Point(507, 414);
-            this.animalInfo.MaximumSize = new System.Drawing.Size(161, 81);
-            this.animalInfo.MinimumSize = new System.Drawing.Size(160, 80);
-            this.animalInfo.Name = "animalInfo";
-            this.animalInfo.Size = new System.Drawing.Size(160, 80);
-            this.animalInfo.TabIndex = 5;
-            this.animalInfo.Click += new System.EventHandler(this.animalInfo_Click);
-            // 
             // SimulationForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(681, 500);
-            this.Controls.Add(this.animalInfo);
-            this.Controls.Add(this.animals);
             this.Controls.Add(this.mainDrawPictureBox);
             this.Controls.Add(this.statusLabel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -101,7 +77,5 @@
         #endregion
         private System.Windows.Forms.PictureBox mainDrawPictureBox;
         private System.Windows.Forms.Label statusLabel;
-        private System.Windows.Forms.GroupBox animals;
-        private System.Windows.Forms.Label animalInfo;
     }
 }

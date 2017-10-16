@@ -14,10 +14,18 @@ namespace Evolution.Evolution
         public string speciesColor;
         public string name;
 
-        public Species(string name, MapGeneration.Map map, string speciesColor)
+        private static Random rnd = new Random();
+
+        public Species(string name, MapGeneration.Map map, string speciesColor, int numberOfAnimals = 50)
         {
             this.name = name;
-            animals = new Animal[] { new Animal(name + "1", map, 10, 10), new Animal(name + "2", map, 20, 20), new Animal(name + "3", map, 30, 30), new Animal(name + "4", map, 40, 40), new Animal(name + "5", map, 50, 50) };
+            animals = new Animal[numberOfAnimals];
+            int mapLengthX = map.map.GetLength(0);
+            int mapLengthY = map.map.GetLength(1);
+            for(int i = 0; i < numberOfAnimals; i++)
+            {
+                animals[i] = new Animal(name + i, map, rnd.Next(mapLengthX), rnd.Next(mapLengthY));
+            }
             this.speciesColor = speciesColor;
         }
 
@@ -29,7 +37,23 @@ namespace Evolution.Evolution
 
         public void NewGeneration()
         {
+            animals = animals.OrderByDescending(x => x.energy).ToArray();
+            for(int i = 0; i < animals.Length / 2; i++)
+            {
+                int partner = rnd.Next(animals.Length);
+                animals[i].BreedWith(animals[partner]);
+            }
+            
+        }
 
+        public void ResetAnimals(int maxX, int maxY)
+        {
+            for (int i = 0; i < animals.Length; i++)
+            {
+                animals[i].energy = 0;
+                animals[i].x = rnd.Next(maxX);
+                animals[i].y = rnd.Next(maxY);
+            }
         }
     }
 }

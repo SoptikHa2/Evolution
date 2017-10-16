@@ -26,7 +26,7 @@ namespace Evolution
             InitializeComponent();
 
             this.simulation = simulation ?? new Evolution.Simulation(100, 100);
-            this.simulation.NextTick += (o, ev) => { this.Invoke((MethodInvoker)delegate() { statusLabel.Text = $"Generation {generation} | Tick {tick++}"; }); };
+            this.simulation.NextTick += (o, ev) => { this.Invoke((MethodInvoker)delegate () { statusLabel.Text = $"Generation {generation} | Tick {tick++}"; }); };
             this.simulation.NextGeneration += (o, ev) => { this.Invoke((MethodInvoker)delegate () { tick = 1; statusLabel.Text = $"Generation {++generation} | Tick {tick}"; UpdateGroupBox(); }); };
 
             UpdateGroupBox();
@@ -40,7 +40,7 @@ namespace Evolution
 
         private void UpdateGroupBox()
         {
-            animals.Controls.Clear();
+            /*animalsPanel.Controls.Clear();
 
             int i = 1;
             foreach (Evolution.Species s in simulation.species)
@@ -57,15 +57,10 @@ namespace Evolution
                     Evolution.Animal currAnimal = a;
                     l.Click += (o, e) => { DisplayInfoAboutAnimal(currAnimal); };
 
-                    animals.Controls.Add(l);
+                    animalsPanel.Controls.Add(l);
                     i++;
                 }
-            }
-        }
-
-        private void DisplayInfoAboutAnimal(Evolution.Animal a)
-        {
-            animalInfo.Text = a.ToString();
+            }*/
         }
 
         private void SimulationForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -77,11 +72,6 @@ namespace Evolution
         private void mainDrawPictureBox_Paint(object sender, PaintEventArgs e)
         {
             simulation.DrawOnBitmap(e.Graphics, mainDrawPictureBox.Width, mainDrawPictureBox.Height);
-        }
-
-        private void animalInfo_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show(animalInfo.Text, "Animal info");
         }
     }
 }

@@ -40,10 +40,10 @@ namespace Evolution.Evolution
         private void AppendNodesTo(Node node, int maxDepth, int currDepth = 0)
         {
             int cd = currDepth;
-            if(cd++ < maxDepth)
+            if (cd++ < maxDepth)
             {
                 int children = node.maximumChildren;
-                for(int i = 0; i < children; i++)
+                for (int i = 0; i < children; i++)
                 {
                     node.children[i] = RandomNode(cd + 1 == maxDepth);
                     if (node.children[i].maximumChildren > 0)
@@ -54,7 +54,7 @@ namespace Evolution.Evolution
 
         private Node RandomNode(bool allowNoChildNodes)
         {
-            int rand = rnd.Next(allowNoChildNodes ? 0 :3, 5);
+            int rand = rnd.Next(allowNoChildNodes ? 0 : 3, 5);
 
             switch (rand)
             {
@@ -123,6 +123,111 @@ namespace Evolution.Evolution
             map.map[x, y].food = 0;
             energy += food;
             return food;
+        }
+
+        public void BreedWith(Animal partner)
+        {
+            BreedNodeTree(partner.startNode);
+        }
+
+        private void BreedNodeTree(Node partnerNodeTree)
+        {
+            // Get random node from 1st animal tree:
+            // Get number of nodes in tree
+            int numberOfNodesInFirstTree = GetNumberOfNodes(startNode);
+            // Get random number:
+            int randomFirstTree = rnd.Next(numberOfNodesInFirstTree);
+            // Get random node from 1st animal tree:
+            Node randomlyChosenFirstTreeNode = GetNode(startNode, randomFirstTree);
+
+            // Select node of same type from 2nd tree
+            Node randomlyChosenSecondTreeNode = null;
+            List<Node> sameTypeNodes = GetNodesOfType(partnerNodeTree, randomlyChosenFirstTreeNode.GetType());
+            if (sameTypeNodes.Count > 0)
+            {
+                int random = rnd.Next(sameTypeNodes.Count);
+                randomlyChosenSecondTreeNode = sameTypeNodes[random];
+            }
+            else
+            // If not available, select any type from 2nd tree
+            {
+                int numberOfNodesInSecondTree = GetNumberOfNodes(partnerNodeTree);
+                int randomSecondTree = rnd.Next(numberOfNodesInSecondTree);
+                randomlyChosenSecondTreeNode = GetNode(partnerNodeTree, randomSecondTree);
+            }
+            // Replace deep copies of these nodes
+            Node nodeFromTree1 = Serializer.DeepClone<Node>(randomlyChosenFirstTreeNode) as Node;
+            Node nodeFromTree2 = Serializer.DeepClone<Node>(randomlyChosenSecondTreeNode) as Node;
+
+            randomlyChosenFirstTreeNode = nodeFromTree2;
+            randomlyChosenSecondTreeNode = nodeFromTree1;
+        }
+
+        private int GetNumberOfNodes(Node tree)
+        {
+            int c = 1;
+            for (int i = 0; i < tree.maximumChildren; i++)
+            {
+                if (tree.children[i] != null)
+                    c += GetNumberOfNodes(tree.children[i]);
+            }
+            return c;
+        }
+
+        private Node GetNode(Node tree, int number, int cnt = 0)
+        {
+            if (cnt == number)
+                return tree;
+            else
+            {
+                Node nToReturn = null;
+                for (int i = 0; i < tree.maximumChildren; i++)
+                {
+                    if (tree.children[i] != null)
+                    {
+                        nToReturn = GetNode(tree.children[i], number, ++cnt);
+                        if (nToReturn != null)
+                            return nToReturn;
+                        cnt += GetNumberOfNodes(tree.children[i]) - 1;
+                    }
+                }
+
+                return nToReturn;
+            }
+        }
+
+        private List<Node> GetNodesOfType(Node tree, Type type)
+        {
+            List<Node> nodes = new List<Node>();
+            if (tree.GetType() == type)
+            {
+                nodes.Add(tree);
+            }
+            for (int i = 0; i < tree.maximumChildren; i++)
+            {
+                if (tree.children[i] != null)
+                {
+                    nodes.AddRange(GetNodesOfType(tree.children[i], type));
+                }
+            }
+            return nodes;
+        }
+
+        private Node CopyNodeTree(Node nodeTree, Animal newAnimal)
+        {
+            Node copiedTree = Serializer.DeepClone<Node>(nodeTree) as Node;
+            SetNodeOwnership(copiedTree, newAnimal);
+            return copiedTree;
+        }
+
+        private void SetNodeOwnership(Node node, Animal newAnimal)
+        {
+            node.parentAnimal = newAnimal;
+            for (int i = 0; i < node.children.Length; i++)
+            {
+                if (node.children[i] != null)
+                    SetNodeOwnership(node.children[i], newAnimal);
+            }
         }
 
         public override string ToString()
