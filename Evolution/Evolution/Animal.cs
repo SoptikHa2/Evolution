@@ -12,6 +12,7 @@ namespace Evolution.Evolution
     {
         #region Settings
         const int startDepth = 3;
+        const int mutationChance = 5;
         #endregion
 
         public string name;
@@ -109,11 +110,21 @@ namespace Evolution.Evolution
                 return 0;
             x += dX;
             y += dY;
+
+            int tile = map.map[x, y].level;
+            if (tile <= Simulation.minSea)
+                energy -= Simulation.waterMoveEnergy;
+            else if (tile >= Simulation.minMountain)
+                energy -= Simulation.mountainMoveEnergy;
+            else
+                energy -= Simulation.baseMoveEnergy;
+
             return 1;
         }
 
         public int GetNearestFoodDirection()
         {
+            energy -= Simulation.searchFoodEnergy;
             return map.getNearestFoodDirection(x, y);
         }
 
@@ -121,7 +132,7 @@ namespace Evolution.Evolution
         {
             int food = map.map[x, y].food;
             map.map[x, y].food = 0;
-            energy += food;
+            energy += food - Simulation.eatEnergy;
             return food;
         }
 
@@ -163,8 +174,57 @@ namespace Evolution.Evolution
             randomlyChosenNode = randomlyChosenSecondTreeNode;
 
             newAnimal.startNode = newTree;
-            newAnimal.energy = -1;
+            newAnimal.energy = int.MinValue;
+
+            // Mutate nodes
+            List<Node> allNodes = GetNodes(newTree);
+            // Select nodes to replace
+            List<Node> toReplace = new List<Node>();
+            for (int i = 0; i < allNodes.Count; i++)
+            {
+                if (rnd.Next(101) <= mutationChance)
+                    toReplace.Add(allNodes[i]);
+            }
+
+            for (int i = 0; i < toReplace.Count; i++)
+            {
+                Node node = toReplace[i];
+                MutateNode(newTree, node);
+            }
+
             return newAnimal;
+        }
+
+        private void MutateNode(Node tree, Node oldNode)
+        {
+            Node newNode = RandomNode(oldNode.maximumChildren == 0);
+            // Mutate all node children
+            for(int i = 0; i < oldNode.maximumChildren; i++)
+            {
+                if (oldNode.children[i] != null)
+                    MutateNode(tree, oldNode.children[i]);
+            }
+            newNode.children = oldNode.children;
+            newNode.parentAnimal = oldNode.parentAnimal;
+            ReplaceNode(tree, oldNode, newNode);
+        }
+
+        private bool ReplaceNode(Node tree, Node oldNode, Node newNode)
+        {
+            if (tree == oldNode)
+            {
+                tree = newNode;
+                return true;
+            }
+            else
+            {
+                for (int i = 0; i < tree.children.Length; i++)
+                {
+                    if (tree.children[i] != null && ReplaceNode(tree.children[i], oldNode, newNode))
+                        return true;
+                }
+                return false;
+            }
         }
 
         private int GetNumberOfNodes(Node tree)
@@ -198,6 +258,20 @@ namespace Evolution.Evolution
 
                 return nToReturn;
             }
+        }
+
+        private List<Node> GetNodes(Node tree)
+        {
+            List<Node> nodes = new List<Node>();
+            nodes.Add(tree);
+            for (int i = 0; i < tree.maximumChildren; i++)
+            {
+                if (tree.children[i] != null)
+                {
+                    nodes.AddRange(GetNodes(tree.children[i]));
+                }
+            }
+            return nodes;
         }
 
         private List<Node> GetNodesOfType(Node tree, Type type)

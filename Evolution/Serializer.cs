@@ -10,11 +10,18 @@ namespace Evolution
 {
     public class Serializer
     {
+        #region Settings
+        private const int saveSerializedFilesEveryXGenerations = 10;
+        #endregion
+
         public static void BeforeGenerationSave(Evolution.Species[] species, MapGeneration.Map map, int generation, DateTime dateTimeStarted)
         {
             try
             {
-                SaveSimulation(species, map, new string[] { "log", dateTimeStarted.ToString("dd-MM-yyy--HH-mm-ss"), "Generation " + generation }, DateTime.Now.ToString("HH-mm-ss"));
+                CheckDirectories(new string[] { "log", dateTimeStarted.ToString("dd-MM-yyy--HH-mm-ss"), "Generation " + generation });
+                if (generation % saveSerializedFilesEveryXGenerations == 0)
+                    SaveSimulation(species, map, $"log\\{dateTimeStarted.ToString("dd-MM-yyy--HH-mm-ss")}\\Generation {generation}\\", DateTime.Now.ToString("HH-mm-ss"));
+
                 File.WriteAllText($"log\\{ dateTimeStarted.ToString("dd-MM-yyy--HH-mm-ss")}\\Generation {generation}\\sim.dat", $"{generation};{dateTimeStarted.ToBinary()}");
             }
             catch (Exception ex)
@@ -61,10 +68,10 @@ namespace Evolution
                 for (int i = 0; i < species.Length; i++)
                 {
                     File.WriteAllText($"log\\{dateTimeStarted.ToString("dd-MM-yyy--HH-mm-ss")}\\Generation {generation - 1}\\species_{species[i].name}.dat",
-                        $"Species best energy: {species[i].animals[0].energy}, sum energy: {species[i].animals.Select(x => x.energy).Sum()}{Environment.NewLine}{Environment.NewLine}" +
+                        $"Species best energy: {species[i].animals[0].energy}, sum energy of top half: {species[i].animals.Select(x => x.energy).Where(x => x != int.MinValue).Sum()}{Environment.NewLine}{Environment.NewLine}" +
                         $"Best animal:{Environment.NewLine}{species[i].animals[0].ToString()}{Environment.NewLine}{Environment.NewLine}" +
                         $"Middle animal:{Environment.NewLine}{species[i].animals[species[i].animals.Length / 4].ToString()}{Environment.NewLine}{Environment.NewLine}" +
-                        $"Worst animal:{Environment.NewLine}{species[i].animals.Where(x => x.energy != -1).Last().ToString()}");
+                        $"Worst animal:{Environment.NewLine}{species[i].animals.Where(x => x.energy != int.MinValue).Last().ToString()}");
                 }
             }
             catch (Exception ex)
@@ -76,9 +83,19 @@ namespace Evolution
             }
         }
 
-        private static void SaveSimulation(Evolution.Species[] species, MapGeneration.Map map, string[] dirPath, string fileName)
+        private static void SaveSimulation(Evolution.Species[] species, MapGeneration.Map map, string path, string fileName)
         {
-            // Check for directories
+            // Generate string
+            string save = SerializeObject(species);
+            // Save string
+            File.WriteAllText(path + fileName + ".species", save);
+
+            save = SerializeObject(map);
+            File.WriteAllText(path + fileName + ".map", save);
+        }
+
+        private static void CheckDirectories(string[] dirPath)
+        {
             string path = "";
             for (int i = 0; i < dirPath.Length; i++)
             {
@@ -87,14 +104,6 @@ namespace Evolution
                     Directory.CreateDirectory(path);
                 path += "\\";
             }
-
-            // Generate string
-            string save = SerializeObject(species);
-            // Save string
-            File.WriteAllText(path + fileName + ".species", save);
-
-            save = SerializeObject(map);
-            File.WriteAllText(path + fileName + ".map", save);
         }
 
         private static string SerializeObject(object o)

@@ -44,6 +44,13 @@ namespace Evolution.Evolution
             // Remove last half
             animals.RemoveRange(0, reqCount / 2);
 
+            int addedEnergy = animals.Select(x => x.energy).Min();
+            if (addedEnergy < 0)
+                addedEnergy = -addedEnergy;
+            else
+                addedEnergy = 0;
+            animals.ForEach(x => x.energy += addedEnergy);
+
             // Breed
             List<Animal> newOnes = new List<Animal>();
             while (newOnes.Count < reqCount / 2)
@@ -74,6 +81,8 @@ namespace Evolution.Evolution
                 }
                 newOnes.Add(parent1.BreedWith(parent2, map, name + animalNumber++));
             }
+
+            animals.ForEach(x => x.energy -= addedEnergy);
             
             animals.Reverse();
             animals.AddRange(newOnes);

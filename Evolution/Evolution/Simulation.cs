@@ -31,6 +31,14 @@ namespace Evolution.Evolution
         private const int savedImageWidth = 720;
         private const int savedImageHeight = 720;
         #endregion
+        #region Settings
+        public const int baseMoveEnergy = 0;
+        public const int waterMoveEnergy = 0;
+        public const int mountainMoveEnergy = 0;
+
+        public const int eatEnergy = 1;
+        public const int searchFoodEnergy = 0;
+        #endregion
 
         private MapGeneration.Map map;
         public Species[] species;
@@ -49,12 +57,12 @@ namespace Evolution.Evolution
         {
             this.width = width;
             this.height = height;
+            dateTimeStarted = DateTime.Now;
             map = new MapGeneration.Map(width, height);
             this.species = InitializeSpecies();
             tickThread = new Thread(Tick);
-            tickThread.Name = "Evolution: Simulation Tick Thread";
+            tickThread.Name = "Simulation Tick Thread";
             tickThread.Start();
-            dateTimeStarted = DateTime.Now;
         }
 
         public Simulation() { }
@@ -98,7 +106,7 @@ namespace Evolution.Evolution
                     // Add new food to tiles
                     for (int i = 0; i < map.map.GetLength(0); i++)
                         for (int j = 0; j < map.map.GetLength(1); j++)
-                            map.map[i, j].food += rnd.Next(6);
+                            map.map[i, j].food = rnd.Next(11);
 
                     // Save image of end of previous generation
                     Bitmap b = new Bitmap(savedImageWidth, savedImageHeight);
