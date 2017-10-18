@@ -18,17 +18,17 @@ namespace Evolution
         {
             try
             {
-                CheckDirectories(new string[] { "log", dateTimeStarted.ToString("dd-MM-yyy--HH-mm-ss"), "Generation " + generation });
+                CheckDirectories(new string[] { "log", dateTimeStarted.ToString("dd-MM-yyyy--HH-mm-ss"), "Generation " + generation });
                 if (generation % saveSerializedFilesEveryXGenerations == 0)
-                    SaveSimulation(species, map, $"log\\{dateTimeStarted.ToString("dd-MM-yyy--HH-mm-ss")}\\Generation {generation}\\", DateTime.Now.ToString("HH-mm-ss"));
+                    SaveSimulation(species, map, $"log\\{dateTimeStarted.ToString("dd-MM-yyyy--HH-mm-ss")}\\Generation {generation}\\", DateTime.Now.ToString("HH-mm-ss"));
 
-                File.WriteAllText($"log\\{ dateTimeStarted.ToString("dd-MM-yyy--HH-mm-ss")}\\Generation {generation}\\sim.dat", $"{generation};{dateTimeStarted.ToBinary()}");
+                File.WriteAllText($"log\\{ dateTimeStarted.ToString("dd-MM-yyyy--HH-mm-ss")}\\Generation {generation}\\sim.dat", $"{generation};{dateTimeStarted.ToBinary()}");
             }
             catch (Exception ex)
             {
                 if (!Directory.Exists("error"))
                     Directory.CreateDirectory("error");
-                File.AppendAllText($"error\\Error_{dateTimeStarted.ToString("dd-MM-yyy--HH-mm-ss")}_{generation}.txt", ex.ToString() + Environment.NewLine + Environment.NewLine);
+                File.AppendAllText($"error\\Error_{dateTimeStarted.ToString("dd-MM-yyyy--HH-mm-ss")}_{generation}.txt", ex.ToString() + Environment.NewLine + Environment.NewLine);
             }
         }
 
@@ -36,13 +36,13 @@ namespace Evolution
         {
             try
             {
-                b.Save($"log\\{dateTimeStarted.ToString("dd-MM-yyy--HH-mm-ss")}\\Generation {generation - 1}\\end of generation.png", System.Drawing.Imaging.ImageFormat.Png);
+                b.Save($"log\\{dateTimeStarted.ToString("dd-MM-yyyy--HH-mm-ss")}\\Generation {generation - 1}\\end of generation.png", System.Drawing.Imaging.ImageFormat.Png);
             }
             catch (Exception ex)
             {
                 if (!Directory.Exists("error"))
                     Directory.CreateDirectory("error");
-                File.AppendAllText($"error\\Error_{dateTimeStarted.ToString("dd-MM-yyy--HH-mm-ss")}_{generation}.txt", ex.ToString() + Environment.NewLine + Environment.NewLine);
+                File.AppendAllText($"error\\Error_{dateTimeStarted.ToString("dd-MM-yyyy--HH-mm-ss")}_{generation}.txt", ex.ToString() + Environment.NewLine + Environment.NewLine);
             }
 
             try
@@ -52,13 +52,13 @@ namespace Evolution
                 foreach (Evolution.Species s in species)
                     foreach (Evolution.Animal a in s.animals)
                         animalSaveData += a.ToString() + Environment.NewLine;
-                File.WriteAllText($"log\\{dateTimeStarted.ToString("dd-MM-yyy--HH-mm-ss")}\\Generation {generation - 1}\\animals.dat", animalSaveData);
+                File.WriteAllText($"log\\{dateTimeStarted.ToString("dd-MM-yyyy--HH-mm-ss")}\\Generation {generation - 1}\\animals.dat", animalSaveData);
             }
             catch (Exception ex)
             {
                 if (!Directory.Exists("error"))
                     Directory.CreateDirectory("error");
-                File.AppendAllText($"error\\Error_{dateTimeStarted.ToString("dd-MM-yyy--HH-mm-ss")}_{generation}.txt", ex.ToString() + Environment.NewLine + Environment.NewLine);
+                File.AppendAllText($"error\\Error_{dateTimeStarted.ToString("dd-MM-yyyy--HH-mm-ss")}_{generation}.txt", ex.ToString() + Environment.NewLine + Environment.NewLine);
 
             }
 
@@ -67,7 +67,7 @@ namespace Evolution
                 // Generate statistics for each species
                 for (int i = 0; i < species.Length; i++)
                 {
-                    File.WriteAllText($"log\\{dateTimeStarted.ToString("dd-MM-yyy--HH-mm-ss")}\\Generation {generation - 1}\\species_{species[i].name}.dat",
+                    File.WriteAllText($"log\\{dateTimeStarted.ToString("dd-MM-yyyy--HH-mm-ss")}\\Generation {generation - 1}\\species_{species[i].name}.dat",
                         $"Species best energy: {species[i].animals[0].energy}, sum energy of top half: {species[i].animals.Select(x => x.energy).Where(x => x != int.MinValue).Sum()}{Environment.NewLine}{Environment.NewLine}" +
                         $"Best animal:{Environment.NewLine}{species[i].animals[0].ToString()}{Environment.NewLine}{Environment.NewLine}" +
                         $"Middle animal:{Environment.NewLine}{species[i].animals[species[i].animals.Length / 4].ToString()}{Environment.NewLine}{Environment.NewLine}" +
@@ -78,8 +78,7 @@ namespace Evolution
             {
                 if (!Directory.Exists("error"))
                     Directory.CreateDirectory("error");
-                File.AppendAllText($"error\\Error_{dateTimeStarted.ToString("dd-MM-yyy--HH-mm-ss")}_{generation}.txt", ex.ToString() + Environment.NewLine + Environment.NewLine);
-
+                File.AppendAllText($"error\\Error_{dateTimeStarted.ToString("dd-MM-yyyy--HH-mm-ss")}_{generation}.txt", ex.ToString() + Environment.NewLine + Environment.NewLine);
             }
         }
 
@@ -139,6 +138,36 @@ namespace Evolution
                 ms.Position = 0;
 
                 return (T)formatter.Deserialize(ms);
+            }
+        }
+
+        public static Evolution.Simulation LoadSimulation(string pathToDirectory)
+        {
+            string[] mapSerialized = Directory.GetFiles(pathToDirectory, "*.map");
+            string[] speciesSerialized = Directory.GetFiles(pathToDirectory, "*.species");
+
+            if (mapSerialized.Length > 0 && speciesSerialized.Length > 0)
+            {
+                Evolution.Simulation result = null;
+                try
+                {
+                    MapGeneration.Map map = DeserializeObject(File.ReadAllText(mapSerialized[0])) as MapGeneration.Map;
+                    result = new Evolution.Simulation(map.map.GetLength(0), map.map.GetLength(1));
+                    string[] datFile = File.ReadAllText(pathToDirectory + "\\sim.dat").Split(';');
+                    result.SetOnLoad(map, DeserializeObject(File.ReadAllText(speciesSerialized[0])) as Evolution.Species[], int.Parse(datFile[0]));
+                    return result;
+                }
+                catch (Exception ex)
+                {
+                    if (!Directory.Exists("error"))
+                        Directory.CreateDirectory("error");
+                    File.AppendAllText($"error\\Error_LoadingSimulation_{DateTime.Now.ToString("dd-MM-yyyy--HH-mm-ss")}.txt", ex.ToString() + Environment.NewLine + Environment.NewLine);
+                    return null;
+                }
+            }
+            else
+            {
+                return null;
             }
         }
     }

@@ -72,8 +72,15 @@ namespace Evolution.Evolution
             return new Species[] { new Species("fox", map, "orange") };
         }
 
+        public void SetOnLoad(MapGeneration.Map map, Species[] species, int generation)
+        {
+            this.map = map;
+            this.species = species;
+            this.generation = generation;
+        }
+
         private int tick = 0;
-        private int generation = 0;
+        public int generation { get; private set; }
         public void Tick()
         {
             DateTime lastThreadCall = DateTime.Now;

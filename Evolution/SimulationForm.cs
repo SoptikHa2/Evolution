@@ -25,6 +25,9 @@ namespace Evolution
         {
             InitializeComponent();
 
+            if (simulation != null)
+                generation = simulation.generation;
+
             this.simulation = simulation ?? new Evolution.Simulation(100, 100);
             this.simulation.NextTick += (o, ev) => { this.Invoke((MethodInvoker)delegate () { statusLabel.Text = $"Generation {generation} | Tick {tick++}"; }); };
             this.simulation.NextGeneration += (o, ev) => { this.Invoke((MethodInvoker)delegate () { tick = 1; statusLabel.Text = $"Generation {++generation} | Tick {tick}"; UpdateGroupBox(); }); };

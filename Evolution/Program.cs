@@ -12,11 +12,12 @@ namespace Evolution
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
+            string arg = args.Length > 0 ? args[0] : "";
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainMenuForm());
+            Application.Run(new MainMenuForm(arg));
         }
     }
 }
