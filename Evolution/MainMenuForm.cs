@@ -28,16 +28,13 @@ namespace Evolution
 
         private void loadSimulationButton_Click(object sender, EventArgs e)
         {
-            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
-            folderBrowserDialog.Description = "Select any folder in /log/, then select a folder, that has name Generation #, where #" +
-                " is any number, that can be divided by 10 (0, 10, 20, 30, ...)";
-            folderBrowserDialog.ShowNewFolderButton = false;
-            folderBrowserDialog.SelectedPath = Environment.CurrentDirectory + "\\log";
-            DialogResult result = folderBrowserDialog.ShowDialog();
-            if (result == DialogResult.OK)
-            {
-                LoadFromPath(folderBrowserDialog.SelectedPath);
-            }
+            LoadForm lf = new LoadForm();
+            DialogResult dialogResult = lf.ShowDialog();
+
+            if (dialogResult == DialogResult.OK)
+                LoadFromPath(lf.SelectedPath);
+
+            return;
         }
 
         private void LoadFromFileDrag(string path)
