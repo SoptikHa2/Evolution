@@ -32,6 +32,7 @@
             this.statusLabel = new System.Windows.Forms.Label();
             this.autoplayTickCheckbox = new System.Windows.Forms.CheckBox();
             this.nextTickButton = new System.Windows.Forms.Button();
+            this.displayFoodCheckbox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.mainDrawPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -80,11 +81,23 @@
             this.nextTickButton.UseVisualStyleBackColor = true;
             this.nextTickButton.Click += new System.EventHandler(this.nextTickButton_Click);
             // 
+            // displayFoodCheckbox
+            // 
+            this.displayFoodCheckbox.AutoSize = true;
+            this.displayFoodCheckbox.Location = new System.Drawing.Point(510, 125);
+            this.displayFoodCheckbox.Name = "displayFoodCheckbox";
+            this.displayFoodCheckbox.Size = new System.Drawing.Size(121, 17);
+            this.displayFoodCheckbox.TabIndex = 6;
+            this.displayFoodCheckbox.Text = "Display food overlay";
+            this.displayFoodCheckbox.UseVisualStyleBackColor = true;
+            this.displayFoodCheckbox.CheckedChanged += new System.EventHandler(this.displayFoodCheckbox_CheckedChanged);
+            // 
             // SimulationForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(681, 500);
+            this.Controls.Add(this.displayFoodCheckbox);
             this.Controls.Add(this.nextTickButton);
             this.Controls.Add(this.autoplayTickCheckbox);
             this.Controls.Add(this.mainDrawPictureBox);
@@ -106,5 +119,6 @@
         private System.Windows.Forms.Label statusLabel;
         private System.Windows.Forms.CheckBox autoplayTickCheckbox;
         private System.Windows.Forms.Button nextTickButton;
+        private System.Windows.Forms.CheckBox displayFoodCheckbox;
     }
 }

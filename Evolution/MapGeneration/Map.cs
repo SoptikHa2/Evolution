@@ -9,6 +9,9 @@ namespace Evolution.MapGeneration
     [Serializable]
     public class Map
     {
+        public const int minFood = 0;
+        public const int maxFood = 10;
+
         public MapObject[,] map { get; private set; }
         private static Random rnd = new Random();
 
@@ -28,7 +31,7 @@ namespace Evolution.MapGeneration
             {
                 for (int j = 0; j < height; j++)
                 {
-                    newMap[i, j] = new MapObject { x = i, y = j, level = map[i, j], food = rnd.Next(0, 11) };
+                    newMap[i, j] = new MapObject { x = i, y = j, level = map[i, j], food = rnd.Next(minFood, maxFood + 1) };
                 }
             }
 

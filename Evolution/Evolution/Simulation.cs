@@ -129,7 +129,7 @@ namespace Evolution.Evolution
                     // Save image of end of previous generation
                     Bitmap b = new Bitmap(savedImageWidth, savedImageHeight);
                     Graphics g = Graphics.FromImage(b);
-                    DrawOnBitmap(g, savedImageWidth, savedImageHeight);
+                    DrawOnBitmap(g, savedImageWidth, savedImageHeight, false);
                     // Save some additional files to log
                     Serializer.AfterGenerationSave(b, species, generation, dateTimeStarted);
 
@@ -141,7 +141,8 @@ namespace Evolution.Evolution
         }
 
         private readonly object _lock = new object();
-        public void DrawOnBitmap(Graphics graphics, int widthOfDrawArea, int heightOfDrawArea)
+        public bool drawFoodOverlay = false;
+        public void DrawOnBitmap(Graphics graphics, int widthOfDrawArea, int heightOfDrawArea, bool respectDrawFoodOverlay = true)
         {
             lock (_lock)
             {
@@ -155,6 +156,19 @@ namespace Evolution.Evolution
                         MapGeneration.MapObject m = map.map[i, j];
                         Brush terrainBrush = getTerrainBrush(m.level);
                         graphics.FillRectangle(terrainBrush, i * lengthOfTile, j * lengthOfTile, lengthOfTile, lengthOfTile);
+                    }
+                }
+                // Draw food overlay
+                if (respectDrawFoodOverlay && drawFoodOverlay)
+                {
+                    for (int i = 0; i < map.map.GetLength(0); i++)
+                    {
+                        for (int j = 0; j < map.map.GetLength(1); j++)
+                        {
+                            MapGeneration.MapObject m = map.map[i, j];
+                            Brush brush = getFoodBrush(m.food);
+                            graphics.FillRectangle(brush, i * lengthOfTile, j * lengthOfTile, lengthOfTile, lengthOfTile);
+                        }
                     }
                 }
                 // Draw animals
@@ -182,6 +196,25 @@ namespace Evolution.Evolution
                 return land;
             else
                 return mountain;
+        }
+
+        private Brush getFoodBrush(int food)
+        {
+            byte rMin = 255;
+            byte gMin = 0;
+            byte bMin = 0;
+
+            byte rMax = 0;
+            byte gMax = 255;
+            byte bMax = 0;
+
+            int max = MapGeneration.Map.maxFood;
+
+            int r = rMin + (food / max) * ((rMax - rMin));
+            int g = gMin + (food / max) * ((gMax - gMin));
+            int b = bMin + (food / max) * ((bMax - bMin));
+
+            return new SolidBrush(Color.FromArgb(128, r, g, b));
         }
     }
 }

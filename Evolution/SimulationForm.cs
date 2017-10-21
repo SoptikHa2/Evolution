@@ -96,5 +96,10 @@ namespace Evolution
                 nextTickButton.Enabled = true;
             }
         }
+
+        private void displayFoodCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            simulation.drawFoodOverlay = displayFoodCheckbox.Checked;
+        }
     }
 }
