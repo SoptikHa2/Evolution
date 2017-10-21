@@ -30,6 +30,8 @@
         {
             this.mainDrawPictureBox = new System.Windows.Forms.PictureBox();
             this.statusLabel = new System.Windows.Forms.Label();
+            this.autoplayTickCheckbox = new System.Windows.Forms.CheckBox();
+            this.nextTickButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.mainDrawPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -55,11 +57,36 @@
             this.statusLabel.Text = "Generation 42";
             this.statusLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
+            // autoplayTickCheckbox
+            // 
+            this.autoplayTickCheckbox.AutoSize = true;
+            this.autoplayTickCheckbox.Checked = true;
+            this.autoplayTickCheckbox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.autoplayTickCheckbox.Location = new System.Drawing.Point(510, 33);
+            this.autoplayTickCheckbox.Name = "autoplayTickCheckbox";
+            this.autoplayTickCheckbox.Size = new System.Drawing.Size(117, 17);
+            this.autoplayTickCheckbox.TabIndex = 4;
+            this.autoplayTickCheckbox.Text = "Simulation autoplay";
+            this.autoplayTickCheckbox.UseVisualStyleBackColor = true;
+            this.autoplayTickCheckbox.CheckedChanged += new System.EventHandler(this.autoplayTickCheckbox_CheckedChanged);
+            // 
+            // nextTickButton
+            // 
+            this.nextTickButton.Location = new System.Drawing.Point(510, 57);
+            this.nextTickButton.Name = "nextTickButton";
+            this.nextTickButton.Size = new System.Drawing.Size(159, 23);
+            this.nextTickButton.TabIndex = 5;
+            this.nextTickButton.Text = "Start 1 tick";
+            this.nextTickButton.UseVisualStyleBackColor = true;
+            this.nextTickButton.Click += new System.EventHandler(this.nextTickButton_Click);
+            // 
             // SimulationForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(681, 500);
+            this.Controls.Add(this.nextTickButton);
+            this.Controls.Add(this.autoplayTickCheckbox);
             this.Controls.Add(this.mainDrawPictureBox);
             this.Controls.Add(this.statusLabel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -77,5 +104,7 @@
         #endregion
         private System.Windows.Forms.PictureBox mainDrawPictureBox;
         private System.Windows.Forms.Label statusLabel;
+        private System.Windows.Forms.CheckBox autoplayTickCheckbox;
+        private System.Windows.Forms.Button nextTickButton;
     }
 }

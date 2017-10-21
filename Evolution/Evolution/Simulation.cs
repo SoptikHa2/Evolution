@@ -81,11 +81,22 @@ namespace Evolution.Evolution
 
         private int tick = 0;
         public int generation { get; private set; }
+        public int playTicks = -1;
         public void Tick()
         {
             DateTime lastThreadCall = DateTime.Now;
             while (true)
             {
+                if (playTicks != 0)
+                    playTicks--;
+                else
+                {
+                    while (playTicks == 0)
+                        Thread.Sleep(10);
+                    if (playTicks > 0)
+                        playTicks--;
+                }
+
                 // Save some data at beginning of generation
                 if (tick == 0)
                 {

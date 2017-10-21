@@ -29,7 +29,7 @@ namespace Evolution
                 generation = simulation.generation;
 
             this.simulation = simulation ?? new Evolution.Simulation(100, 100);
-            this.simulation.NextTick += (o, ev) => { this.Invoke((MethodInvoker)delegate () { statusLabel.Text = $"Generation {generation} | Tick {tick++}"; }); };
+            this.simulation.NextTick += (o, ev) => { this.Invoke((MethodInvoker)delegate () { statusLabel.Text = $"Generation {generation} | Tick {tick++}"; if (this.simulation.playTicks == 0) nextTickButton.Enabled = true; });  };
             this.simulation.NextGeneration += (o, ev) => { this.Invoke((MethodInvoker)delegate () { tick = 1; statusLabel.Text = $"Generation {++generation} | Tick {tick}"; UpdateGroupBox(); }); };
 
             UpdateGroupBox();
@@ -75,6 +75,26 @@ namespace Evolution
         private void mainDrawPictureBox_Paint(object sender, PaintEventArgs e)
         {
             simulation.DrawOnBitmap(e.Graphics, mainDrawPictureBox.Width, mainDrawPictureBox.Height);
+        }
+
+        private void nextTickButton_Click(object sender, EventArgs e)
+        {
+            simulation.playTicks = 1;
+            nextTickButton.Enabled = false;
+        }
+
+        private void autoplayTickCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (autoplayTickCheckbox.Checked)
+            {
+                simulation.playTicks = -1;
+                nextTickButton.Enabled = false;
+            }
+            else
+            {
+                simulation.playTicks = 0;
+                nextTickButton.Enabled = true;
+            }
         }
     }
 }
