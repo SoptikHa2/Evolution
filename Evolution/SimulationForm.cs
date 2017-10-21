@@ -29,6 +29,7 @@ namespace Evolution
                 generation = simulation.generation;
 
             this.simulation = simulation ?? new Evolution.Simulation(100, 100);
+            this.simulation.StartTicks();
             this.simulation.NextTick += (o, ev) => { this.Invoke((MethodInvoker)delegate () { statusLabel.Text = $"Generation {generation} | Tick {tick++}"; if (this.simulation.playTicks == 0) nextTickButton.Enabled = true; });  };
             this.simulation.NextGeneration += (o, ev) => { this.Invoke((MethodInvoker)delegate () { tick = 1; statusLabel.Text = $"Generation {++generation} | Tick {tick}"; UpdateGroupBox(); }); };
 
@@ -100,6 +101,11 @@ namespace Evolution
         private void displayFoodCheckbox_CheckedChanged(object sender, EventArgs e)
         {
             simulation.drawFoodOverlay = displayFoodCheckbox.Checked;
+        }
+
+        private void saveExcelDataButton_Click(object sender, EventArgs e)
+        {
+            Serializer.SaveExcelDataInClipboard();
         }
     }
 }

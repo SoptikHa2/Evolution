@@ -14,6 +14,20 @@ namespace Evolution
         private const int saveSerializedFilesEveryXGenerations = 10;
         #endregion
 
+        private static StringBuilder bestExcelData = new StringBuilder();
+        private static StringBuilder avgExcelData = new StringBuilder();
+        private static string GetExcelData()
+        {
+            string s = "Best energy:\n" + bestExcelData.ToString();
+            s += "\n\nAverage energy:\n" + avgExcelData.ToString();
+            return s;
+        }
+
+        public static void SaveExcelDataInClipboard()
+        {
+            System.Windows.Forms.Clipboard.SetText(GetExcelData());
+        }
+
         public static void BeforeGenerationSave(Evolution.Species[] species, MapGeneration.Map map, int generation, DateTime dateTimeStarted)
         {
             try
@@ -67,11 +81,16 @@ namespace Evolution
                 // Generate statistics for each species
                 for (int i = 0; i < species.Length; i++)
                 {
+                    int best = species[i].animals[0].energy;
+                    double avg = species[i].animals.Select(x => x.energy).Average();
                     File.WriteAllText($"log\\{dateTimeStarted.ToString("dd-MM-yyyy--HH-mm-ss")}\\Generation {generation - 1}\\species_{species[i].name}.dat",
-                        $"Species best energy: {species[i].animals[0].energy}, sum energy of top half: {species[i].animals.Select(x => x.energy).Where(x => x != int.MinValue).Sum()}{Environment.NewLine}{Environment.NewLine}" +
+                        $"Species best energy: {best}, sum energy: {species[i].animals.Select(x => x.energy).Where(x => x != int.MinValue).Sum()}, average energy: {avg}{Environment.NewLine}{Environment.NewLine}" +
                         $"Best animal:{Environment.NewLine}{species[i].animals[0].ToString()}{Environment.NewLine}{Environment.NewLine}" +
                         $"Middle animal:{Environment.NewLine}{species[i].animals[species[i].animals.Length / 4].ToString()}{Environment.NewLine}{Environment.NewLine}" +
                         $"Worst animal:{Environment.NewLine}{species[i].animals.Where(x => x.energy != int.MinValue).Last().ToString()}");
+
+                    bestExcelData.Append(best.ToString() + "\t");
+                    avgExcelData.Append(avg.ToString() + "\t");
                 }
             }
             catch (Exception ex)

@@ -33,6 +33,7 @@
             this.autoplayTickCheckbox = new System.Windows.Forms.CheckBox();
             this.nextTickButton = new System.Windows.Forms.Button();
             this.displayFoodCheckbox = new System.Windows.Forms.CheckBox();
+            this.saveExcelDataButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.mainDrawPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -92,11 +93,22 @@
             this.displayFoodCheckbox.UseVisualStyleBackColor = true;
             this.displayFoodCheckbox.CheckedChanged += new System.EventHandler(this.displayFoodCheckbox_CheckedChanged);
             // 
+            // saveExcelDataButton
+            // 
+            this.saveExcelDataButton.Location = new System.Drawing.Point(510, 173);
+            this.saveExcelDataButton.Name = "saveExcelDataButton";
+            this.saveExcelDataButton.Size = new System.Drawing.Size(159, 38);
+            this.saveExcelDataButton.TabIndex = 7;
+            this.saveExcelDataButton.Text = "Save generation data in excel format into clipboard";
+            this.saveExcelDataButton.UseVisualStyleBackColor = true;
+            this.saveExcelDataButton.Click += new System.EventHandler(this.saveExcelDataButton_Click);
+            // 
             // SimulationForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(681, 500);
+            this.Controls.Add(this.saveExcelDataButton);
             this.Controls.Add(this.displayFoodCheckbox);
             this.Controls.Add(this.nextTickButton);
             this.Controls.Add(this.autoplayTickCheckbox);
@@ -120,5 +132,6 @@
         private System.Windows.Forms.CheckBox autoplayTickCheckbox;
         private System.Windows.Forms.Button nextTickButton;
         private System.Windows.Forms.CheckBox displayFoodCheckbox;
+        private System.Windows.Forms.Button saveExcelDataButton;
     }
 }

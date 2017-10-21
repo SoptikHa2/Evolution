@@ -47,7 +47,7 @@ namespace Evolution
         private void simulationListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             generationListBox.Items.Clear();
-
+            SelectedPath = "";
             string nameOfDir = simulationListBox.SelectedItem.ToString();
 
             try

@@ -38,7 +38,7 @@ namespace Evolution.Evolution
 
         public void NewGeneration(MapGeneration.Map map)
         {
-            var animals = this.animals.OrderBy(x => x.energy).ToList();
+            var animals = this.animals.Reverse().ToList();
             int reqCount = animals.Count;
 
             // Remove last half

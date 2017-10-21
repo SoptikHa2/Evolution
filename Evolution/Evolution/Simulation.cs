@@ -62,7 +62,6 @@ namespace Evolution.Evolution
             this.species = InitializeSpecies();
             tickThread = new Thread(Tick);
             tickThread.Name = "Simulation Tick Thread";
-            tickThread.Start();
         }
 
         public Simulation() { }
@@ -77,6 +76,11 @@ namespace Evolution.Evolution
             this.map = map;
             this.species = species;
             this.generation = generation;
+        }
+
+        public void StartTicks()
+        {
+            tickThread.Start();
         }
 
         private int tick = 0;
@@ -115,10 +119,7 @@ namespace Evolution.Evolution
                 // If there is new generation
                 if (tick++ >= generationTicks)
                 {
-                    // Breed new animals and fire event
                     tick = 0;
-                    foreach (Species s in species)
-                        s.NewGeneration(map);
                     NextGeneration(this, EventArgs.Empty);
 
                     // Add new food to tiles
@@ -130,8 +131,17 @@ namespace Evolution.Evolution
                     Bitmap b = new Bitmap(savedImageWidth, savedImageHeight);
                     Graphics g = Graphics.FromImage(b);
                     DrawOnBitmap(g, savedImageWidth, savedImageHeight, false);
+
+                    // Order animals
+                    for (int i = 0; i < species.Length; i++)
+                        species[i].animals = species[i].animals.OrderByDescending(x => x.energy).ToArray();
+
                     // Save some additional files to log
                     Serializer.AfterGenerationSave(b, species, generation, dateTimeStarted);
+
+                    // Breed new animals
+                    foreach (Species s in species)
+                        s.NewGeneration(map);
 
                     // Reset animals energy & position
                     foreach (Species s in species)
