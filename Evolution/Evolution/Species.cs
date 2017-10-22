@@ -40,9 +40,7 @@ namespace Evolution.Evolution
         {
             var animals = this.animals.Reverse().ToList();
             int reqCount = animals.Count;
-
-            // Remove last half
-            animals.RemoveRange(0, reqCount / 2);
+            
 
             int addedEnergy = animals.Select(x => x.energy).Min();
             if (addedEnergy < 0)
@@ -83,7 +81,10 @@ namespace Evolution.Evolution
             }
 
             animals.ForEach(x => x.energy -= addedEnergy);
-            
+
+            // Remove last half
+            animals.RemoveRange(0, reqCount / 2);
+
             animals.Reverse();
             animals.AddRange(newOnes);
             this.animals = animals.ToArray();
