@@ -28,8 +28,7 @@ namespace Evolution
                 directories = directories.OrderBy(x => Directory.GetCreationTime(x)).ToArray();
                 for (int i = 0; i < directories.Length; i++)
                 {
-                    if (Directory.Exists(directories[i] + "\\Generation 0"))
-                        simulationListBox.Items.Add(directories[i].Split('\\').Last());
+                    simulationListBox.Items.Add(directories[i].Split('\\').Last());
                 }
             }
             catch (Exception ex)
@@ -72,12 +71,11 @@ namespace Evolution
                 if (!Directory.Exists("error"))
                     Directory.CreateDirectory("error");
                 File.AppendAllText($"error\\Error_LoadForm_{DateTime.Now.ToString("dd-MM-yyyy--HH-mm-ss")}.txt", ex.ToString() + Environment.NewLine + Environment.NewLine);
-
             }
 
             try
             {
-                detailsPictureBox.Image = Image.FromFile(Directory.GetCurrentDirectory() + "\\log\\" + simulationListBox.SelectedItem + "\\Generation 0\\end of generation.png");
+                detailsPictureBox.Image = Image.FromFile(Directory.GetDirectories(Directory.GetCurrentDirectory() + "\\log\\" + simulationListBox.SelectedItem)[0] + "\\end of generation.png");
             }
             catch
             {

@@ -14,12 +14,23 @@ namespace Evolution
         private const int saveSerializedFilesEveryXGenerations = 10;
         #endregion
 
-        private static StringBuilder bestExcelData = new StringBuilder();
-        private static StringBuilder avgExcelData = new StringBuilder();
+        private static List<int> bestEnergyData = new List<int>();
+        private static List<double> averageEnergyData = new List<double>();
         private static string GetExcelData()
         {
-            string s = "Best energy:\n" + bestExcelData.ToString();
-            s += "\n\nAverage energy:\n" + avgExcelData.ToString();
+            string s = "\t";
+            for (int i = 0; i < bestEnergyData.Count; i++)
+                s += $"{i + 1}\t";
+            s += Environment.NewLine;
+
+            s += "Best Energy\t";
+            for (int i = 0; i < bestEnergyData.Count; i++)
+                s += $"{bestEnergyData[i]}\t";
+            s += Environment.NewLine;
+
+            s += "Average Energy\t";
+            for (int i = 0; i < averageEnergyData.Count; i++)
+                s += $"{averageEnergyData[i]}\t";
             return s;
         }
 
@@ -78,20 +89,24 @@ namespace Evolution
 
             try
             {
+                int oBest = 0;
+                List<double> avgs = new List<double>();
                 // Generate statistics for each species
                 for (int i = 0; i < species.Length; i++)
                 {
                     int best = species[i].animals[0].energy;
+                    if (best > oBest)
+                        oBest = best;
                     double avg = species[i].animals.Select(x => x.energy).Average();
+                    avgs.Add(avg);
                     File.WriteAllText($"log\\{dateTimeStarted.ToString("dd-MM-yyyy--HH-mm-ss")}\\Generation {generation - 1}\\species_{species[i].name}.dat",
                         $"Species best energy: {best}, sum energy: {species[i].animals.Select(x => x.energy).Where(x => x != int.MinValue).Sum()}, average energy: {avg}{Environment.NewLine}{Environment.NewLine}" +
                         $"Best animal:{Environment.NewLine}{species[i].animals[0].ToString()}{Environment.NewLine}{Environment.NewLine}" +
                         $"Middle animal:{Environment.NewLine}{species[i].animals[species[i].animals.Length / 4].ToString()}{Environment.NewLine}{Environment.NewLine}" +
                         $"Worst animal:{Environment.NewLine}{species[i].animals.Where(x => x.energy != int.MinValue).Last().ToString()}");
-
-                    bestExcelData.Append(best.ToString() + "\t");
-                    avgExcelData.Append(avg.ToString() + "\t");
                 }
+                bestEnergyData.Add(oBest);
+                averageEnergyData.Add(avgs.Average());
             }
             catch (Exception ex)
             {
@@ -162,29 +177,36 @@ namespace Evolution
 
         public static Evolution.Simulation LoadSimulation(string pathToDirectory)
         {
-            string[] mapSerialized = Directory.GetFiles(pathToDirectory, "*.map");
-            string[] speciesSerialized = Directory.GetFiles(pathToDirectory, "*.species");
-
-            if (mapSerialized.Length > 0 && speciesSerialized.Length > 0)
+            try
             {
-                Evolution.Simulation result = null;
-                try
+                string[] mapSerialized = Directory.GetFiles(pathToDirectory, "*.map");
+                string[] speciesSerialized = Directory.GetFiles(pathToDirectory, "*.species");
+
+                if (mapSerialized.Length > 0 && speciesSerialized.Length > 0)
                 {
-                    MapGeneration.Map map = DeserializeObject(File.ReadAllText(mapSerialized[0])) as MapGeneration.Map;
-                    result = new Evolution.Simulation(map.map.GetLength(0), map.map.GetLength(1));
-                    string[] datFile = File.ReadAllText(pathToDirectory + "\\sim.dat").Split(';');
-                    result.SetOnLoad(map, DeserializeObject(File.ReadAllText(speciesSerialized[0])) as Evolution.Species[], int.Parse(datFile[0]));
-                    return result;
+                    Evolution.Simulation result = null;
+                    try
+                    {
+                        MapGeneration.Map map = DeserializeObject(File.ReadAllText(mapSerialized[0])) as MapGeneration.Map;
+                        result = new Evolution.Simulation(map.map.GetLength(0), map.map.GetLength(1));
+                        string[] datFile = File.ReadAllText(pathToDirectory + "\\sim.dat").Split(';');
+                        result.SetOnLoad(map, DeserializeObject(File.ReadAllText(speciesSerialized[0])) as Evolution.Species[], int.Parse(datFile[0]));
+                        return result;
+                    }
+                    catch (Exception ex)
+                    {
+                        if (!Directory.Exists("error"))
+                            Directory.CreateDirectory("error");
+                        File.AppendAllText($"error\\Error_LoadingSimulation_{DateTime.Now.ToString("dd-MM-yyyy--HH-mm-ss")}.txt", ex.ToString() + Environment.NewLine + Environment.NewLine);
+                        return null;
+                    }
                 }
-                catch (Exception ex)
+                else
                 {
-                    if (!Directory.Exists("error"))
-                        Directory.CreateDirectory("error");
-                    File.AppendAllText($"error\\Error_LoadingSimulation_{DateTime.Now.ToString("dd-MM-yyyy--HH-mm-ss")}.txt", ex.ToString() + Environment.NewLine + Environment.NewLine);
                     return null;
                 }
             }
-            else
+            catch
             {
                 return null;
             }

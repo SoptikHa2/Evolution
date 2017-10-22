@@ -39,9 +39,9 @@ namespace Evolution
 
         private void LoadFromFileDrag(string path)
         {
-            string dirPath = System.IO.Path.GetDirectoryName(path);
-            System.IO.Directory.SetCurrentDirectory(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location));
-            LoadFromPath(dirPath);
+                string dirPath = System.IO.Path.GetDirectoryName(path);
+                System.IO.Directory.SetCurrentDirectory(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location));
+                LoadFromPath(dirPath);
         }
 
         private void LoadFromPath(string path)
