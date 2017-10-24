@@ -10,7 +10,7 @@ namespace Evolution.MapGeneration
     public class Map
     {
         public const int minFood = 0;
-        public const int maxFood = 10;
+        public const int maxFood = 3;
 
         public MapObject[,] map { get; private set; }
         private static Random rnd = new Random();

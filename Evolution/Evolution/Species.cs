@@ -40,18 +40,21 @@ namespace Evolution.Evolution
         {
             var animals = this.animals.Reverse().ToList();
             int reqCount = animals.Count;
-            
 
-            int addedEnergy = animals.Select(x => x.energy).Min();
-            if (addedEnergy < 0)
-                addedEnergy = -addedEnergy;
-            else
-                addedEnergy = 0;
-            animals.ForEach(x => x.energy += addedEnergy);
+            // Remove all animals with not positive energy
+            animals = animals.Where(x => x.energy >= 0).ToList();
+            int removedAnimalsDueToNegativeEnergy = reqCount - animals.Count;
+
+            if (animals.Count == 0)
+                return;
+
+            int removedAnimals = reqCount / 2;
+            if (removedAnimalsDueToNegativeEnergy > removedAnimals)
+                removedAnimals = removedAnimalsDueToNegativeEnergy;
 
             // Breed
             List<Animal> newOnes = new List<Animal>();
-            while (newOnes.Count < reqCount / 2)
+            while (newOnes.Count < removedAnimals)
             {
                 Animal parent1 = null;
                 Animal parent2 = null;
@@ -59,18 +62,18 @@ namespace Evolution.Evolution
                 int sum = animals.Select(x => x.energy).Sum();
                 int random = rnd.Next(sum);
 
-                for(int i = 0; i < animals.Count; i++)
+                for (int i = 0; i < animals.Count; i++)
                 {
-                    if(random < animals[i].energy)
+                    if (random < animals[i].energy)
                     {
                         parent1 = animals[i];
                         break;
                     }
                     random -= animals[i].energy;
                 }
-                for(int i = 0; i < animals.Count; i++)
+                for (int i = 0; i < animals.Count; i++)
                 {
-                    if(random < animals[i].energy)
+                    if (random < animals[i].energy)
                     {
                         parent2 = animals[i];
                         break;
@@ -80,10 +83,8 @@ namespace Evolution.Evolution
                 newOnes.Add(parent1.BreedWith(parent2, map, name + animalNumber++));
             }
 
-            animals.ForEach(x => x.energy -= addedEnergy);
-
-            // Remove last half
-            animals.RemoveRange(0, reqCount / 2);
+            // Remove animals so at most 1/2 of them survives
+            animals.RemoveRange(0, removedAnimals);
 
             animals.Reverse();
             animals.AddRange(newOnes);
