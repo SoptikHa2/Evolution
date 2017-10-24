@@ -124,7 +124,7 @@ namespace Evolution.Evolution
                     // Add new food to tiles
                     for (int i = 0; i < map.map.GetLength(0); i++)
                         for (int j = 0; j < map.map.GetLength(1); j++)
-                            map.map[i, j].food = rnd.Next(11);
+                            map.map[i, j].food = rnd.Next(MapGeneration.Map.minFood, MapGeneration.Map.maxFood);
 
                     // Save image of end of previous generation
                     Bitmap b = new Bitmap(savedImageWidth, savedImageHeight);
@@ -221,9 +221,9 @@ namespace Evolution.Evolution
 
             int max = MapGeneration.Map.maxFood;
 
-            int r = rMin + (food / max) * ((rMax - rMin));
-            int g = gMin + (food / max) * ((gMax - gMin));
-            int b = bMin + (food / max) * ((bMax - bMin));
+            int r = (int)(rMin + (food / (double)max) * ((rMax - rMin)));
+            int g = (int)(gMin + (food / (double)max) * ((gMax - gMin)));
+            int b = (int)(bMin + (food / (double)max) * ((bMax - bMin)));
 
             return new SolidBrush(Color.FromArgb(128, r, g, b));
         }

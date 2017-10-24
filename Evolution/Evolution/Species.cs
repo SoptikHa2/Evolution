@@ -84,7 +84,7 @@ namespace Evolution.Evolution
             }
 
             // Remove animals so at most 1/2 of them survives
-            animals.RemoveRange(0, removedAnimals);
+            animals.RemoveRange(0, removedAnimals - removedAnimalsDueToNegativeEnergy);
 
             animals.Reverse();
             animals.AddRange(newOnes);
