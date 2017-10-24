@@ -120,7 +120,6 @@ namespace Evolution.Evolution
                 if (tick++ >= generationTicks)
                 {
                     tick = 0;
-                    NextGeneration(this, EventArgs.Empty);
 
                     // Add new food to tiles
                     for (int i = 0; i < map.map.GetLength(0); i++)
@@ -146,6 +145,8 @@ namespace Evolution.Evolution
                     // Reset animals energy & position
                     foreach (Species s in species)
                         s.ResetAnimals(width, height);
+
+                    NextGeneration(this, EventArgs.Empty);
                 }
             }
         }

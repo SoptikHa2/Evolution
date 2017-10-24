@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace Evolution
 {
@@ -30,10 +31,10 @@ namespace Evolution
 
             this.simulation = simulation ?? new Evolution.Simulation(100, 100);
             this.simulation.StartTicks();
-            this.simulation.NextTick += (o, ev) => { this.Invoke((MethodInvoker)delegate () { statusLabel.Text = $"Generation {generation} | Tick {tick++}"; if (this.simulation.playTicks == 0) nextTickButton.Enabled = true; });  };
-            this.simulation.NextGeneration += (o, ev) => { this.Invoke((MethodInvoker)delegate () { tick = 1; statusLabel.Text = $"Generation {++generation} | Tick {tick}"; UpdateGroupBox(); }); };
+            this.simulation.NextTick += (o, ev) => { this.Invoke((MethodInvoker)delegate () { statusLabel.Text = $"Generation {generation} | Tick {tick++}"; if (this.simulation.playTicks == 0) nextTickButton.Enabled = true; }); };
+            this.simulation.NextGeneration += (o, ev) => { this.Invoke((MethodInvoker)delegate () { tick = 1; statusLabel.Text = $"Generation {++generation} | Tick {tick}"; UpdateChart(); }); };
 
-            UpdateGroupBox();
+            UpdateChart();
 
             mainDrawPictureBox.Image = new Bitmap(mainDrawPictureBox.Width, mainDrawPictureBox.Height);
             drawTimer = new Timer();
@@ -42,29 +43,22 @@ namespace Evolution
             drawTimer.Start();
         }
 
-        private void UpdateGroupBox()
+        private void UpdateChart(int elements = 10)
         {
-            /*animalsPanel.Controls.Clear();
+            Series best = visualisationGraph.Series[0];
+            Series average = visualisationGraph.Series[1];
 
-            int i = 1;
-            foreach (Evolution.Species s in simulation.species)
+            best.Points.Clear();
+            average.Points.Clear();
+
+            int min = Math.Max(0, Serializer.bestEnergyData.Count - elements);
+
+            int c = 0;
+            for (int i = min; i < Serializer.bestEnergyData.Count; i++)
             {
-                foreach (Evolution.Animal a in s.animals)
-                {
-                    Label l = new Label();
-
-                    l.Text = a.name;
-                    l.Width = 200;
-                    l.Height = 18;
-                    l.Location = new Point(10, 20 * i);
-
-                    Evolution.Animal currAnimal = a;
-                    l.Click += (o, e) => { DisplayInfoAboutAnimal(currAnimal); };
-
-                    animalsPanel.Controls.Add(l);
-                    i++;
-                }
-            }*/
+                best.Points.Add(new DataPoint(c, Serializer.bestEnergyData[i]));
+                average.Points.Add(new DataPoint(c++, Serializer.averageEnergyData[i]));
+            }
         }
 
         private void SimulationForm_FormClosing(object sender, FormClosingEventArgs e)

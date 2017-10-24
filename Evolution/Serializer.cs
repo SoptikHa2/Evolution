@@ -14,8 +14,8 @@ namespace Evolution
         private const int saveSerializedFilesEveryXGenerations = 10;
         #endregion
 
-        private static List<int> bestEnergyData = new List<int>();
-        private static List<double> averageEnergyData = new List<double>();
+        public static List<int> bestEnergyData = new List<int>();
+        public static List<double> averageEnergyData = new List<double>();
         private static string GetExcelData()
         {
             string s = "\t";
