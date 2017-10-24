@@ -42,7 +42,7 @@ namespace Evolution.Evolution
             int reqCount = animals.Count;
 
             // Remove all animals with not positive energy
-            animals = animals.Where(x => x.energy >= 0).ToList();
+            animals = animals.Where(x => x.energy > 0).ToList();
             int removedAnimalsDueToNegativeEnergy = reqCount - animals.Count;
 
             if (animals.Count == 0)
