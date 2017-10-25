@@ -88,9 +88,9 @@ namespace Evolution.Evolution
         public int playTicks = -1;
         public void Tick()
         {
-            DateTime lastThreadCall = DateTime.Now;
             while (true)
             {
+                // If ticks arent turned on, wait
                 if (playTicks != 0)
                     playTicks--;
                 else
@@ -108,7 +108,6 @@ namespace Evolution.Evolution
                 }
 
                 // Tick all objects
-                lastThreadCall = DateTime.Now;
                 for (int i = 0; i < map.map.GetLength(0); i++)
                     for (int j = 0; j < map.map.GetLength(1); j++)
                         map.map[i, j].Tick();
@@ -124,16 +123,23 @@ namespace Evolution.Evolution
                     // Add new food to tiles
                     for (int i = 0; i < map.map.GetLength(0); i++)
                         for (int j = 0; j < map.map.GetLength(1); j++)
-                            map.map[i, j].food = rnd.Next(11);
+                            map.map[i, j].food = rnd.Next(101) <= MapGeneration.Map.chanceToPosFood ? rnd.Next(MapGeneration.Map.minFood, MapGeneration.Map.maxFood) : 0;
 
                     // Save image of end of previous generation
                     Bitmap b = new Bitmap(savedImageWidth, savedImageHeight);
                     Graphics g = Graphics.FromImage(b);
                     DrawOnBitmap(g, savedImageWidth, savedImageHeight, false);
 
-                    // Order animals
+                    // Order animals and save animal with maximum energy, so it will be drawn another color on map
                     for (int i = 0; i < species.Length; i++)
+                    {
                         species[i].animals = species[i].animals.OrderByDescending(x => x.energy).ToArray();
+                        if (maxAnimal == null)
+                            maxAnimal = species[i].animals[0];
+                        else if (maxAnimal.energy < species[i].animals[0].energy)
+                            maxAnimal = species[i].animals[0];
+                    }
+
 
                     // Save some additional files to log
                     Serializer.AfterGenerationSave(b, species, generation, dateTimeStarted);
@@ -153,6 +159,8 @@ namespace Evolution.Evolution
 
         private readonly object _lock = new object();
         public bool drawFoodOverlay = false;
+        private Animal maxAnimal = null;
+        private Animal selectedAnimal = null;
         public void DrawOnBitmap(Graphics graphics, int widthOfDrawArea, int heightOfDrawArea, bool respectDrawFoodOverlay = true)
         {
             lock (_lock)
@@ -189,7 +197,12 @@ namespace Evolution.Evolution
                     for (int aN = 0; aN < sp.animals.Length; aN++)
                     {
                         Animal a = sp.animals[aN];
-                        graphics.FillRectangle(new SolidBrush(Color.FromName(sp.speciesColor)), a.x * lengthOfTile, a.y * lengthOfTile, lengthOfTile, lengthOfTile);
+                        SolidBrush sb = new SolidBrush(Color.FromName(sp.speciesColor));
+                        if (maxAnimal != null && a == maxAnimal)
+                            sb = Brushes.MediumVioletRed as SolidBrush;
+                        if (selectedAnimal != null && a == selectedAnimal)
+                            sb = Brushes.Purple as SolidBrush;
+                        graphics.FillRectangle(sb, a.x * lengthOfTile, a.y * lengthOfTile, lengthOfTile, lengthOfTile);
                     }
                 }
             }
@@ -221,9 +234,9 @@ namespace Evolution.Evolution
 
             int max = MapGeneration.Map.maxFood;
 
-            int r = rMin + (food / max) * ((rMax - rMin));
-            int g = gMin + (food / max) * ((gMax - gMin));
-            int b = bMin + (food / max) * ((bMax - bMin));
+            int r = (int)(rMin + (food / (double)max) * ((rMax - rMin)));
+            int g = (int)(gMin + (food / (double)max) * ((gMax - gMin)));
+            int b = (int)(bMin + (food / (double)max) * ((bMax - bMin)));
 
             return new SolidBrush(Color.FromArgb(128, r, g, b));
         }
