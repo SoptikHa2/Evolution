@@ -68,7 +68,7 @@ namespace Evolution.Evolution
 
         public Species[] InitializeSpecies()
         {
-            return new Species[] { new Species("fox", map, "orange") };
+            return new Species[] { new Species("Fox", map, "red"), new Species("Sheep", map, "silver"), new Species("Goat", map, "orange") };
         }
 
         public void SetOnLoad(MapGeneration.Map map, Species[] species, int generation)
@@ -130,15 +130,9 @@ namespace Evolution.Evolution
                     Graphics g = Graphics.FromImage(b);
                     DrawOnBitmap(g, savedImageWidth, savedImageHeight, false);
 
-                    // Order animals and save animal with maximum energy, so it will be drawn another color on map
+                    // Order animals
                     for (int i = 0; i < species.Length; i++)
-                    {
                         species[i].animals = species[i].animals.OrderByDescending(x => x.energy).ToArray();
-                        if (maxAnimal == null)
-                            maxAnimal = species[i].animals[0];
-                        else if (maxAnimal.energy < species[i].animals[0].energy)
-                            maxAnimal = species[i].animals[0];
-                    }
 
 
                     // Save some additional files to log
@@ -159,8 +153,6 @@ namespace Evolution.Evolution
 
         private readonly object _lock = new object();
         public bool drawFoodOverlay = false;
-        private Animal maxAnimal = null;
-        private Animal selectedAnimal = null;
         public void DrawOnBitmap(Graphics graphics, int widthOfDrawArea, int heightOfDrawArea, bool respectDrawFoodOverlay = true)
         {
             lock (_lock)
@@ -198,10 +190,6 @@ namespace Evolution.Evolution
                     {
                         Animal a = sp.animals[aN];
                         SolidBrush sb = new SolidBrush(Color.FromName(sp.speciesColor));
-                        if (maxAnimal != null && a == maxAnimal)
-                            sb = Brushes.MediumVioletRed as SolidBrush;
-                        if (selectedAnimal != null && a == selectedAnimal)
-                            sb = Brushes.Purple as SolidBrush;
                         graphics.FillRectangle(sb, a.x * lengthOfTile, a.y * lengthOfTile, lengthOfTile, lengthOfTile);
                     }
                 }

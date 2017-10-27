@@ -32,9 +32,9 @@ namespace Evolution
             this.simulation = simulation ?? new Evolution.Simulation(100, 100);
             this.simulation.StartTicks();
             this.simulation.NextTick += (o, ev) => { this.Invoke((MethodInvoker)delegate () { statusLabel.Text = $"Generation {generation} | Tick {tick++}"; if (this.simulation.playTicks == 0) nextTickButton.Enabled = true; }); };
-            this.simulation.NextGeneration += (o, ev) => { this.Invoke((MethodInvoker)delegate () { tick = 1; statusLabel.Text = $"Generation {++generation} | Tick {tick}"; UpdateChart(); }); };
+            this.simulation.NextGeneration += (o, ev) => { this.Invoke((MethodInvoker)delegate () { tick = 1; statusLabel.Text = $"Generation {++generation} | Tick {tick}"; UpdateCharts(); }); };
 
-            UpdateChart();
+            UpdateCharts();
 
             mainDrawPictureBox.Image = new Bitmap(mainDrawPictureBox.Width, mainDrawPictureBox.Height);
             drawTimer = new Timer();
@@ -43,8 +43,9 @@ namespace Evolution
             drawTimer.Start();
         }
 
-        private void UpdateChart(int elements = 10)
+        private void UpdateCharts(int elements = 10)
         {
+            #region BestAverageAnimalChart
             Series best = visualisationGraph.Series[0];
             Series average = visualisationGraph.Series[1];
 
@@ -59,6 +60,31 @@ namespace Evolution
                 best.Points.Add(new DataPoint(c, Serializer.bestEnergyData[i]));
                 average.Points.Add(new DataPoint(c++, Serializer.averageEnergyData[i]));
             }
+            #endregion
+
+            #region SpeciesChart
+            speciesChart.Series.Clear();
+            int skip = Math.Max(Serializer.overallSpeciesEnergy.Count - elements * simulation.species.Length, 0);
+            List<int> points = Serializer.overallSpeciesEnergy.Skip(skip).ToList();
+
+            // Initialize series in chart
+            for(int i = 0; i < simulation.species.Length; i++)
+            {
+                speciesChart.Series.Add(new Series(simulation.species[i].name));
+                speciesChart.Series[i].ChartType = SeriesChartType.StackedArea100;
+                speciesChart.Series[i].Color = Color.FromName(simulation.species[i].speciesColor);
+            }
+
+            // Add points to series in chart
+            int generations = points.Count / simulation.species.Length;
+            for(int i = 0; i < generations; i++)
+            {
+                for(int j = 0; j < simulation.species.Length; j++)
+                {
+                    speciesChart.Series[j].Points.Add(new DataPoint(i, points[i * simulation.species.Length + j]));
+                }
+            }
+            #endregion
         }
 
         private void SimulationForm_FormClosing(object sender, FormClosingEventArgs e)

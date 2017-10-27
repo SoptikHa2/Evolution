@@ -16,6 +16,7 @@ namespace Evolution
 
         public static List<int> bestEnergyData = new List<int>();
         public static List<double> averageEnergyData = new List<double>();
+        public static List<int> overallSpeciesEnergy = new List<int>();
         private static string GetExcelData()
         {
             string s = "\t";
@@ -104,6 +105,7 @@ namespace Evolution
                         $"Best animal:{Environment.NewLine}{species[i].animals[0].ToString()}{Environment.NewLine}{Environment.NewLine}" +
                         $"Middle animal:{Environment.NewLine}{species[i].animals[species[i].animals.Length / 4].ToString()}{Environment.NewLine}{Environment.NewLine}" +
                         $"Worst animal:{Environment.NewLine}{species[i].animals.Where(x => x.energy != int.MinValue).Last().ToString()}");
+                    overallSpeciesEnergy.Add(species[i].animals.Select(x => x.energy).Sum());
                 }
                 bestEnergyData.Add(oBest);
                 averageEnergyData.Add(avgs.Average());
