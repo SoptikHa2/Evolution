@@ -64,8 +64,8 @@ namespace Evolution
 
             #region SpeciesChart
             speciesChart.Series.Clear();
-            int skip = Math.Max(Serializer.overallSpeciesEnergy.Count - elements * simulation.species.Length, 0);
-            List<int> points = Serializer.overallSpeciesEnergy.Skip(skip).ToList();
+            int skip = Math.Max(Serializer.overallSpeciesAnimalNumbers.Count - elements * simulation.species.Length, 0);
+            List<int> points = Serializer.overallSpeciesAnimalNumbers.Skip(skip).ToList();
 
             // Initialize series in chart
             for(int i = 0; i < simulation.species.Length; i++)

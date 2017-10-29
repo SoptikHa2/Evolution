@@ -39,13 +39,15 @@ namespace Evolution
 
         private void LoadFromFileDrag(string path)
         {
-                string dirPath = System.IO.Path.GetDirectoryName(path);
-                System.IO.Directory.SetCurrentDirectory(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location));
-                LoadFromPath(dirPath);
+            string dirPath = System.IO.Path.GetDirectoryName(path);
+            System.IO.Directory.SetCurrentDirectory(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location));
+            LoadFromPath(dirPath);
         }
 
         private void LoadFromPath(string path)
         {
+            if (path == "")
+                return;
             Evolution.Simulation sim = Serializer.LoadSimulation(path);
             if (sim == null)
                 MessageBox.Show("Sorry, I tried, but I was unable to load simulation. Check if there are correct files (*.map, *.species)" +

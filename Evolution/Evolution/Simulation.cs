@@ -38,6 +38,8 @@ namespace Evolution.Evolution
 
         public const int eatEnergy = 1;
         public const int searchFoodEnergy = 0;
+
+        public const int numberOfAnimalsOnMap = 100;
         #endregion
 
         private MapGeneration.Map map;
@@ -68,7 +70,7 @@ namespace Evolution.Evolution
 
         public Species[] InitializeSpecies()
         {
-            return new Species[] { new Species("Fox", map, "red"), new Species("Sheep", map, "silver"), new Species("Goat", map, "orange") };
+            return new Species[] { new Species("Fox", map, "red", 3), new Species("Sheep", map, "silver", 3), new Species("Goat", map, "orange", 3) };
         }
 
         public void SetOnLoad(MapGeneration.Map map, Species[] species, int generation)
@@ -138,6 +140,8 @@ namespace Evolution.Evolution
                     // Save some additional files to log
                     Serializer.AfterGenerationSave(b, species, generation, dateTimeStarted);
 
+                    // Calculate number of allowed animals for each species
+                    Species.SetMaxNumberOfAnimalsForSpecies(species, numberOfAnimalsOnMap);
                     // Breed new animals
                     foreach (Species s in species)
                         s.NewGeneration(map);

@@ -16,11 +16,14 @@ namespace Evolution.Evolution
 
         private static Random rnd = new Random();
         private int animalNumber = 0;
+        public int maxAnimals;
 
-        public Species(string name, MapGeneration.Map map, string speciesColor, int numberOfAnimals = 50)
+        public Species(string name, MapGeneration.Map map, string speciesColor, int totalNumberOfSpecies)
         {
             this.name = name;
+            int numberOfAnimals = Simulation.numberOfAnimalsOnMap / totalNumberOfSpecies;
             animals = new Animal[numberOfAnimals];
+            maxAnimals = numberOfAnimals;
             int mapLengthX = map.map.GetLength(0);
             int mapLengthY = map.map.GetLength(1);
             for (int i = 0; i < numberOfAnimals; i++)
@@ -38,19 +41,37 @@ namespace Evolution.Evolution
 
         public void NewGeneration(MapGeneration.Map map)
         {
+            if (maxAnimals < 2)
+            {
+                this.animals = new Animal[0];
+                return;
+            }
+
             var animals = this.animals.Reverse().ToList();
             int reqCount = animals.Count;
 
             // Remove all animals with not positive energy
             animals = animals.Where(x => x.energy > 0).ToList();
-            int removedAnimalsDueToNegativeEnergy = reqCount - animals.Count;
+            int removedAnimalsBeforeBreeding = reqCount - animals.Count;
+
+            // Remove all animals over limit
+            int remAnim = animals.Count - maxAnimals;
+            if (remAnim > 0)
+                animals.RemoveRange(0, remAnim);
+
+
+            int removedAnimals = reqCount / 2;
+            if (removedAnimalsBeforeBreeding > removedAnimals)
+                removedAnimals = removedAnimalsBeforeBreeding;
+
+            if (animals.Count == 1)
+            {
+                animals.RemoveAt(0);
+                return;
+            }
 
             if (animals.Count == 0)
                 return;
-
-            int removedAnimals = reqCount / 2;
-            if (removedAnimalsDueToNegativeEnergy > removedAnimals)
-                removedAnimals = removedAnimalsDueToNegativeEnergy;
 
             // Breed
             List<Animal> newOnes = new List<Animal>();
@@ -84,7 +105,7 @@ namespace Evolution.Evolution
             }
 
             // Remove animals so at most 1/2 of them survives
-            animals.RemoveRange(0, removedAnimals - removedAnimalsDueToNegativeEnergy);
+            animals.RemoveRange(0, removedAnimals - removedAnimalsBeforeBreeding);
 
             animals.Reverse();
             animals.AddRange(newOnes);
@@ -98,6 +119,17 @@ namespace Evolution.Evolution
                 animals[i].energy = 0;
                 animals[i].x = rnd.Next(maxX);
                 animals[i].y = rnd.Next(maxY);
+            }
+        }
+
+        public static void SetMaxNumberOfAnimalsForSpecies(Species[] species, int totalNumberOfAnimals)
+        {
+            double sum = species.Select(x => x.animals.Select(y => y.energy).Sum()).Sum();
+
+            // Assign number of allowed animals to each species
+            for (int i = 0; i < species.Length; i++)
+            {
+                species[i].maxAnimals = (int)(totalNumberOfAnimals * (species[i].animals.Select(x => x.energy).Sum() / sum));
             }
         }
     }
