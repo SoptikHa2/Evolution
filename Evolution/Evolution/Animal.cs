@@ -32,110 +32,12 @@ namespace Evolution.Evolution
             GenerateNodes(startDepth);
         }
 
-        private void GenerateNodes(int depth)
-        {
-            startNode = RandomNode(false);
-            AppendNodesTo(startNode, depth);
-        }
-
-        private void AppendNodesTo(Node node, int maxDepth, int currDepth = 0)
-        {
-            int cd = currDepth;
-            if (cd++ < maxDepth)
-            {
-                int children = node.maximumChildren;
-                for (int i = 0; i < children; i++)
-                {
-                    node.children[i] = RandomNode(cd + 1 == maxDepth);
-                    if (node.children[i].maximumChildren > 0)
-                        AppendNodesTo(node.children[i], maxDepth, cd);
-                }
-            }
-        }
-
-        private Node RandomNode(bool allowNoChildNodes)
-        {
-            int rand = rnd.Next(allowNoChildNodes ? 0 : 3, 5);
-
-            switch (rand)
-            {
-                case 0:
-                    return new ConstantNode(rnd.Next(ConstantNode.minValue, ConstantNode.maxValue + 1), this);
-                case 1:
-                    return new EatNode(this);
-                case 2:
-                    return new FoodNode(this);
-                case 3:
-                    return new GoNode(this);
-                case 4:
-                    return new IfNode(this);
-                default:
-                    throw new Exception("Node type selected by random number does not exist.");
-            }
-        }
-
         public void Eval()
         {
             startNode.Eval();
         }
 
-        public int Go(int direction)
-        {
-            int dX = 0;
-            int dY = 0;
-
-            switch (direction)
-            {
-                case 0:
-                    dX = 1;
-                    dY = 0;
-                    break;
-                case 1:
-                    dX = 0;
-                    dY = 1;
-                    break;
-                case 2:
-                    dX = -1;
-                    dY = 0;
-                    break;
-                case 3:
-                    dX = 0;
-                    dY = -1;
-                    break;
-                default:
-                    return 0;
-            }
-
-            if (x + dX < 0 || y + dY < 0 || x + dX >= map.map.GetLength(0) || y + dY >= map.map.GetLength(0))
-                return 0;
-            x += dX;
-            y += dY;
-
-            int tile = map.map[x, y].level;
-            if (tile <= Simulation.minSea)
-                energy -= Simulation.waterMoveEnergy;
-            else if (tile >= Simulation.minMountain)
-                energy -= Simulation.mountainMoveEnergy;
-            else
-                energy -= Simulation.baseMoveEnergy;
-
-            return 1;
-        }
-
-        public int GetNearestFoodDirection()
-        {
-            energy -= Simulation.searchFoodEnergy;
-            return map.getNearestFoodDirection(x, y);
-        }
-
-        public int Eat()
-        {
-            int food = map.map[x, y].food;
-            map.map[x, y].food = 0;
-            energy += food - Simulation.eatEnergy;
-            return food;
-        }
-
+        #region BreedMethods
         public Animal BreedWith(Animal partner, MapGeneration.Map map, string newName)
         {
             return BreedNodeTree(partner.startNode, new Animal(newName, map, -1, -1));
@@ -199,7 +101,7 @@ namespace Evolution.Evolution
         {
             Node newNode = RandomNode(oldNode.maximumChildren == 0);
             // Mutate all node children
-            for(int i = 0; i < oldNode.maximumChildren; i++)
+            for (int i = 0; i < oldNode.maximumChildren; i++)
             {
                 if (oldNode.children[i] != null)
                     MutateNode(tree, oldNode.children[i]);
@@ -208,6 +110,49 @@ namespace Evolution.Evolution
             newNode.parentAnimal = oldNode.parentAnimal;
             ReplaceNode(tree, oldNode, newNode);
         }
+        #endregion
+        #region TreeMethods
+        private void GenerateNodes(int depth)
+        {
+            startNode = RandomNode(false);
+            AppendNodesTo(startNode, depth);
+        }
+
+        private void AppendNodesTo(Node node, int maxDepth, int currDepth = 0)
+        {
+            int cd = currDepth;
+            if (cd++ < maxDepth)
+            {
+                int children = node.maximumChildren;
+                for (int i = 0; i < children; i++)
+                {
+                    node.children[i] = RandomNode(cd + 1 == maxDepth);
+                    if (node.children[i].maximumChildren > 0)
+                        AppendNodesTo(node.children[i], maxDepth, cd);
+                }
+            }
+        }
+
+        private Node RandomNode(bool allowNoChildNodes)
+        {
+            int rand = rnd.Next(allowNoChildNodes ? 0 : 3, 5);
+
+            switch (rand)
+            {
+                case 0:
+                    return new ConstantNode(rnd.Next(ConstantNode.minValue, ConstantNode.maxValue + 1), this);
+                case 1:
+                    return new EatNode(this);
+                case 2:
+                    return new FoodNode(this);
+                case 3:
+                    return new GoNode(this);
+                case 4:
+                    return new IfNode(this);
+                default:
+                    throw new Exception("Node type selected by random number does not exist.");
+            }
+        }        
 
         private bool ReplaceNode(Node tree, Node oldNode, Node newNode)
         {
@@ -307,6 +252,65 @@ namespace Evolution.Evolution
                     SetNodeOwnership(node.children[i], newAnimal);
             }
         }
+        #endregion
+        #region NodeMethods
+        public int Go(int direction)
+        {
+            int dX = 0;
+            int dY = 0;
+
+            switch (direction)
+            {
+                case 0:
+                    dX = 1;
+                    dY = 0;
+                    break;
+                case 1:
+                    dX = 0;
+                    dY = 1;
+                    break;
+                case 2:
+                    dX = -1;
+                    dY = 0;
+                    break;
+                case 3:
+                    dX = 0;
+                    dY = -1;
+                    break;
+                default:
+                    return 0;
+            }
+
+            if (x + dX < 0 || y + dY < 0 || x + dX >= map.map.GetLength(0) || y + dY >= map.map.GetLength(0))
+                return 0;
+            x += dX;
+            y += dY;
+
+            int tile = map.map[x, y].level;
+            if (tile <= Simulation.minSea)
+                energy -= Simulation.waterMoveEnergy;
+            else if (tile >= Simulation.minMountain)
+                energy -= Simulation.mountainMoveEnergy;
+            else
+                energy -= Simulation.baseMoveEnergy;
+
+            return 1;
+        }
+
+        public int GetNearestFoodDirection()
+        {
+            energy -= Simulation.searchFoodEnergy;
+            return map.getNearestFoodDirection(x, y);
+        }
+
+        public int Eat()
+        {
+            int food = map.map[x, y].food;
+            map.map[x, y].food = 0;
+            energy += food - Simulation.eatEnergy;
+            return food;
+        }
+        #endregion
 
         public override string ToString()
         {
