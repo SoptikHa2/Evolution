@@ -16,7 +16,8 @@ namespace Evolution.Evolution
         #endregion
 
         public string name;
-        public int x, y;
+        public int x = -1;
+        public int y = -1;
         public int energy;
         public Node startNode;
         private MapGeneration.Map map;
@@ -26,15 +27,24 @@ namespace Evolution.Evolution
         public Animal(string name, MapGeneration.Map map, int x, int y)
         {
             this.name = name;
-            this.x = x;
-            this.y = y;
             this.map = map;
+            Move(x, y);
             GenerateNodes(startDepth);
         }
 
         public void Eval()
         {
             startNode.Eval();
+        }
+
+        public void Move(int toX, int toY)
+        {
+            if (x != -1 && y != -1)
+                map.map[x, y].objectsOnTile.Remove(this);
+            if (toX != -1 && toY != -1)
+                map.map[toX, toY].objectsOnTile.Add(this);
+            x = toX;
+            y = toY;
         }
 
         #region BreedMethods
@@ -152,7 +162,7 @@ namespace Evolution.Evolution
                 default:
                     throw new Exception("Node type selected by random number does not exist.");
             }
-        }        
+        }
 
         private bool ReplaceNode(Node tree, Node oldNode, Node newNode)
         {
@@ -283,8 +293,8 @@ namespace Evolution.Evolution
 
             if (x + dX < 0 || y + dY < 0 || x + dX >= map.map.GetLength(0) || y + dY >= map.map.GetLength(0))
                 return 0;
-            x += dX;
-            y += dY;
+
+            Move(x + dX, y + dY);
 
             int tile = map.map[x, y].level;
             if (tile <= Simulation.minSea)

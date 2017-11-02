@@ -117,8 +117,7 @@ namespace Evolution.Evolution
             for (int i = 0; i < animals.Length; i++)
             {
                 animals[i].energy = 0;
-                animals[i].x = rnd.Next(maxX);
-                animals[i].y = rnd.Next(maxY);
+                animals[i].Move(rnd.Next(maxX), rnd.Next(maxY));
             }
         }
 

@@ -12,6 +12,7 @@ namespace Evolution.MapGeneration
         public int x, y;
         public int level;
         public int food;
+        public List<object> objectsOnTile;
 
         public void Tick()
         {

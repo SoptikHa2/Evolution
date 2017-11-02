@@ -33,6 +33,7 @@ namespace Evolution.MapGeneration
                 for (int j = 0; j < height; j++)
                 {
                     newMap[i, j] = new MapObject { x = i, y = j, level = map[i, j], food = rnd.Next(101) <= chanceToPosFood ? rnd.Next(minFood, maxFood + 1) : 0 };
+                    newMap[i, j].objectsOnTile = new List<object>();
                 }
             }
 
