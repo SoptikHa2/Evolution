@@ -38,6 +38,10 @@ namespace Evolution.Evolution
 
         public const int eatEnergy = 1;
         public const int searchFoodEnergy = 0;
+        public const int searchEnemyEnergy = 0;
+        public const int fightEnergy = -2;
+        public const int fightSuccEnergy = 10;
+        public const int killBonusEnergy = 0;
 
         public const int numberOfAnimalsOnMap = 100;
         #endregion

@@ -325,6 +325,7 @@ namespace Evolution.Evolution
 
         public int GetNearestEnemyDirection()
         {
+            energy += Simulation.searchEnemyEnergy;
             return map.GetNearestEnemyDirection(x, y, speciesName);
         }
 
@@ -337,9 +338,13 @@ namespace Evolution.Evolution
             Animal target = map.GetNearEnemyAnimal(x, y, speciesName);
             if (target != null)
             {
-
+                target.health -= attackStrength;
+                if (target.health < 1)
+                    energy += Simulation.killBonusEnergy;
+                energy += Simulation.fightSuccEnergy;
                 return 0;
             }
+            energy += Simulation.fightEnergy;
             return -1;
         }
 
@@ -349,6 +354,7 @@ namespace Evolution.Evolution
         /// <returns></returns>
         public int IsPossibleToFight()
         {
+            energy += Simulation.searchEnemyEnergy;
             return map.GetNearEnemyAnimal(x, y, speciesName) == null ? -1 : 0;
         }
 
