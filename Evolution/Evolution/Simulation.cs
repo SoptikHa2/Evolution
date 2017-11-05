@@ -81,6 +81,10 @@ namespace Evolution.Evolution
         {
             this.map = map;
             this.species = species;
+            // Set animals 'Simulation' reference to this
+            for (int s = 0; s < species.Length; s++)
+                for (int a = 0; a < species[s].animals.Length; a++)
+                    species[s].animals[a].simulation = this;
             this.generation = generation;
         }
 
