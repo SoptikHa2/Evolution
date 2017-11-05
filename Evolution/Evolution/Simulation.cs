@@ -193,6 +193,8 @@ namespace Evolution.Evolution
                     for (int aN = 0; aN < sp.animals.Length; aN++)
                     {
                         Animal a = sp.animals[aN];
+                        if (a.health < 1)
+                            continue;
                         SolidBrush sb = new SolidBrush(Color.FromName(sp.speciesColor));
                         graphics.FillRectangle(sb, a.x * lengthOfTile, a.y * lengthOfTile, lengthOfTile, lengthOfTile);
                     }

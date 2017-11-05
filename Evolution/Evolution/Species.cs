@@ -50,8 +50,8 @@ namespace Evolution.Evolution
             var animals = this.animals.Reverse().ToList();
             int reqCount = animals.Count;
 
-            // Remove all animals with not positive energy
-            animals = animals.Where(x => x.energy > 0).ToList();
+            // Remove all animals with not positive energy or with no health
+            animals = animals.Where(x => x.energy > 0 && x.health > 0).ToList();
             int removedAnimalsBeforeBreeding = reqCount - animals.Count;
 
             // Remove all animals over limit

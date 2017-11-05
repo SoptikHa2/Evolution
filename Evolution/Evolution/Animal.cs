@@ -40,7 +40,11 @@ namespace Evolution.Evolution
 
         public void Eval()
         {
-            startNode.Eval();
+            if (health >= 1)
+                startNode.Eval();
+            else
+                // Remove this corpse from tile
+                map.map[x, y].objectsOnTile.Remove(this);
         }
 
         public void Move(int toX, int toY)
@@ -331,7 +335,7 @@ namespace Evolution.Evolution
         public int Fight()
         {
             Animal target = map.GetNearEnemyAnimal(x, y, speciesName);
-            if(target != null)
+            if (target != null)
             {
 
                 return 0;
