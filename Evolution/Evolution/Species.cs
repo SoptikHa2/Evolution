@@ -18,17 +18,17 @@ namespace Evolution.Evolution
         private int animalNumber = 0;
         public int maxAnimals;
 
-        public Species(string name, MapGeneration.Map map, string speciesColor, int totalNumberOfSpecies)
+        public Species(string name, Simulation simulation, string speciesColor, int totalNumberOfSpecies)
         {
             this.name = name;
             int numberOfAnimals = Simulation.numberOfAnimalsOnMap / totalNumberOfSpecies;
             animals = new Animal[numberOfAnimals];
             maxAnimals = numberOfAnimals;
-            int mapLengthX = map.map.GetLength(0);
-            int mapLengthY = map.map.GetLength(1);
+            int mapLengthX = simulation.map.map.GetLength(0);
+            int mapLengthY = simulation.map.map.GetLength(1);
             for (int i = 0; i < numberOfAnimals; i++)
             {
-                animals[i] = new Animal(name + animalNumber++, name, map, rnd.Next(mapLengthX), rnd.Next(mapLengthY));
+                animals[i] = new Animal(name + animalNumber++, name, simulation, rnd.Next(mapLengthX), rnd.Next(mapLengthY));
             }
             this.speciesColor = speciesColor;
         }
@@ -117,7 +117,8 @@ namespace Evolution.Evolution
             for (int i = 0; i < animals.Length; i++)
             {
                 animals[i].energy = 0;
-                animals[i].Move(rnd.Next(maxX), rnd.Next(maxY));
+                animals[i].x = rnd.Next(maxX);
+                animals[i].y = rnd.Next(maxY);
                 animals[i].health = Animal.startHealth;
             }
         }

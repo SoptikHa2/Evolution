@@ -46,7 +46,7 @@ namespace Evolution.Evolution
         public const int numberOfAnimalsOnMap = 100;
         #endregion
 
-        private MapGeneration.Map map;
+        public MapGeneration.Map map;
         public Species[] species;
         private int width, height;
         private DateTime dateTimeStarted;
@@ -74,7 +74,7 @@ namespace Evolution.Evolution
 
         public Species[] InitializeSpecies()
         {
-            return new Species[] { new Species("Fox", map, "red", 3), new Species("Sheep", map, "silver", 3), new Species("Goat", map, "orange", 3) };
+            return new Species[] { new Species("Fox", this, "red", 3), new Species("Sheep", this, "silver", 3), new Species("Goat", this, "orange", 3) };
         }
 
         public void SetOnLoad(MapGeneration.Map map, Species[] species, int generation)

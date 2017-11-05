@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Evolution.Evolution;
 
 namespace Evolution.MapGeneration
 {
@@ -33,7 +34,6 @@ namespace Evolution.MapGeneration
                 for (int j = 0; j < height; j++)
                 {
                     newMap[i, j] = new MapObject { x = i, y = j, level = map[i, j], food = rnd.Next(101) <= chanceToPosFood ? rnd.Next(minFood, maxFood + 1) : 0 };
-                    newMap[i, j].objectsOnTile = new List<object>();
                 }
             }
 
@@ -72,19 +72,26 @@ namespace Evolution.MapGeneration
                 return -1;
         }
 
-        public int GetNearestEnemyDirection(int x, int y, string mySpeciesName)
+        public int GetNearestEnemyDirection(int x, int y, string mySpeciesName, Simulation simulation)
         {
-            List<MapObject> possibleResults = new List<MapObject>();
-            for(int i = 0; i < map.GetLength(0); i++)
+            List<Animal> possibleResults = new List<Animal>();
+
+            // Go thru all species (except the one that is species of animal that called this method)
+            for(int i = 0; i < simulation.species.Length; i++)
             {
-                for(int j = 0; j < map.GetLength(1); j++)
+                if (simulation.species[i].name == mySpeciesName)
+                    continue;
+
+                // Add all animals from the species to possibleResults list, if it has at least 1 HP
+                for(int j = 0; j < simulation.species[i].animals.Length; j++)
                 {
-                    if (map[i, j].objectsOnTile.Select(q => q is Evolution.Animal && (q as Evolution.Animal).speciesName != mySpeciesName).Count() > 0)
-                        possibleResults.Add(map[i, j]);
+                    if (simulation.species[i].animals[j].health > 0)
+                        possibleResults.Add(simulation.species[i].animals[j]);
                 }
             }
 
-            MapObject result = possibleResults.OrderBy(q => getDistance((q.objectsOnTile[0] as Evolution.Animal).x, (q.objectsOnTile[0] as Evolution.Animal).y, x, y)).FirstOrDefault();
+            // Order results and pick the nearest one
+            Animal result = possibleResults.OrderBy(q => getDistance(q.x, q.y, x, y)).FirstOrDefault();
 
             if (result.x > x)
                 return 0;
@@ -98,20 +105,26 @@ namespace Evolution.MapGeneration
                 return -1;
         }
 
-        public Evolution.Animal GetNearEnemyAnimal(int x, int y, string mySpeciesName)
+        public Animal GetNearEnemyAnimal(int x, int y, string mySpeciesName, Simulation simulation)
         {
-            List<MapObject> possibleResults = new List<MapObject>();
-            for (int i = 0; i < map.GetLength(0); i++)
+            List<Animal> possibleResults = new List<Animal>();
+
+            // Go thru all species (except the one that is species of animal that called this method)
+            for (int i = 0; i < simulation.species.Length; i++)
             {
-                for (int j = 0; j < map.GetLength(1); j++)
+                if (simulation.species[i].name == mySpeciesName)
+                    continue;
+
+                // Add all animals from the species to possibleResults list, if it has at least 1 HP
+                for (int j = 0; j < simulation.species[i].animals.Length; j++)
                 {
-                    if (map[i, j].objectsOnTile.Select(q => q is Evolution.Animal && (q as Evolution.Animal).speciesName != mySpeciesName).Count() > 0)
-                        possibleResults.Add(map[i, j]);
+                    if (simulation.species[i].animals[j].health > 0)
+                        possibleResults.Add(simulation.species[i].animals[j]);
                 }
             }
 
-            return possibleResults.Where(q => getDistance((q.objectsOnTile[0] as Evolution.Animal).x, 0, x, 0) <= 1 && getDistance(0, (q.objectsOnTile[0] as Evolution.Animal).y, 0, y) <= 1).Select(q => q.objectsOnTile[0] as Evolution.Animal).FirstOrDefault();
-
+            // Return animal that is at most 1 tile away from animal
+            return possibleResults.Where(q => getDistance(q.x, 0, x, 0) <= 1 && getDistance(0, q.y, 0, y) <= 1).FirstOrDefault();
         }
 
         private int getDistance(int fromX, int fromY, int toX, int toY)

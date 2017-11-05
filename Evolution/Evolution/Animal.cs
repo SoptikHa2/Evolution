@@ -24,17 +24,18 @@ namespace Evolution.Evolution
         public int energy;
         public int health;
         public Node startNode;
-        private MapGeneration.Map map;
+        private Simulation simulation;
 
         private static Random rnd = new Random();
 
-        public Animal(string name, string speciesName, MapGeneration.Map map, int x, int y)
+        public Animal(string name, string speciesName, Simulation simulation, int x, int y)
         {
             this.name = name;
             this.speciesName = speciesName;
-            this.map = map;
+            this.simulation = simulation;
             this.health = 10;
-            Move(x, y);
+            this.x = x;
+            this.y = y;
             GenerateNodes(startDepth);
         }
 
@@ -42,25 +43,12 @@ namespace Evolution.Evolution
         {
             if (health >= 1)
                 startNode.Eval();
-            else
-                // Remove this corpse from tile
-                map.map[x, y].objectsOnTile.Remove(this);
-        }
-
-        public void Move(int toX, int toY)
-        {
-            if (x != -1 && y != -1)
-                map.map[x, y].objectsOnTile.Remove(this);
-            if (toX != -1 && toY != -1)
-                map.map[toX, toY].objectsOnTile.Add(this);
-            x = toX;
-            y = toY;
         }
 
         #region BreedMethods
         public Animal BreedWith(Animal partner, MapGeneration.Map map, string newName)
         {
-            return BreedNodeTree(partner.startNode, new Animal(newName, speciesName, map, -1, -1));
+            return BreedNodeTree(partner.startNode, new Animal(newName, speciesName, simulation, -1, -1));
         }
 
         private Animal BreedNodeTree(Node partnerNodeTree, Animal newAnimal)
@@ -307,12 +295,13 @@ namespace Evolution.Evolution
                     return 0;
             }
 
-            if (x + dX < 0 || y + dY < 0 || x + dX >= map.map.GetLength(0) || y + dY >= map.map.GetLength(0))
+            if (x + dX < 0 || y + dY < 0 || x + dX >= simulation.map.map.GetLength(0) || y + dY >= simulation.map.map.GetLength(0))
                 return 0;
 
-            Move(x + dX, y + dY);
+            x += dX;
+            y += dY;
 
-            int tile = map.map[x, y].level;
+            int tile = simulation.map.map[x, y].level;
             if (tile <= Simulation.minSea)
                 energy -= Simulation.waterMoveEnergy;
             else if (tile >= Simulation.minMountain)
@@ -326,13 +315,13 @@ namespace Evolution.Evolution
         public int GetNearestFoodDirection()
         {
             energy -= Simulation.searchFoodEnergy;
-            return map.GetNearestFoodDirection(x, y);
+            return simulation.map.GetNearestFoodDirection(x, y);
         }
 
         public int GetNearestEnemyDirection()
         {
             energy += Simulation.searchEnemyEnergy;
-            return map.GetNearestEnemyDirection(x, y, speciesName);
+            return simulation.map.GetNearestEnemyDirection(x, y, speciesName, simulation);
         }
 
         /// <summary>
@@ -341,7 +330,7 @@ namespace Evolution.Evolution
         /// <returns></returns>
         public int Fight()
         {
-            Animal target = map.GetNearEnemyAnimal(x, y, speciesName);
+            Animal target = simulation.map.GetNearEnemyAnimal(x, y, speciesName, simulation);
             if (target != null)
             {
                 target.health -= attackStrength;
@@ -361,13 +350,13 @@ namespace Evolution.Evolution
         public int IsPossibleToFight()
         {
             energy += Simulation.searchEnemyEnergy;
-            return map.GetNearEnemyAnimal(x, y, speciesName) == null ? -1 : 0;
+            return simulation.map.GetNearEnemyAnimal(x, y, speciesName, simulation) == null ? -1 : 0;
         }
 
         public int Eat()
         {
-            int food = map.map[x, y].food;
-            map.map[x, y].food = 0;
+            int food = simulation.map.map[x, y].food;
+            simulation.map.map[x, y].food = 0;
             energy += food - Simulation.eatEnergy;
             return food;
         }
