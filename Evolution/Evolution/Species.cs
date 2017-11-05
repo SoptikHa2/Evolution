@@ -125,12 +125,11 @@ namespace Evolution.Evolution
 
         public static void SetMaxNumberOfAnimalsForSpecies(Species[] species, int totalNumberOfAnimals)
         {
-            double sum = species.Select(x => x.animals.Select(y => y.energy).Sum()).Sum();
-
+            double sum = species.Select(x => x.animals.Where(y => y.health > 0 && y.energy > 0).Select(y => y.energy).Sum()).Sum();
             // Assign number of allowed animals to each species
             for (int i = 0; i < species.Length; i++)
             {
-                species[i].maxAnimals = (int)(totalNumberOfAnimals * (species[i].animals.Select(x => x.energy).Sum() / sum));
+                species[i].maxAnimals = (int)(totalNumberOfAnimals * (species[i].animals.Where(x => x.health > 0 && x.energy > 0).Select(x => x.energy).Sum() / sum));
             }
         }
     }

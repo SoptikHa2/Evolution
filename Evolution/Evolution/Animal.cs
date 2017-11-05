@@ -13,8 +13,8 @@ namespace Evolution.Evolution
         #region Settings
         const int startDepth = 3;
         const int mutationChance = 5;
-        public const int startHealth = 10;
-        const int attackStrength = 2;
+        public const int startHealth = 20;
+        const int attackStrength = 1;
         #endregion
 
         public string name;
