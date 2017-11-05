@@ -24,6 +24,7 @@ namespace Evolution.Evolution
         public int energy;
         public int health;
         public Node startNode;
+        [NonSerialized]
         private Simulation simulation;
 
         private static Random rnd = new Random();
