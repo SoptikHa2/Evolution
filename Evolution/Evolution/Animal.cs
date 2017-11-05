@@ -155,7 +155,7 @@ namespace Evolution.Evolution
 
         private Node RandomNode(bool allowNoChildNodes)
         {
-            int rand = rnd.Next(allowNoChildNodes ? 0 : 3, 5);
+            int rand = rnd.Next(allowNoChildNodes ? 0 : 6, 8);
 
             switch (rand)
             {
@@ -166,8 +166,14 @@ namespace Evolution.Evolution
                 case 2:
                     return new FoodNode(this);
                 case 3:
-                    return new GoNode(this);
+                    return new HitRangeNode(this);
                 case 4:
+                    return new FindEnemyNode(this);
+                case 5:
+                    return new HitNode(this);
+                case 6:
+                    return new GoNode(this);
+                case 7:
                     return new IfNode(this);
                 default:
                     throw new Exception("Node type selected by random number does not exist.");

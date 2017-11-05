@@ -49,8 +49,11 @@
     <Compile Include="Evolution\Animal.cs" />
     <Compile Include="Evolution\Nodes\ConstantNode.cs" />
     <Compile Include="Evolution\Nodes\EatNode.cs" />
+    <Compile Include="Evolution\Nodes\FindEnemyNode.cs" />
     <Compile Include="Evolution\Nodes\FoodNode.cs" />
     <Compile Include="Evolution\Nodes\GoNode.cs" />
+    <Compile Include="Evolution\Nodes\HitNode.cs" />
+    <Compile Include="Evolution\Nodes\HitRangeNode.cs" />
     <Compile Include="Evolution\Nodes\IfNode.cs" />
     <Compile Include="Evolution\Nodes\Node.cs" />
     <Compile Include="Evolution\Simulation.cs" />
