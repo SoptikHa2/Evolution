@@ -28,7 +28,7 @@ namespace Evolution.Evolution
             int mapLengthY = map.map.GetLength(1);
             for (int i = 0; i < numberOfAnimals; i++)
             {
-                animals[i] = new Animal(name + animalNumber++, map, rnd.Next(mapLengthX), rnd.Next(mapLengthY));
+                animals[i] = new Animal(name + animalNumber++, name, map, rnd.Next(mapLengthX), rnd.Next(mapLengthY));
             }
             this.speciesColor = speciesColor;
         }
@@ -118,6 +118,7 @@ namespace Evolution.Evolution
             {
                 animals[i].energy = 0;
                 animals[i].Move(rnd.Next(maxX), rnd.Next(maxY));
+                animals[i].health = Animal.startHealth;
             }
         }
 

@@ -13,21 +13,27 @@ namespace Evolution.Evolution
         #region Settings
         const int startDepth = 3;
         const int mutationChance = 5;
+        public const int startHealth = 10;
+        const int attackStrength = 2;
         #endregion
 
         public string name;
+        public string speciesName;
         public int x = -1;
         public int y = -1;
         public int energy;
+        public int health;
         public Node startNode;
         private MapGeneration.Map map;
 
         private static Random rnd = new Random();
 
-        public Animal(string name, MapGeneration.Map map, int x, int y)
+        public Animal(string name, string speciesName, MapGeneration.Map map, int x, int y)
         {
             this.name = name;
+            this.speciesName = speciesName;
             this.map = map;
+            this.health = 10;
             Move(x, y);
             GenerateNodes(startDepth);
         }
@@ -50,7 +56,7 @@ namespace Evolution.Evolution
         #region BreedMethods
         public Animal BreedWith(Animal partner, MapGeneration.Map map, string newName)
         {
-            return BreedNodeTree(partner.startNode, new Animal(newName, map, -1, -1));
+            return BreedNodeTree(partner.startNode, new Animal(newName, speciesName, map, -1, -1));
         }
 
         private Animal BreedNodeTree(Node partnerNodeTree, Animal newAnimal)
@@ -310,7 +316,36 @@ namespace Evolution.Evolution
         public int GetNearestFoodDirection()
         {
             energy -= Simulation.searchFoodEnergy;
-            return map.getNearestFoodDirection(x, y);
+            return map.GetNearestFoodDirection(x, y);
+        }
+
+        public int GetNearestEnemyDirection()
+        {
+            return map.GetNearestEnemyDirection(x, y, speciesName);
+        }
+
+        /// <summary>
+        /// Eat nearest enemy, that is at most 1 tile away. If successfull, return 0, otherwise, return -1
+        /// </summary>
+        /// <returns></returns>
+        public int Fight()
+        {
+            Animal target = map.GetNearEnemyAnimal(x, y, speciesName);
+            if(target != null)
+            {
+
+                return 0;
+            }
+            return -1;
+        }
+
+        /// <summary>
+        /// Get number, that represents, if there is any enemy close enough, so animal can eat him. If nearest enemy is at most 1 tile away, return 0, otherwise, return -1
+        /// </summary>
+        /// <returns></returns>
+        public int IsPossibleToFight()
+        {
+            return map.GetNearEnemyAnimal(x, y, speciesName) == null ? -1 : 0;
         }
 
         public int Eat()
