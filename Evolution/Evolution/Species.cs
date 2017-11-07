@@ -18,17 +18,17 @@ namespace Evolution.Evolution
         private int animalNumber = 0;
         public int maxAnimals;
 
-        public Species(string name, MapGeneration.Map map, string speciesColor, int totalNumberOfSpecies)
+        public Species(string name, Simulation simulation, string speciesColor, int totalNumberOfSpecies)
         {
             this.name = name;
             int numberOfAnimals = Simulation.numberOfAnimalsOnMap / totalNumberOfSpecies;
             animals = new Animal[numberOfAnimals];
             maxAnimals = numberOfAnimals;
-            int mapLengthX = map.map.GetLength(0);
-            int mapLengthY = map.map.GetLength(1);
+            int mapLengthX = simulation.map.map.GetLength(0);
+            int mapLengthY = simulation.map.map.GetLength(1);
             for (int i = 0; i < numberOfAnimals; i++)
             {
-                animals[i] = new Animal(name + animalNumber++, map, rnd.Next(mapLengthX), rnd.Next(mapLengthY));
+                animals[i] = new Animal(name + animalNumber++, name, simulation, rnd.Next(mapLengthX), rnd.Next(mapLengthY));
             }
             this.speciesColor = speciesColor;
         }
@@ -50,8 +50,8 @@ namespace Evolution.Evolution
             var animals = this.animals.Reverse().ToList();
             int reqCount = animals.Count;
 
-            // Remove all animals with not positive energy
-            animals = animals.Where(x => x.energy > 0).ToList();
+            // Remove all animals with not positive energy or with no health
+            animals = animals.Where(x => x.energy > 0 && x.health > 0).ToList();
             int removedAnimalsBeforeBreeding = reqCount - animals.Count;
 
             // Remove all animals over limit
@@ -119,17 +119,17 @@ namespace Evolution.Evolution
                 animals[i].energy = 0;
                 animals[i].x = rnd.Next(maxX);
                 animals[i].y = rnd.Next(maxY);
+                animals[i].health = Animal.startHealth;
             }
         }
 
         public static void SetMaxNumberOfAnimalsForSpecies(Species[] species, int totalNumberOfAnimals)
         {
-            double sum = species.Select(x => x.animals.Select(y => y.energy).Sum()).Sum();
-
+            double sum = species.Select(x => x.animals.Where(y => y.health > 0 && y.energy > 0).Select(y => y.energy).Sum()).Sum();
             // Assign number of allowed animals to each species
             for (int i = 0; i < species.Length; i++)
             {
-                species[i].maxAnimals = (int)(totalNumberOfAnimals * (species[i].animals.Select(x => x.energy).Sum() / sum));
+                species[i].maxAnimals = (int)(totalNumberOfAnimals * (species[i].animals.Where(x => x.health > 0 && x.energy > 0).Select(x => x.energy).Sum() / sum));
             }
         }
     }

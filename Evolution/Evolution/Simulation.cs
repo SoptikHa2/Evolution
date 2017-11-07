@@ -38,11 +38,15 @@ namespace Evolution.Evolution
 
         public const int eatEnergy = 1;
         public const int searchFoodEnergy = 0;
+        public const int searchEnemyEnergy = 0;
+        public const int fightEnergy = -2;
+        public const int fightSuccEnergy = 10;
+        public const int killBonusEnergy = 0;
 
         public const int numberOfAnimalsOnMap = 100;
         #endregion
 
-        private MapGeneration.Map map;
+        public MapGeneration.Map map;
         public Species[] species;
         private int width, height;
         private DateTime dateTimeStarted;
@@ -70,13 +74,17 @@ namespace Evolution.Evolution
 
         public Species[] InitializeSpecies()
         {
-            return new Species[] { new Species("Fox", map, "red", 3), new Species("Sheep", map, "silver", 3), new Species("Goat", map, "orange", 3) };
+            return new Species[] { new Species("Fox", this, "red", 3), new Species("Sheep", this, "silver", 3), new Species("Goat", this, "orange", 3) };
         }
 
         public void SetOnLoad(MapGeneration.Map map, Species[] species, int generation)
         {
             this.map = map;
             this.species = species;
+            // Set animals 'Simulation' reference to this
+            for (int s = 0; s < species.Length; s++)
+                for (int a = 0; a < species[s].animals.Length; a++)
+                    species[s].animals[a].simulation = this;
             this.generation = generation;
         }
 
@@ -193,6 +201,8 @@ namespace Evolution.Evolution
                     for (int aN = 0; aN < sp.animals.Length; aN++)
                     {
                         Animal a = sp.animals[aN];
+                        if (a.health < 1)
+                            continue;
                         SolidBrush sb = new SolidBrush(Color.FromName(sp.speciesColor));
                         graphics.FillRectangle(sb, a.x * lengthOfTile, a.y * lengthOfTile, lengthOfTile, lengthOfTile);
                     }
