@@ -72,14 +72,14 @@ namespace Evolution.MapGeneration
                 return -1;
         }
 
-        public int GetNearestEnemyDirection(int x, int y, string mySpeciesName, Simulation simulation)
+        public int GetNearestEnemyDirection(int x, int y, Species mySpecies, Simulation simulation)
         {
             List<Animal> possibleResults = new List<Animal>();
 
             // Go thru all species (except the one that is species of animal that called this method)
             for(int i = 0; i < simulation.species.Length; i++)
             {
-                if (simulation.species[i].name == mySpeciesName)
+                if (simulation.species[i] == mySpecies)
                     continue;
 
                 // Add all animals from the species to possibleResults list, if it has at least 1 HP
@@ -105,14 +105,14 @@ namespace Evolution.MapGeneration
                 return -1;
         }
 
-        public Animal GetNearEnemyAnimal(int x, int y, string mySpeciesName, Simulation simulation)
+        public Animal GetNearEnemyAnimal(int x, int y, Species mySpecies, Simulation simulation)
         {
             List<Animal> possibleResults = new List<Animal>();
 
             // Go thru all species (except the one that is species of animal that called this method)
             for (int i = 0; i < simulation.species.Length; i++)
             {
-                if (simulation.species[i].name == mySpeciesName)
+                if (simulation.species[i] == mySpecies)
                     continue;
 
                 // Add all animals from the species to possibleResults list, if it has at least 1 HP

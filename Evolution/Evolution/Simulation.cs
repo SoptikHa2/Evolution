@@ -32,17 +32,6 @@ namespace Evolution.Evolution
         private const int savedImageHeight = 720;
         #endregion
         #region Settings
-        public const int baseMoveEnergy = 0;
-        public const int waterMoveEnergy = 0;
-        public const int mountainMoveEnergy = 0;
-
-        public const int eatEnergy = 1;
-        public const int searchFoodEnergy = 0;
-        public const int searchEnemyEnergy = 0;
-        public const int fightEnergy = -2;
-        public const int fightSuccEnergy = 10;
-        public const int killBonusEnergy = 0;
-
         public const int numberOfAnimalsOnMap = 100;
         #endregion
 
@@ -74,7 +63,7 @@ namespace Evolution.Evolution
 
         public Species[] InitializeSpecies()
         {
-            return new Species[] { new Species("Fox", this, "red", 3), new Species("Sheep", this, "silver", 3), new Species("Goat", this, "orange", 3) };
+            return new Species[] { new Species("Fox", this, "red", 3, 1, 10), new Species("Sheep", this, "silver", 3, 1, 10), new Species("Goat", this, "orange", 3, 1, 10) };
         }
 
         public void SetOnLoad(MapGeneration.Map map, Species[] species, int generation)

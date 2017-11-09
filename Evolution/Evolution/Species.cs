@@ -10,6 +10,22 @@ namespace Evolution.Evolution
     [Serializable]
     public class Species
     {
+        #region Settings
+        public int baseMoveEnergy = 0;
+        public int waterMoveEnergy = 0;
+        public int mountainMoveEnergy = 0;
+
+        public int eatEnergy = 1;
+        public int searchFoodEnergy = 0;
+        public int searchEnemyEnergy = 0;
+        public int fightEnergy = -2;
+        public int fightSuccEnergy = 10;
+        public int killBonusEnergy = 0;
+
+        public int attackStrength = 1;
+        public int maximumHealth = 10;
+        #endregion
+
         public Animal[] animals;
         public string speciesColor;
         public string name;
@@ -18,7 +34,7 @@ namespace Evolution.Evolution
         private int animalNumber = 0;
         public int maxAnimals;
 
-        public Species(string name, Simulation simulation, string speciesColor, int totalNumberOfSpecies)
+        public Species(string name, Simulation simulation, string speciesColor, int totalNumberOfSpecies, int attackStrength, int maximumHealth, int mutationChance = 5, int baseMoveEnergy = 0, int waterMoveEnergy = 0, int mountainMoveEnergy = 0, int eatEnergy = 1, int searchFoodEnergy = 0, int searchEnemyEnergy = 0, int fightEnergy = -2, int fightSuccEnergy = 10, int killBonusEnergy = 0)
         {
             this.name = name;
             int numberOfAnimals = Simulation.numberOfAnimalsOnMap / totalNumberOfSpecies;
@@ -26,9 +42,22 @@ namespace Evolution.Evolution
             maxAnimals = numberOfAnimals;
             int mapLengthX = simulation.map.map.GetLength(0);
             int mapLengthY = simulation.map.map.GetLength(1);
+            #region Settings
+            this.baseMoveEnergy = baseMoveEnergy;
+            this.waterMoveEnergy = waterMoveEnergy;
+            this.mountainMoveEnergy = mountainMoveEnergy;
+            this.eatEnergy = eatEnergy;
+            this.searchFoodEnergy = searchFoodEnergy;
+            this.searchEnemyEnergy = searchEnemyEnergy;
+            this.fightEnergy = fightEnergy;
+            this.fightSuccEnergy = fightSuccEnergy;
+            this.killBonusEnergy = killBonusEnergy;
+            this.attackStrength = attackStrength;
+            this.maximumHealth = maximumHealth;
+            #endregion
             for (int i = 0; i < numberOfAnimals; i++)
             {
-                animals[i] = new Animal(name + animalNumber++, name, simulation, rnd.Next(mapLengthX), rnd.Next(mapLengthY));
+                animals[i] = new Animal(name + animalNumber++, this, simulation, rnd.Next(mapLengthX), rnd.Next(mapLengthY), maximumHealth, attackStrength, mutationChance);
             }
             this.speciesColor = speciesColor;
         }
@@ -119,7 +148,7 @@ namespace Evolution.Evolution
                 animals[i].energy = 0;
                 animals[i].x = rnd.Next(maxX);
                 animals[i].y = rnd.Next(maxY);
-                animals[i].health = Animal.startHealth;
+                animals[i].health = animals[i].startHealth;
             }
         }
 

@@ -11,14 +11,14 @@ namespace Evolution.Evolution
     public class Animal
     {
         #region Settings
-        const int startDepth = 3;
-        const int mutationChance = 5;
-        public const int startHealth = 20;
-        const int attackStrength = 1;
+        private const int startDepth = 3;
+        private int mutationChance = 5;
+        public int startHealth = 20;
+        private int attackStrength = 1;
         #endregion
 
         public string name;
-        public string speciesName;
+        public Species species;
         public int x = -1;
         public int y = -1;
         public int energy;
@@ -29,12 +29,15 @@ namespace Evolution.Evolution
 
         private static Random rnd = new Random();
 
-        public Animal(string name, string speciesName, Simulation simulation, int x, int y)
+        public Animal(string name, Species species, Simulation simulation, int x, int y, int startHealth, int attackStrength, int mutationChance)
         {
             this.name = name;
-            this.speciesName = speciesName;
+            this.species = species;
             this.simulation = simulation;
-            this.health = 10;
+            this.startHealth = startHealth;
+            this.attackStrength = attackStrength;
+            this.mutationChance = mutationChance;
+            this.health = startHealth;
             this.x = x;
             this.y = y;
             GenerateNodes(startDepth);
@@ -49,7 +52,7 @@ namespace Evolution.Evolution
         #region BreedMethods
         public Animal BreedWith(Animal partner, MapGeneration.Map map, string newName)
         {
-            return BreedNodeTree(partner.startNode, new Animal(newName, speciesName, simulation, -1, -1));
+            return BreedNodeTree(partner.startNode, new Animal(newName, species, simulation, -1, -1, startHealth, attackStrength, mutationChance));
         }
 
         private Animal BreedNodeTree(Node partnerNodeTree, Animal newAnimal)
@@ -304,25 +307,25 @@ namespace Evolution.Evolution
 
             int tile = simulation.map.map[x, y].level;
             if (tile <= Simulation.minSea)
-                energy -= Simulation.waterMoveEnergy;
+                energy += species.waterMoveEnergy;
             else if (tile >= Simulation.minMountain)
-                energy -= Simulation.mountainMoveEnergy;
+                energy += species.mountainMoveEnergy;
             else
-                energy -= Simulation.baseMoveEnergy;
+                energy += species.baseMoveEnergy;
 
             return 1;
         }
 
         public int GetNearestFoodDirection()
         {
-            energy -= Simulation.searchFoodEnergy;
+            energy -= species.searchFoodEnergy;
             return simulation.map.GetNearestFoodDirection(x, y);
         }
 
         public int GetNearestEnemyDirection()
         {
-            energy += Simulation.searchEnemyEnergy;
-            return simulation.map.GetNearestEnemyDirection(x, y, speciesName, simulation);
+            energy += species.searchEnemyEnergy;
+            return simulation.map.GetNearestEnemyDirection(x, y, species, simulation);
         }
 
         /// <summary>
@@ -331,16 +334,16 @@ namespace Evolution.Evolution
         /// <returns></returns>
         public int Fight()
         {
-            Animal target = simulation.map.GetNearEnemyAnimal(x, y, speciesName, simulation);
+            Animal target = simulation.map.GetNearEnemyAnimal(x, y, species, simulation);
             if (target != null)
             {
                 target.health -= attackStrength;
                 if (target.health < 1)
-                    energy += Simulation.killBonusEnergy;
-                energy += Simulation.fightSuccEnergy;
+                    energy += species.killBonusEnergy;
+                energy += species.fightSuccEnergy;
                 return 0;
             }
-            energy += Simulation.fightEnergy;
+            energy += species.fightEnergy;
             return -1;
         }
 
@@ -350,15 +353,15 @@ namespace Evolution.Evolution
         /// <returns></returns>
         public int IsPossibleToFight()
         {
-            energy += Simulation.searchEnemyEnergy;
-            return simulation.map.GetNearEnemyAnimal(x, y, speciesName, simulation) == null ? -1 : 0;
+            energy += species.searchEnemyEnergy;
+            return simulation.map.GetNearEnemyAnimal(x, y, species, simulation) == null ? -1 : 0;
         }
 
         public int Eat()
         {
             int food = simulation.map.map[x, y].food;
             simulation.map.map[x, y].food = 0;
-            energy += food - Simulation.eatEnergy;
+            energy += food - species.eatEnergy;
             return food;
         }
         #endregion
