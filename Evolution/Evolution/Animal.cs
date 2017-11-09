@@ -27,9 +27,9 @@ namespace Evolution.Evolution
         [NonSerialized]
         public Simulation simulation;
 
-        private static Random rnd = new Random();
+        private Random rnd;
 
-        public Animal(string name, Species species, Simulation simulation, int x, int y, int startHealth, int attackStrength, int mutationChance)
+        public Animal(string name, Species species, Simulation simulation, int x, int y, int startHealth, int attackStrength, int mutationChance, Random rnd)
         {
             this.name = name;
             this.species = species;
@@ -40,6 +40,7 @@ namespace Evolution.Evolution
             this.health = startHealth;
             this.x = x;
             this.y = y;
+            this.rnd = rnd;
             GenerateNodes(startDepth);
         }
 
@@ -52,7 +53,7 @@ namespace Evolution.Evolution
         #region BreedMethods
         public Animal BreedWith(Animal partner, MapGeneration.Map map, string newName)
         {
-            return BreedNodeTree(partner.startNode, new Animal(newName, species, simulation, -1, -1, startHealth, attackStrength, mutationChance));
+            return BreedNodeTree(partner.startNode, new Animal(newName, species, simulation, -1, -1, startHealth, attackStrength, mutationChance, rnd));
         }
 
         private Animal BreedNodeTree(Node partnerNodeTree, Animal newAnimal)

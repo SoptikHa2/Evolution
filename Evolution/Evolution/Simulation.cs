@@ -40,7 +40,7 @@ namespace Evolution.Evolution
         private int width, height;
         private DateTime dateTimeStarted;
 
-        private static Random rnd = new Random();
+        public Random rnd;
 
         [NonSerialized]
         private Thread tickThread;
@@ -48,12 +48,13 @@ namespace Evolution.Evolution
         public event EventHandler NextTick;
         public event EventHandler NextGeneration;
 
-        public Simulation(int width = 100, int height = 100)
+        public Simulation(int width = 100, int height = 100, Random rnd = null, int chanceToPosFood = 30, int minFood = 10, int maxFood = 15)
         {
             this.width = width;
             this.height = height;
             dateTimeStarted = DateTime.Now;
-            map = new MapGeneration.Map(width, height);
+            this.rnd = rnd ?? new Random();
+            map = new MapGeneration.Map(this.rnd, width, height, chanceToPosFood, minFood, maxFood);
             this.species = InitializeSpecies();
             tickThread = new Thread(Tick);
             tickThread.Name = "Simulation Tick Thread";
@@ -61,9 +62,10 @@ namespace Evolution.Evolution
 
         public Simulation() { }
 
+        [Obsolete("InitializeSpecies method should no longer be used and will be removed soon")]
         public Species[] InitializeSpecies()
         {
-            return new Species[] { new Species("Fox", this, "red", 3, 1, 10), new Species("Sheep", this, "silver", 3, 1, 10), new Species("Goat", this, "orange", 3, 1, 10) };
+            return new Species[] { new Species("Fox", this, "red", 3, rnd, 1, 10), new Species("Sheep", this, "silver", 3, rnd, 1, 10), new Species("Goat", this, "orange", 3, rnd, 1, 10) };
         }
 
         public void SetOnLoad(MapGeneration.Map map, Species[] species, int generation)
@@ -122,7 +124,7 @@ namespace Evolution.Evolution
                     // Add new food to tiles
                     for (int i = 0; i < map.map.GetLength(0); i++)
                         for (int j = 0; j < map.map.GetLength(1); j++)
-                            map.map[i, j].food = rnd.Next(101) <= MapGeneration.Map.chanceToPosFood ? rnd.Next(MapGeneration.Map.minFood, MapGeneration.Map.maxFood) : 0;
+                            map.map[i, j].food = rnd.Next(101) <= map.chanceToPosFood ? rnd.Next(map.minFood, map.maxFood) : 0;
 
                     // Save image of end of previous generation
                     Bitmap b = new Bitmap(savedImageWidth, savedImageHeight);
@@ -223,7 +225,7 @@ namespace Evolution.Evolution
             byte gMax = 255;
             byte bMax = 0;
 
-            int max = MapGeneration.Map.maxFood;
+            int max = map.maxFood;
 
             int r = (int)(rMin + (food / (double)max) * ((rMax - rMin)));
             int g = (int)(gMin + (food / (double)max) * ((gMax - gMin)));

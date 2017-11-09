@@ -30,11 +30,11 @@ namespace Evolution.Evolution
         public string speciesColor;
         public string name;
 
-        private static Random rnd = new Random();
+        private Random rnd;
         private int animalNumber = 0;
         public int maxAnimals;
 
-        public Species(string name, Simulation simulation, string speciesColor, int totalNumberOfSpecies, int attackStrength, int maximumHealth, int mutationChance = 5, int baseMoveEnergy = 0, int waterMoveEnergy = 0, int mountainMoveEnergy = 0, int eatEnergy = 1, int searchFoodEnergy = 0, int searchEnemyEnergy = 0, int fightEnergy = -2, int fightSuccEnergy = 10, int killBonusEnergy = 0)
+        public Species(string name, Simulation simulation, string speciesColor, int totalNumberOfSpecies, Random rnd, int attackStrength, int maximumHealth, int mutationChance = 5, int baseMoveEnergy = 0, int waterMoveEnergy = 0, int mountainMoveEnergy = 0, int eatEnergy = 1, int searchFoodEnergy = 0, int searchEnemyEnergy = 0, int fightEnergy = -2, int fightSuccEnergy = 10, int killBonusEnergy = 0)
         {
             this.name = name;
             int numberOfAnimals = Simulation.numberOfAnimalsOnMap / totalNumberOfSpecies;
@@ -42,6 +42,7 @@ namespace Evolution.Evolution
             maxAnimals = numberOfAnimals;
             int mapLengthX = simulation.map.map.GetLength(0);
             int mapLengthY = simulation.map.map.GetLength(1);
+            this.rnd = rnd;
             #region Settings
             this.baseMoveEnergy = baseMoveEnergy;
             this.waterMoveEnergy = waterMoveEnergy;
@@ -57,7 +58,7 @@ namespace Evolution.Evolution
             #endregion
             for (int i = 0; i < numberOfAnimals; i++)
             {
-                animals[i] = new Animal(name + animalNumber++, this, simulation, rnd.Next(mapLengthX), rnd.Next(mapLengthY), maximumHealth, attackStrength, mutationChance);
+                animals[i] = new Animal(name + animalNumber++, this, simulation, rnd.Next(mapLengthX), rnd.Next(mapLengthY), maximumHealth, attackStrength, mutationChance, rnd);
             }
             this.speciesColor = speciesColor;
         }
