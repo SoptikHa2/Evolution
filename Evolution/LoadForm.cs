@@ -58,7 +58,8 @@ namespace Evolution
                     string[] files = Directory.GetFiles(directories[i]);
                     var query = files.Select(x => Path.GetFileName(x));
                     if (query.Where(x => x.EndsWith(".map")).Count() > 0 &&
-                    query.Where(x => x.EndsWith(".species")).Count() > 0)
+                    query.Where(x => x.EndsWith(".species")).Count() > 0 &&
+                    query.Where(x => x.EndsWith(".rnd")).Count() > 0)
                     {
                         generationListBox.Items.Add(directories[i].Split('\\').Last());
                     }

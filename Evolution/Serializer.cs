@@ -40,13 +40,13 @@ namespace Evolution
             System.Windows.Forms.Clipboard.SetText(GetExcelData());
         }
 
-        public static void BeforeGenerationSave(Evolution.Species[] species, MapGeneration.Map map, int generation, DateTime dateTimeStarted)
+        public static void BeforeGenerationSave(Evolution.Species[] species, MapGeneration.Map map, int generation, DateTime dateTimeStarted, Random rnd)
         {
             try
             {
                 CheckDirectories(new string[] { "log", dateTimeStarted.ToString("dd-MM-yyyy--HH-mm-ss"), "Generation " + generation });
                 if (generation % saveSerializedFilesEveryXGenerations == 0)
-                    SaveSimulation(species, map, $"log\\{dateTimeStarted.ToString("dd-MM-yyyy--HH-mm-ss")}\\Generation {generation}\\", DateTime.Now.ToString("HH-mm-ss"));
+                    SaveSimulation(species, map, $"log\\{dateTimeStarted.ToString("dd-MM-yyyy--HH-mm-ss")}\\Generation {generation}\\", DateTime.Now.ToString("HH-mm-ss"), rnd);
 
                 File.WriteAllText($"log\\{ dateTimeStarted.ToString("dd-MM-yyyy--HH-mm-ss")}\\Generation {generation}\\sim.dat", $"{generation};{dateTimeStarted.ToBinary()}");
             }
@@ -123,7 +123,7 @@ namespace Evolution
             }
         }
 
-        private static void SaveSimulation(Evolution.Species[] species, MapGeneration.Map map, string path, string fileName)
+        private static void SaveSimulation(Evolution.Species[] species, MapGeneration.Map map, string path, string fileName, Random rnd)
         {
             // Generate string
             string save = SerializeObject(species);
@@ -132,6 +132,9 @@ namespace Evolution
 
             save = SerializeObject(map);
             File.WriteAllText(path + fileName + ".map", save);
+
+            save = SerializeObject(rnd);
+            File.WriteAllText(path + fileName + ".rnd", save);
         }
 
         private static void CheckDirectories(string[] dirPath)
@@ -146,7 +149,7 @@ namespace Evolution
             }
         }
 
-        private static string SerializeObject(object o)
+        public static string SerializeObject(object o)
         {
             if (!o.GetType().IsSerializable)
             {
@@ -160,7 +163,7 @@ namespace Evolution
             }
         }
 
-        private static object DeserializeObject(string str)
+        public static object DeserializeObject(string str)
         {
             byte[] bytes = Convert.FromBase64String(str);
 
@@ -188,6 +191,7 @@ namespace Evolution
             {
                 string[] mapSerialized = Directory.GetFiles(pathToDirectory, "*.map");
                 string[] speciesSerialized = Directory.GetFiles(pathToDirectory, "*.species");
+                string[] rndSerialized = Directory.GetFiles(pathToDirectory, "*.rnd");
 
                 if (mapSerialized.Length > 0 && speciesSerialized.Length > 0)
                 {
@@ -197,7 +201,7 @@ namespace Evolution
                         MapGeneration.Map map = DeserializeObject(File.ReadAllText(mapSerialized[0])) as MapGeneration.Map;
                         result = new Evolution.Simulation(map.map.GetLength(0), map.map.GetLength(1));
                         string[] datFile = File.ReadAllText(pathToDirectory + "\\sim.dat").Split(';');
-                        result.SetOnLoad(map, DeserializeObject(File.ReadAllText(speciesSerialized[0])) as Evolution.Species[], int.Parse(datFile[0]));
+                        result.SetOnLoad(map, DeserializeObject(File.ReadAllText(speciesSerialized[0])) as Evolution.Species[], int.Parse(datFile[0]), Serializer.DeserializeObject(File.ReadAllText(rndSerialized[0])) as Random);
                         return result;
                     }
                     catch (Exception ex)

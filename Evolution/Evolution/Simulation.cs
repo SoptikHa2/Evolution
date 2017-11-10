@@ -68,7 +68,7 @@ namespace Evolution.Evolution
             return new Species[] { new Species("Fox", this, "red", 3, rnd, 1, 10), new Species("Sheep", this, "silver", 3, rnd, 1, 10), new Species("Goat", this, "orange", 3, rnd, 1, 10) };
         }
 
-        public void SetOnLoad(MapGeneration.Map map, Species[] species, int generation)
+        public void SetOnLoad(MapGeneration.Map map, Species[] species, int generation, Random rnd)
         {
             this.map = map;
             this.species = species;
@@ -77,6 +77,7 @@ namespace Evolution.Evolution
                 for (int a = 0; a < species[s].animals.Length; a++)
                     species[s].animals[a].simulation = this;
             this.generation = generation;
+            this.rnd = rnd;
         }
 
         public void StartTicks()
@@ -105,7 +106,7 @@ namespace Evolution.Evolution
                 // Save some data at beginning of generation
                 if (tick == 0)
                 {
-                    Serializer.BeforeGenerationSave(species, map, generation++, dateTimeStarted);
+                    Serializer.BeforeGenerationSave(species, map, generation++, dateTimeStarted, rnd);
                 }
 
                 // Tick all objects
