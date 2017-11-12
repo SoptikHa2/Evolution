@@ -319,7 +319,7 @@ namespace Evolution.Evolution
 
         public int GetNearestFoodDirection()
         {
-            energy -= species.searchFoodEnergy;
+            energy += species.searchFoodEnergy;
             return simulation.map.GetNearestFoodDirection(x, y);
         }
 
@@ -362,7 +362,7 @@ namespace Evolution.Evolution
         {
             int food = simulation.map.map[x, y].food;
             simulation.map.map[x, y].food = 0;
-            energy += food - species.eatEnergy;
+            energy += food + species.eatEnergy;
             return food;
         }
         #endregion

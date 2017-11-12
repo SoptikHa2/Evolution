@@ -21,9 +21,16 @@ namespace Evolution
 
         private void newSimulationButton_Click(object sender, EventArgs e)
         {
-            SimulationForm simulation = new SimulationForm();
-            simulation.Show();
-            Hide();
+            CreateSimForm csForm = new CreateSimForm();
+            DialogResult dR = csForm.ShowDialog();
+
+            if(dR == DialogResult.OK)
+            {
+
+            }
+            //SimulationForm simulation = new SimulationForm();
+            //simulation.Show();
+            //Hide();
         }
 
         private void loadSimulationButton_Click(object sender, EventArgs e)
