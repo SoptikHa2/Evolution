@@ -62,12 +62,6 @@ namespace Evolution.Evolution
 
         public Simulation() { }
 
-        [Obsolete("InitializeSpecies method should no longer be used and will be removed soon")]
-        public Species[] InitializeSpecies()
-        {
-            return new Species[] { new Species("Fox", this, Color.Red.ToArgb(), 3, rnd, 1, 10), new Species("Sheep", this, Color.Silver.ToArgb(), 3, rnd, 1, 10), new Species("Goat", this, Color.Orange.ToArgb(), 3, rnd, 1, 10) };
-        }
-
         public void SetOnLoad(MapGeneration.Map map, Species[] species, int generation, Random rnd)
         {
             this.map = map;

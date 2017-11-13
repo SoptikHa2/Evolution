@@ -64,6 +64,8 @@
             this.AllowMovementWaterCheckbox = new System.Windows.Forms.CheckBox();
             this.AllowMovementMountainsCheckbox = new System.Windows.Forms.CheckBox();
             this.warningLabel = new System.Windows.Forms.Label();
+            this.FoodEnergyGainInput = new System.Windows.Forms.NumericUpDown();
+            this.FoodEnergyGainLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.EatEnergyNumberInput)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SearchFoodEnergyNumberInput)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SearchEnemyEnergyNumberInput)).BeginInit();
@@ -76,6 +78,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.BaseMoveEnergyNumberInput)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.WaterMoveEnergyNumberInput)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MountainMoveEnergyNumberInput)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.FoodEnergyGainInput)).BeginInit();
             this.SuspendLayout();
             // 
             // OKbutton
@@ -189,7 +192,7 @@
             // searchFoodEnergy
             // 
             this.searchFoodEnergy.AutoSize = true;
-            this.searchFoodEnergy.Location = new System.Drawing.Point(9, 111);
+            this.searchFoodEnergy.Location = new System.Drawing.Point(9, 131);
             this.searchFoodEnergy.MaximumSize = new System.Drawing.Size(70, 0);
             this.searchFoodEnergy.Name = "searchFoodEnergy";
             this.searchFoodEnergy.Size = new System.Drawing.Size(68, 26);
@@ -198,7 +201,7 @@
             // 
             // SearchFoodEnergyNumberInput
             // 
-            this.SearchFoodEnergyNumberInput.Location = new System.Drawing.Point(83, 111);
+            this.SearchFoodEnergyNumberInput.Location = new System.Drawing.Point(83, 137);
             this.SearchFoodEnergyNumberInput.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -215,7 +218,7 @@
             // 
             // SearchEnemyEnergyNumberInput
             // 
-            this.SearchEnemyEnergyNumberInput.Location = new System.Drawing.Point(83, 137);
+            this.SearchEnemyEnergyNumberInput.Location = new System.Drawing.Point(83, 163);
             this.SearchEnemyEnergyNumberInput.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -233,7 +236,7 @@
             // SearchEnemyEnergyLabel
             // 
             this.SearchEnemyEnergyLabel.AutoSize = true;
-            this.SearchEnemyEnergyLabel.Location = new System.Drawing.Point(9, 139);
+            this.SearchEnemyEnergyLabel.Location = new System.Drawing.Point(9, 165);
             this.SearchEnemyEnergyLabel.MaximumSize = new System.Drawing.Size(80, 0);
             this.SearchEnemyEnergyLabel.Name = "SearchEnemyEnergyLabel";
             this.SearchEnemyEnergyLabel.Size = new System.Drawing.Size(79, 26);
@@ -242,7 +245,7 @@
             // 
             // FightEnergyNumberInput
             // 
-            this.FightEnergyNumberInput.Location = new System.Drawing.Point(83, 163);
+            this.FightEnergyNumberInput.Location = new System.Drawing.Point(83, 189);
             this.FightEnergyNumberInput.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -265,7 +268,7 @@
             // FightEnergyLabel
             // 
             this.FightEnergyLabel.AutoSize = true;
-            this.FightEnergyLabel.Location = new System.Drawing.Point(9, 165);
+            this.FightEnergyLabel.Location = new System.Drawing.Point(9, 196);
             this.FightEnergyLabel.MaximumSize = new System.Drawing.Size(80, 0);
             this.FightEnergyLabel.Name = "FightEnergyLabel";
             this.FightEnergyLabel.Size = new System.Drawing.Size(65, 13);
@@ -274,7 +277,7 @@
             // 
             // FightSuccEnergyNumberInput
             // 
-            this.FightSuccEnergyNumberInput.Location = new System.Drawing.Point(83, 189);
+            this.FightSuccEnergyNumberInput.Location = new System.Drawing.Point(83, 215);
             this.FightSuccEnergyNumberInput.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -297,7 +300,7 @@
             // FightSuccEnergyLabel
             // 
             this.FightSuccEnergyLabel.AutoSize = true;
-            this.FightSuccEnergyLabel.Location = new System.Drawing.Point(9, 191);
+            this.FightSuccEnergyLabel.Location = new System.Drawing.Point(9, 215);
             this.FightSuccEnergyLabel.MaximumSize = new System.Drawing.Size(80, 0);
             this.FightSuccEnergyLabel.Name = "FightSuccEnergyLabel";
             this.FightSuccEnergyLabel.Size = new System.Drawing.Size(63, 26);
@@ -306,7 +309,7 @@
             // 
             // KillBonusEnergyNumberInput
             // 
-            this.KillBonusEnergyNumberInput.Location = new System.Drawing.Point(83, 215);
+            this.KillBonusEnergyNumberInput.Location = new System.Drawing.Point(83, 241);
             this.KillBonusEnergyNumberInput.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -324,7 +327,7 @@
             // KillBonusEnergyLabel
             // 
             this.KillBonusEnergyLabel.AutoSize = true;
-            this.KillBonusEnergyLabel.Location = new System.Drawing.Point(9, 217);
+            this.KillBonusEnergyLabel.Location = new System.Drawing.Point(9, 243);
             this.KillBonusEnergyLabel.MaximumSize = new System.Drawing.Size(80, 0);
             this.KillBonusEnergyLabel.Name = "KillBonusEnergyLabel";
             this.KillBonusEnergyLabel.Size = new System.Drawing.Size(58, 26);
@@ -552,12 +555,46 @@
             this.warningLabel.TabIndex = 35;
             this.warningLabel.Text = "Select species name to continue";
             // 
+            // FoodEnergyGainInput
+            // 
+            this.FoodEnergyGainInput.Location = new System.Drawing.Point(83, 111);
+            this.FoodEnergyGainInput.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.FoodEnergyGainInput.Minimum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            -2147483648});
+            this.FoodEnergyGainInput.Name = "FoodEnergyGainInput";
+            this.FoodEnergyGainInput.Size = new System.Drawing.Size(100, 20);
+            this.FoodEnergyGainInput.TabIndex = 36;
+            this.FoodEnergyGainInput.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // FoodEnergyGainLabel
+            // 
+            this.FoodEnergyGainLabel.AutoSize = true;
+            this.FoodEnergyGainLabel.Location = new System.Drawing.Point(9, 105);
+            this.FoodEnergyGainLabel.MaximumSize = new System.Drawing.Size(80, 0);
+            this.FoodEnergyGainLabel.Name = "FoodEnergyGainLabel";
+            this.FoodEnergyGainLabel.Size = new System.Drawing.Size(70, 26);
+            this.FoodEnergyGainLabel.TabIndex = 37;
+            this.FoodEnergyGainLabel.Text = "Food Energy Gain";
+            // 
             // CreateSpeciesForm
             // 
             this.AcceptButton = this.OKbutton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(383, 382);
+            this.Controls.Add(this.FoodEnergyGainLabel);
+            this.Controls.Add(this.FoodEnergyGainInput);
             this.Controls.Add(this.warningLabel);
             this.Controls.Add(this.AllowMovementMountainsCheckbox);
             this.Controls.Add(this.AllowMovementWaterCheckbox);
@@ -613,6 +650,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.BaseMoveEnergyNumberInput)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.WaterMoveEnergyNumberInput)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.MountainMoveEnergyNumberInput)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.FoodEnergyGainInput)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -656,5 +694,7 @@
         private System.Windows.Forms.CheckBox AllowMovementWaterCheckbox;
         private System.Windows.Forms.CheckBox AllowMovementMountainsCheckbox;
         private System.Windows.Forms.Label warningLabel;
+        private System.Windows.Forms.NumericUpDown FoodEnergyGainInput;
+        private System.Windows.Forms.Label FoodEnergyGainLabel;
     }
 }

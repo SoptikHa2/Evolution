@@ -362,7 +362,7 @@ namespace Evolution.Evolution
         {
             int food = simulation.map.map[x, y].food;
             simulation.map.map[x, y].food = 0;
-            energy += food + species.eatEnergy;
+            energy += food * species.foodGainEnergy + species.eatEnergy;
             return food;
         }
         #endregion
