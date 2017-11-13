@@ -63,6 +63,7 @@
             this.AllowMovementLandCheckbox = new System.Windows.Forms.CheckBox();
             this.AllowMovementWaterCheckbox = new System.Windows.Forms.CheckBox();
             this.AllowMovementMountainsCheckbox = new System.Windows.Forms.CheckBox();
+            this.warningLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.EatEnergyNumberInput)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SearchFoodEnergyNumberInput)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SearchEnemyEnergyNumberInput)).BeginInit();
@@ -79,6 +80,8 @@
             // 
             // OKbutton
             // 
+            this.OKbutton.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.OKbutton.Enabled = false;
             this.OKbutton.Location = new System.Drawing.Point(12, 333);
             this.OKbutton.Name = "OKbutton";
             this.OKbutton.Size = new System.Drawing.Size(98, 37);
@@ -102,6 +105,7 @@
             this.NameInput.Name = "NameInput";
             this.NameInput.Size = new System.Drawing.Size(100, 20);
             this.NameInput.TabIndex = 2;
+            this.NameInput.TextChanged += new System.EventHandler(this.NameInput_TextChanged);
             // 
             // nameLabel
             // 
@@ -139,6 +143,7 @@
             this.button1.TabIndex = 6;
             this.button1.Text = "Set color";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // showColorLabel
             // 
@@ -535,13 +540,25 @@
             this.AllowMovementMountainsCheckbox.Text = "Allow movement in mountains";
             this.AllowMovementMountainsCheckbox.UseVisualStyleBackColor = true;
             // 
+            // warningLabel
+            // 
+            this.warningLabel.AutoSize = true;
+            this.warningLabel.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.warningLabel.ForeColor = System.Drawing.Color.Tomato;
+            this.warningLabel.Location = new System.Drawing.Point(12, 312);
+            this.warningLabel.MaximumSize = new System.Drawing.Size(250, 0);
+            this.warningLabel.Name = "warningLabel";
+            this.warningLabel.Size = new System.Drawing.Size(194, 17);
+            this.warningLabel.TabIndex = 35;
+            this.warningLabel.Text = "Select species name to continue";
+            // 
             // CreateSpeciesForm
             // 
             this.AcceptButton = this.OKbutton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.CancelButton;
             this.ClientSize = new System.Drawing.Size(383, 382);
+            this.Controls.Add(this.warningLabel);
             this.Controls.Add(this.AllowMovementMountainsCheckbox);
             this.Controls.Add(this.AllowMovementWaterCheckbox);
             this.Controls.Add(this.AllowMovementLandCheckbox);
@@ -638,5 +655,6 @@
         private System.Windows.Forms.CheckBox AllowMovementLandCheckbox;
         private System.Windows.Forms.CheckBox AllowMovementWaterCheckbox;
         private System.Windows.Forms.CheckBox AllowMovementMountainsCheckbox;
+        private System.Windows.Forms.Label warningLabel;
     }
 }

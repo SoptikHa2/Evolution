@@ -48,14 +48,14 @@ namespace Evolution.Evolution
         public event EventHandler NextTick;
         public event EventHandler NextGeneration;
 
-        public Simulation(int width = 100, int height = 100, Random rnd = null, int chanceToPosFood = 30, int minFood = 10, int maxFood = 15)
+        public Simulation(Species[] species, int width = 100, int height = 100, Random rnd = null, int chanceToPosFood = 30, int minFood = 10, int maxFood = 15)
         {
             this.width = width;
             this.height = height;
             dateTimeStarted = DateTime.Now;
             this.rnd = rnd ?? new Random();
             map = new MapGeneration.Map(this.rnd, width, height, chanceToPosFood, minFood, maxFood);
-            this.species = InitializeSpecies();
+            this.species = species;
             tickThread = new Thread(Tick);
             tickThread.Name = "Simulation Tick Thread";
         }
@@ -65,7 +65,7 @@ namespace Evolution.Evolution
         [Obsolete("InitializeSpecies method should no longer be used and will be removed soon")]
         public Species[] InitializeSpecies()
         {
-            return new Species[] { new Species("Fox", this, "red", 3, rnd, 1, 10), new Species("Sheep", this, "silver", 3, rnd, 1, 10), new Species("Goat", this, "orange", 3, rnd, 1, 10) };
+            return new Species[] { new Species("Fox", this, Color.Red.ToArgb(), 3, rnd, 1, 10), new Species("Sheep", this, Color.Silver.ToArgb(), 3, rnd, 1, 10), new Species("Goat", this, Color.Orange.ToArgb(), 3, rnd, 1, 10) };
         }
 
         public void SetOnLoad(MapGeneration.Map map, Species[] species, int generation, Random rnd)
@@ -195,7 +195,7 @@ namespace Evolution.Evolution
                         Animal a = sp.animals[aN];
                         if (a.health < 1)
                             continue;
-                        SolidBrush sb = new SolidBrush(Color.FromName(sp.speciesColor));
+                        SolidBrush sb = new SolidBrush(Color.FromArgb(sp.speciesColor));
                         graphics.FillRectangle(sb, a.x * lengthOfTile, a.y * lengthOfTile, lengthOfTile, lengthOfTile);
                     }
                 }

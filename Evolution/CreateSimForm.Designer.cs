@@ -35,9 +35,9 @@
             this.OKbutton = new System.Windows.Forms.Button();
             this.CancelButton = new System.Windows.Forms.Button();
             this.SimulationSettingsLabel = new System.Windows.Forms.Label();
-            this.FoodPercentageInput = new System.Windows.Forms.NumericUpDown();
+            this.PositionFoodPercentageInput = new System.Windows.Forms.NumericUpDown();
             this.MinimumFoodInput = new System.Windows.Forms.NumericUpDown();
-            this.FoodMaximumInput = new System.Windows.Forms.NumericUpDown();
+            this.MaximumFoodInput = new System.Windows.Forms.NumericUpDown();
             this.PositionFoodLabel = new System.Windows.Forms.Label();
             this.minimumFoodLabel = new System.Windows.Forms.Label();
             this.MaximumFoodLabel = new System.Windows.Forms.Label();
@@ -51,9 +51,9 @@
             this.EditButton = new System.Windows.Forms.Button();
             this.RandomSeedInput = new System.Windows.Forms.TextBox();
             this.RandomSeedLabel = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.FoodPercentageInput)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PositionFoodPercentageInput)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MinimumFoodInput)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.FoodMaximumInput)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MaximumFoodInput)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.WidthOfMapInput)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.heightOfMapInput)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.AnimalsPerMapInput)).BeginInit();
@@ -101,6 +101,7 @@
             // 
             // OKbutton
             // 
+            this.OKbutton.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.OKbutton.Enabled = false;
             this.OKbutton.Location = new System.Drawing.Point(167, 306);
             this.OKbutton.Name = "OKbutton";
@@ -129,13 +130,13 @@
             this.SimulationSettingsLabel.TabIndex = 7;
             this.SimulationSettingsLabel.Text = "Simulation Settings";
             // 
-            // FoodPercentageInput
+            // PositionFoodPercentageInput
             // 
-            this.FoodPercentageInput.Location = new System.Drawing.Point(279, 48);
-            this.FoodPercentageInput.Name = "FoodPercentageInput";
-            this.FoodPercentageInput.Size = new System.Drawing.Size(120, 20);
-            this.FoodPercentageInput.TabIndex = 8;
-            this.FoodPercentageInput.Value = new decimal(new int[] {
+            this.PositionFoodPercentageInput.Location = new System.Drawing.Point(279, 48);
+            this.PositionFoodPercentageInput.Name = "PositionFoodPercentageInput";
+            this.PositionFoodPercentageInput.Size = new System.Drawing.Size(120, 20);
+            this.PositionFoodPercentageInput.TabIndex = 8;
+            this.PositionFoodPercentageInput.Value = new decimal(new int[] {
             30,
             0,
             0,
@@ -153,18 +154,18 @@
             0,
             0});
             // 
-            // FoodMaximumInput
+            // MaximumFoodInput
             // 
-            this.FoodMaximumInput.Location = new System.Drawing.Point(279, 100);
-            this.FoodMaximumInput.Minimum = new decimal(new int[] {
+            this.MaximumFoodInput.Location = new System.Drawing.Point(279, 100);
+            this.MaximumFoodInput.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.FoodMaximumInput.Name = "FoodMaximumInput";
-            this.FoodMaximumInput.Size = new System.Drawing.Size(120, 20);
-            this.FoodMaximumInput.TabIndex = 10;
-            this.FoodMaximumInput.Value = new decimal(new int[] {
+            this.MaximumFoodInput.Name = "MaximumFoodInput";
+            this.MaximumFoodInput.Size = new System.Drawing.Size(120, 20);
+            this.MaximumFoodInput.TabIndex = 10;
+            this.MaximumFoodInput.Value = new decimal(new int[] {
             15,
             0,
             0,
@@ -365,9 +366,9 @@
             this.Controls.Add(this.MaximumFoodLabel);
             this.Controls.Add(this.minimumFoodLabel);
             this.Controls.Add(this.PositionFoodLabel);
-            this.Controls.Add(this.FoodMaximumInput);
+            this.Controls.Add(this.MaximumFoodInput);
             this.Controls.Add(this.MinimumFoodInput);
-            this.Controls.Add(this.FoodPercentageInput);
+            this.Controls.Add(this.PositionFoodPercentageInput);
             this.Controls.Add(this.SimulationSettingsLabel);
             this.Controls.Add(this.CancelButton);
             this.Controls.Add(this.OKbutton);
@@ -382,9 +383,9 @@
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "New Simulation";
-            ((System.ComponentModel.ISupportInitialize)(this.FoodPercentageInput)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PositionFoodPercentageInput)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.MinimumFoodInput)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.FoodMaximumInput)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MaximumFoodInput)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.WidthOfMapInput)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.heightOfMapInput)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.AnimalsPerMapInput)).EndInit();
@@ -402,9 +403,9 @@
         private System.Windows.Forms.Button OKbutton;
         private System.Windows.Forms.Button CancelButton;
         private System.Windows.Forms.Label SimulationSettingsLabel;
-        private System.Windows.Forms.NumericUpDown FoodPercentageInput;
+        private System.Windows.Forms.NumericUpDown PositionFoodPercentageInput;
         private System.Windows.Forms.NumericUpDown MinimumFoodInput;
-        private System.Windows.Forms.NumericUpDown FoodMaximumInput;
+        private System.Windows.Forms.NumericUpDown MaximumFoodInput;
         private System.Windows.Forms.Label PositionFoodLabel;
         private System.Windows.Forms.Label minimumFoodLabel;
         private System.Windows.Forms.Label MaximumFoodLabel;

@@ -27,14 +27,14 @@ namespace Evolution.Evolution
         #endregion
 
         public Animal[] animals;
-        public string speciesColor;
+        public int speciesColor;
         public string name;
 
         private Random rnd;
         private int animalNumber = 0;
         public int maxAnimals;
 
-        public Species(string name, Simulation simulation, string speciesColor, int totalNumberOfSpecies, Random rnd, int attackStrength, int maximumHealth, int mutationChance = 5, int baseMoveEnergy = 0, int waterMoveEnergy = 0, int mountainMoveEnergy = 0, int eatEnergy = -1, int searchFoodEnergy = 0, int searchEnemyEnergy = 0, int fightEnergy = -2, int fightSuccEnergy = 10, int killBonusEnergy = 0)
+        public Species(string name, Simulation simulation, int speciesColor, int totalNumberOfSpecies, Random rnd, int attackStrength, int maximumHealth, int mutationChance = 5, int baseMoveEnergy = 0, int waterMoveEnergy = 0, int mountainMoveEnergy = 0, int eatEnergy = -1, int searchFoodEnergy = 0, int searchEnemyEnergy = 0, int fightEnergy = -2, int fightSuccEnergy = 10, int killBonusEnergy = 0)
         {
             this.name = name;
             int numberOfAnimals = Simulation.numberOfAnimalsOnMap / totalNumberOfSpecies;

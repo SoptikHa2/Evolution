@@ -199,7 +199,7 @@ namespace Evolution
                     try
                     {
                         MapGeneration.Map map = DeserializeObject(File.ReadAllText(mapSerialized[0])) as MapGeneration.Map;
-                        result = new Evolution.Simulation(map.map.GetLength(0), map.map.GetLength(1));
+                        result = new Evolution.Simulation(null, map.map.GetLength(0), map.map.GetLength(1));
                         string[] datFile = File.ReadAllText(pathToDirectory + "\\sim.dat").Split(';');
                         result.SetOnLoad(map, DeserializeObject(File.ReadAllText(speciesSerialized[0])) as Evolution.Species[], int.Parse(datFile[0]), Serializer.DeserializeObject(File.ReadAllText(rndSerialized[0])) as Random);
                         return result;

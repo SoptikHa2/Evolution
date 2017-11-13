@@ -26,7 +26,9 @@ namespace Evolution
 
             if(dR == DialogResult.OK)
             {
-
+                SimulationForm sf = new SimulationForm(csForm.CreateSimulation());
+                sf.Show();
+                Hide();
             }
             //SimulationForm simulation = new SimulationForm();
             //simulation.Show();

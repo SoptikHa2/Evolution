@@ -190,7 +190,7 @@
             legend2.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Bottom;
             legend2.Name = "Legend1";
             this.speciesChart.Legends.Add(legend2);
-            this.speciesChart.Location = new System.Drawing.Point(510, 262);
+            this.speciesChart.Location = new System.Drawing.Point(506, 262);
             this.speciesChart.Name = "speciesChart";
             series3.ChartArea = "ChartArea1";
             series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.StackedArea100;
