@@ -21,9 +21,18 @@ namespace Evolution
 
         private void newSimulationButton_Click(object sender, EventArgs e)
         {
-            SimulationForm simulation = new SimulationForm();
-            simulation.Show();
-            Hide();
+            CreateSimForm csForm = new CreateSimForm();
+            DialogResult dR = csForm.ShowDialog();
+
+            if(dR == DialogResult.OK)
+            {
+                SimulationForm sf = new SimulationForm(csForm.CreateSimulation());
+                sf.Show();
+                Hide();
+            }
+            //SimulationForm simulation = new SimulationForm();
+            //simulation.Show();
+            //Hide();
         }
 
         private void loadSimulationButton_Click(object sender, EventArgs e)
@@ -50,8 +59,7 @@ namespace Evolution
                 return;
             Evolution.Simulation sim = Serializer.LoadSimulation(path);
             if (sim == null)
-                MessageBox.Show("Sorry, I tried, but I was unable to load simulation. Check if there are correct files (*.map, *.species)" +
-                    "in the selected directory. These files should be in any generation, where the generation number can be divided by 10 (0, 10, 20, 30, ...)" +
+                MessageBox.Show("Sorry, I tried, but I was unable to load simulation. Something went wrong. Try to load different save file." +
                     "\n\nSelected directory path: " + path, "Loading simulation failed");
             else
             {

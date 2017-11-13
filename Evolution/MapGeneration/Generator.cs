@@ -8,7 +8,7 @@ namespace Evolution.MapGeneration
 {
     public class Generator
     {
-        private static Random rnd = new Random();
+        private Random rnd;
         private int[,] map;
 
         #region Settings
@@ -20,12 +20,12 @@ namespace Evolution.MapGeneration
         private const int chanceToGen1 = 68;
         #endregion
 
-        public Generator(int width = 100, int height = 100, string seed = null, int smoothLevel = 7, int enableNeighbour = 5, int disableNeighbour = 4)
+        public Generator(int width = 100, int height = 100, Random rnd = null, int smoothLevel = 7, int enableNeighbour = 5, int disableNeighbour = 4)
         {
             this.width = width;
             this.height = height;
             this.map = new int[width, height];
-            //rnd = //String.IsNullOrEmpty(seed) ? new Random() : new Random(seed.GetHashCode());
+            this.rnd = rnd ?? new Random();
             this.smoothLevel = smoothLevel;
             this.enableNeighbour = enableNeighbour;
             this.disableNeighbour = disableNeighbour;

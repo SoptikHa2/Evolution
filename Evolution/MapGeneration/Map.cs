@@ -10,20 +10,24 @@ namespace Evolution.MapGeneration
     [Serializable]
     public class Map
     {
-        public const int chanceToPosFood = 30;
-        public const int minFood = 10;
-        public const int maxFood = 15;
+        public int chanceToPosFood = 30;
+        public int minFood = 10;
+        public int maxFood = 15;
 
         public MapObject[,] map { get; private set; }
-        private static Random rnd = new Random();
+        private Random rnd;
 
-        public Map(int width = 100, int height = 100, string seed = null)
+        public Map(Random random, int width = 100, int height = 100, int chanceToPosFood = 30, int minFood = 10, int maxFood = 15)
         {
-            int[,] map = new Generator(width, height, seed).Generate();
+            this.chanceToPosFood = chanceToPosFood;
+            this.minFood = minFood;
+            this.maxFood = maxFood;
+            rnd = random;
+            int[,] map = new Generator(width, height, random).Generate();
             this.map = ConvertMap(map);
         }
 
-        private static MapObject[,] ConvertMap(int[,] map)
+        private MapObject[,] ConvertMap(int[,] map)
         {
             int width = map.GetLength(0);
             int height = map.GetLength(1);
@@ -72,14 +76,14 @@ namespace Evolution.MapGeneration
                 return -1;
         }
 
-        public int GetNearestEnemyDirection(int x, int y, string mySpeciesName, Simulation simulation)
+        public int GetNearestEnemyDirection(int x, int y, Species mySpecies, Simulation simulation)
         {
             List<Animal> possibleResults = new List<Animal>();
 
             // Go thru all species (except the one that is species of animal that called this method)
             for(int i = 0; i < simulation.species.Length; i++)
             {
-                if (simulation.species[i].name == mySpeciesName)
+                if (simulation.species[i] == mySpecies)
                     continue;
 
                 // Add all animals from the species to possibleResults list, if it has at least 1 HP
@@ -105,14 +109,14 @@ namespace Evolution.MapGeneration
                 return -1;
         }
 
-        public Animal GetNearEnemyAnimal(int x, int y, string mySpeciesName, Simulation simulation)
+        public Animal GetNearEnemyAnimal(int x, int y, Species mySpecies, Simulation simulation)
         {
             List<Animal> possibleResults = new List<Animal>();
 
             // Go thru all species (except the one that is species of animal that called this method)
             for (int i = 0; i < simulation.species.Length; i++)
             {
-                if (simulation.species[i].name == mySpeciesName)
+                if (simulation.species[i] == mySpecies)
                     continue;
 
                 // Add all animals from the species to possibleResults list, if it has at least 1 HP

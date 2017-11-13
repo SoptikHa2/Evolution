@@ -22,14 +22,14 @@ namespace Evolution
         private int generation = 1;
         private int tick = 1;
 
-        public SimulationForm(Evolution.Simulation simulation = null)
+        public SimulationForm(Evolution.Simulation simulation)
         {
             InitializeComponent();
 
             if (simulation != null)
                 generation = simulation.generation;
 
-            this.simulation = simulation ?? new Evolution.Simulation(100, 100);
+            this.simulation = simulation;
             this.simulation.StartTicks();
             this.simulation.NextTick += (o, ev) => { this.Invoke((MethodInvoker)delegate () { statusLabel.Text = $"Generation {generation} | Tick {tick++}"; if (this.simulation.playTicks == 0) nextTickButton.Enabled = true; }); };
             this.simulation.NextGeneration += (o, ev) => { this.Invoke((MethodInvoker)delegate () { tick = 1; statusLabel.Text = $"Generation {++generation} | Tick {tick}"; UpdateCharts(); }); };
@@ -72,7 +72,7 @@ namespace Evolution
             {
                 speciesChart.Series.Add(new Series(simulation.species[i].name));
                 speciesChart.Series[i].ChartType = SeriesChartType.StackedArea100;
-                speciesChart.Series[i].Color = Color.FromName(simulation.species[i].speciesColor);
+                speciesChart.Series[i].Color = Color.FromArgb(simulation.species[i].speciesColor);
             }
 
             // Add points to series in chart
