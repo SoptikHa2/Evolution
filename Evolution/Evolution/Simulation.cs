@@ -39,6 +39,7 @@ namespace Evolution.Evolution
         public Species[] species;
         private int width, height;
         private DateTime dateTimeStarted;
+        private bool extinct = false;
 
         public Random rnd;
 
@@ -47,6 +48,7 @@ namespace Evolution.Evolution
 
         public event EventHandler NextTick;
         public event EventHandler NextGeneration;
+        public event EventHandler SpeciesExtinct;
 
         public Simulation(Species[] species, int width = 100, int height = 100, Random rnd = null, int chanceToPosFood = 30, int minFood = 10, int maxFood = 15)
         {
@@ -130,6 +132,14 @@ namespace Evolution.Evolution
                     for (int i = 0; i < species.Length; i++)
                         species[i].animals = species[i].animals.OrderByDescending(x => x.energy).ToArray();
 
+                    // Are any animals left?
+                    if (species.Select(x => x.animals.Where(a => a.energy > 0 && a.health > 0).Count()).Sum() == 0)
+                    {
+                        extinct = true;
+                        SpeciesExtinct(this, EventArgs.Empty);
+                        tickThread.Abort();
+                        return;
+                    }
 
                     // Save some additional files to log
                     Serializer.AfterGenerationSave(b, species, generation, dateTimeStarted);
@@ -181,16 +191,19 @@ namespace Evolution.Evolution
                     }
                 }
                 // Draw animals
-                for (int spN = 0; spN < species.Length; spN++)
+                if (!extinct)
                 {
-                    Species sp = species[spN];
-                    for (int aN = 0; aN < sp.animals.Length; aN++)
+                    for (int spN = 0; spN < species.Length; spN++)
                     {
-                        Animal a = sp.animals[aN];
-                        if (a.health < 1)
-                            continue;
-                        SolidBrush sb = new SolidBrush(Color.FromArgb(sp.speciesColor));
-                        graphics.FillRectangle(sb, a.x * lengthOfTile, a.y * lengthOfTile, lengthOfTile, lengthOfTile);
+                        Species sp = species[spN];
+                        for (int aN = 0; aN < sp.animals.Length; aN++)
+                        {
+                            Animal a = sp.animals[aN];
+                            if (a.health < 1)
+                                continue;
+                            SolidBrush sb = new SolidBrush(Color.FromArgb(sp.speciesColor));
+                            graphics.FillRectangle(sb, a.x * lengthOfTile, a.y * lengthOfTile, lengthOfTile, lengthOfTile);
+                        }
                     }
                 }
             }

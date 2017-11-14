@@ -33,6 +33,7 @@ namespace Evolution
             this.simulation.StartTicks();
             this.simulation.NextTick += (o, ev) => { this.Invoke((MethodInvoker)delegate () { statusLabel.Text = $"Generation {generation} | Tick {tick++}"; if (this.simulation.playTicks == 0) nextTickButton.Enabled = true; }); };
             this.simulation.NextGeneration += (o, ev) => { this.Invoke((MethodInvoker)delegate () { tick = 1; statusLabel.Text = $"Generation {++generation} | Tick {tick}"; UpdateCharts(); }); };
+            this.simulation.SpeciesExtinct += (o, ev) => { this.Invoke((MethodInvoker)delegate () { drawTimer.Stop(); UpdateCharts(); mainDrawPictureBox.Refresh(); autoplayTickCheckbox.Checked = false; autoplayTickCheckbox.Enabled = false; nextTickButton.Enabled = false; }); };
 
             UpdateCharts();
 
@@ -68,7 +69,7 @@ namespace Evolution
             List<int> points = Serializer.overallSpeciesAnimalNumbers.Skip(skip).ToList();
 
             // Initialize series in chart
-            for(int i = 0; i < simulation.species.Length; i++)
+            for (int i = 0; i < simulation.species.Length; i++)
             {
                 speciesChart.Series.Add(new Series(simulation.species[i].name));
                 speciesChart.Series[i].ChartType = SeriesChartType.StackedArea100;
@@ -77,9 +78,9 @@ namespace Evolution
 
             // Add points to series in chart
             int generations = points.Count / simulation.species.Length;
-            for(int i = 0; i < generations; i++)
+            for (int i = 0; i < generations; i++)
             {
-                for(int j = 0; j < simulation.species.Length; j++)
+                for (int j = 0; j < simulation.species.Length; j++)
                 {
                     speciesChart.Series[j].Points.Add(new DataPoint(i, points[i * simulation.species.Length + j]));
                 }
