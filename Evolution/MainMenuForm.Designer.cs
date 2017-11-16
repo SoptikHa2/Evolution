@@ -68,7 +68,6 @@
             // 
             // visualiseDataButton
             // 
-            this.visualiseDataButton.Enabled = false;
             this.visualiseDataButton.Font = new System.Drawing.Font("Segoe UI Semilight", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.visualiseDataButton.Location = new System.Drawing.Point(12, 206);
             this.visualiseDataButton.Name = "visualiseDataButton";
@@ -76,6 +75,7 @@
             this.visualiseDataButton.TabIndex = 3;
             this.visualiseDataButton.Text = "Visualise Data";
             this.visualiseDataButton.UseVisualStyleBackColor = true;
+            this.visualiseDataButton.Click += new System.EventHandler(this.visualiseDataButton_Click);
             // 
             // MainMenuForm
             // 

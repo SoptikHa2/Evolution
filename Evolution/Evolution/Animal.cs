@@ -224,7 +224,7 @@ namespace Evolution.Evolution
             }
         }
 
-        private List<Node> GetNodes(Node tree)
+        public List<Node> GetNodes(Node tree)
         {
             List<Node> nodes = new List<Node>();
             nodes.Add(tree);

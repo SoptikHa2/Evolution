@@ -75,5 +75,9 @@ namespace Evolution
             if (receivedPath != "")
                 LoadFromFileDrag(receivedPath);
         }
+
+        private void visualiseDataButton_Click(object sender, EventArgs e)
+        {
+        }
     }
 }

@@ -70,6 +70,7 @@
     <Compile Include="Evolution\Nodes\Node.cs" />
     <Compile Include="Evolution\Simulation.cs" />
     <Compile Include="Evolution\Species.cs" />
+    <Compile Include="GraphViz.cs" />
     <Compile Include="LoadForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -118,6 +119,9 @@
     </Compile>
     <EmbeddedResource Include="SimulationForm.resx">
       <DependentUpon>SimulationForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VisualiseForm.resx">
+      <DependentUpon>VisualiseForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
