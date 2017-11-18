@@ -30,7 +30,7 @@ namespace Evolution.Evolution.Nodes
         // Get this node identifier ("Node123" [label="Go", fillcolor="#AAAAAA"];
         public string GetNodeGVDeclaration()
         {
-            return $"\"{GetHashCode()}\" [label=\"{identifier}\", fillcolor=\"#AAAAAA\"";
+            return $"\"{GetHashCode()}\" [label=\"{identifier}\", fillcolor=\"#AAAAAA\"]";
         }
         public override string ToString()
         {

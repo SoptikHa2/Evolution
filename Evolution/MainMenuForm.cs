@@ -78,6 +78,16 @@ namespace Evolution
 
         private void visualiseDataButton_Click(object sender, EventArgs e)
         {
+            LoadForm lf = new LoadForm();
+            DialogResult dialogResult = lf.ShowDialog();
+
+            if (dialogResult == DialogResult.OK)
+            {
+                if (lf.SelectedPath == "")
+                    return;
+                VisualiseForm vf = new VisualiseForm(lf.SelectedPath);
+                vf.ShowDialog();
+            }
         }
     }
 }

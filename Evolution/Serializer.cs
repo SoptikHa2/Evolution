@@ -45,8 +45,12 @@ namespace Evolution
             try
             {
                 CheckDirectories(new string[] { "log", dateTimeStarted.ToString("dd-MM-yyyy--HH-mm-ss"), "Generation " + generation });
+
+                // If it is [saveSerializedFilesEveryXGenerations]th generation, save everything, else save only species
                 if (generation % saveSerializedFilesEveryXGenerations == 0)
                     SaveSimulation(species, map, $"log\\{dateTimeStarted.ToString("dd-MM-yyyy--HH-mm-ss")}\\Generation {generation}\\", DateTime.Now.ToString("HH-mm-ss"), rnd);
+                else
+                    SaveSimulation(species, null, $"log\\{dateTimeStarted.ToString("dd-MM-yyyy--HH-mm-ss")}\\Generation {generation}\\", DateTime.Now.ToString("HH-mm-ss"), null);
 
                 File.WriteAllText($"log\\{ dateTimeStarted.ToString("dd-MM-yyyy--HH-mm-ss")}\\Generation {generation}\\sim.dat", $"{generation};{dateTimeStarted.ToBinary()}");
             }
@@ -125,16 +129,25 @@ namespace Evolution
 
         private static void SaveSimulation(Evolution.Species[] species, MapGeneration.Map map, string path, string fileName, Random rnd)
         {
-            // Generate string
-            string save = SerializeObject(species);
-            // Save string
-            File.WriteAllText(path + fileName + ".species", save);
+            string save = "";
 
-            save = SerializeObject(map);
-            File.WriteAllText(path + fileName + ".map", save);
+            if (species != null)
+            {
+                save = SerializeObject(species);
+                File.WriteAllText(path + fileName + ".species", save);
+            }
 
-            save = SerializeObject(rnd);
-            File.WriteAllText(path + fileName + ".rnd", save);
+            if (map != null)
+            {
+                save = SerializeObject(map);
+                File.WriteAllText(path + fileName + ".map", save);
+            }
+
+            if (rnd != null)
+            {
+                save = SerializeObject(rnd);
+                File.WriteAllText(path + fileName + ".rnd", save);
+            }
         }
 
         private static void CheckDirectories(string[] dirPath)

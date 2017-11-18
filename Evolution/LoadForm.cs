@@ -15,6 +15,7 @@ namespace Evolution
     {
         public string SelectedPath = string.Empty;
 
+        // TODO: Do not hide saves without .map, if selecting save for visualisation usage
         public LoadForm()
         {
             InitializeComponent();
@@ -34,17 +35,18 @@ namespace Evolution
             catch (Exception ex)
             {
                 simulationListBox.Items.Clear();
-                simulationListBox.Items.Add("ERROR: An error occured");
-                generationListBox.Items.Clear();
-                generationListBox.Items.Add("ERROR: An error occured");
                 if (!Directory.Exists("error"))
                     Directory.CreateDirectory("error");
                 File.AppendAllText($"error\\Error_LoadForm_{DateTime.Now.ToString("dd-MM-yyyy--HH-mm-ss")}.txt", ex.ToString() + Environment.NewLine + Environment.NewLine);
+                SelectedPath = "";
             }
         }
 
         private void simulationListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (simulationListBox.SelectedItem == null)
+                return;
+
             generationListBox.Items.Clear();
             SelectedPath = "";
             string nameOfDir = simulationListBox.SelectedItem.ToString();
@@ -68,10 +70,10 @@ namespace Evolution
             catch (Exception ex)
             {
                 generationListBox.Items.Clear();
-                generationListBox.Items.Add("ERROR: An error occured");
                 if (!Directory.Exists("error"))
                     Directory.CreateDirectory("error");
                 File.AppendAllText($"error\\Error_LoadForm_{DateTime.Now.ToString("dd-MM-yyyy--HH-mm-ss")}.txt", ex.ToString() + Environment.NewLine + Environment.NewLine);
+                SelectedPath = "";
             }
 
             try

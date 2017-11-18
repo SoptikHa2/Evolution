@@ -369,7 +369,7 @@ namespace Evolution.Evolution
 
         public override string ToString()
         {
-            return $"Animal: {name} at {x};{y}, Energy: {energy}, Nodes: " + Environment.NewLine + startNode.ToString();
+            return $"{name}";
         }
     }
 }

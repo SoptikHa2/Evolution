@@ -89,11 +89,23 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Serializer.cs" />
+    <Compile Include="ShowImageForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ShowImageForm.Designer.cs">
+      <DependentUpon>ShowImageForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="SimulationForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="SimulationForm.Designer.cs">
       <DependentUpon>SimulationForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="VisualiseForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="VisualiseForm.Designer.cs">
+      <DependentUpon>VisualiseForm.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="CreateSimForm.resx">
       <DependentUpon>CreateSimForm.cs</DependentUpon>
@@ -117,6 +129,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="ShowImageForm.resx">
+      <DependentUpon>ShowImageForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SimulationForm.resx">
       <DependentUpon>SimulationForm.cs</DependentUpon>
     </EmbeddedResource>

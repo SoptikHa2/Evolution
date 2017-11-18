@@ -164,5 +164,10 @@ namespace Evolution.Evolution
                 species[i].maxAnimals = (int)(totalNumberOfAnimals * (species[i].animals.Where(x => x.health > 0 && x.energy > 0).Select(x => x.energy).Sum() / sum));
             }
         }
+
+        public override string ToString()
+        {
+            return name;
+        }
     }
 }
