@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.OKbutton = new System.Windows.Forms.Button();
-            this.CancelButton = new System.Windows.Forms.Button();
+            this.cancelButton = new System.Windows.Forms.Button();
             this.NameInput = new System.Windows.Forms.TextBox();
             this.nameLabel = new System.Windows.Forms.Label();
             this.speciesLabel = new System.Windows.Forms.Label();
@@ -92,22 +92,22 @@
             this.OKbutton.Text = "OK";
             this.OKbutton.UseVisualStyleBackColor = true;
             // 
-            // CancelButton
+            // cancelButton
             // 
-            this.CancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.CancelButton.Location = new System.Drawing.Point(273, 333);
-            this.CancelButton.Name = "CancelButton";
-            this.CancelButton.Size = new System.Drawing.Size(98, 37);
-            this.CancelButton.TabIndex = 1;
-            this.CancelButton.Text = "Cancel";
-            this.CancelButton.UseVisualStyleBackColor = true;
+            this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.cancelButton.Location = new System.Drawing.Point(273, 333);
+            this.cancelButton.Name = "cancelButton";
+            this.cancelButton.Size = new System.Drawing.Size(98, 37);
+            this.cancelButton.TabIndex = 1;
+            this.cancelButton.Text = "Cancel";
+            this.cancelButton.UseVisualStyleBackColor = true;
             // 
             // NameInput
             // 
             this.NameInput.Location = new System.Drawing.Point(83, 32);
             this.NameInput.Name = "NameInput";
             this.NameInput.Size = new System.Drawing.Size(100, 20);
-            this.NameInput.TabIndex = 2;
+            this.NameInput.TabIndex = 0;
             this.NameInput.TextChanged += new System.EventHandler(this.NameInput_TextChanged);
             // 
             // nameLabel
@@ -551,9 +551,9 @@
             this.warningLabel.Location = new System.Drawing.Point(12, 312);
             this.warningLabel.MaximumSize = new System.Drawing.Size(250, 0);
             this.warningLabel.Name = "warningLabel";
-            this.warningLabel.Size = new System.Drawing.Size(194, 17);
+            this.warningLabel.Size = new System.Drawing.Size(191, 17);
             this.warningLabel.TabIndex = 35;
-            this.warningLabel.Text = "Select species name to continue";
+            this.warningLabel.Text = "Write species name to continue";
             // 
             // FoodEnergyGainInput
             // 
@@ -592,6 +592,7 @@
             this.AcceptButton = this.OKbutton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(383, 382);
             this.Controls.Add(this.FoodEnergyGainLabel);
             this.Controls.Add(this.FoodEnergyGainInput);
@@ -629,7 +630,7 @@
             this.Controls.Add(this.speciesLabel);
             this.Controls.Add(this.nameLabel);
             this.Controls.Add(this.NameInput);
-            this.Controls.Add(this.CancelButton);
+            this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.OKbutton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -659,7 +660,7 @@
         #endregion
 
         private System.Windows.Forms.Button OKbutton;
-        private System.Windows.Forms.Button CancelButton;
+        private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.TextBox NameInput;
         private System.Windows.Forms.Label nameLabel;
         private System.Windows.Forms.Label speciesLabel;

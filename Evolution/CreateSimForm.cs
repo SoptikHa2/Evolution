@@ -67,9 +67,29 @@ namespace Evolution
         public Evolution.Simulation CreateSimulation()
         {
             Random rnd = RandomSeedInput.Text == "" ? new Random() : new Random(RandomSeedInput.Text.GetHashCode());
-            Evolution.Simulation sim = new Evolution.Simulation(null, (int)WidthOfMapInput.Value, (int)heightOfMapInput.Value, rnd, (int)PositionFoodPercentageInput.Value, (int)MinimumFoodInput.Value, (int)MaximumFoodInput.Value);
+            Evolution.Simulation sim = new Evolution.Simulation(null, (int)WidthOfMapInput.Value, (int)heightOfMapInput.Value, rnd, (int)PositionFoodPercentageInput.Value, (int)MinimumFoodInput.Value, (int)MaximumFoodInput.Value, (int)AnimalsPerMapInput.Value, (int)tickPerGenerationInput.Value);
             sim.species = species.Select(x => x.ToSpecies(sim, rnd, species.Count)).ToArray();
             return sim;
         }
+
+
+
+        // When width or height of map changes, set the "maximum animals input" new maximum value
+        #region WidthHeightValueChanges
+        private const int maximumAllowedMaxAnimalInputValue = 10000;
+
+        private void WidthOfMapInput_ValueChanged(object sender, EventArgs e)
+        {
+            int wh = (int)WidthOfMapInput.Value * (int)heightOfMapInput.Value;
+            AnimalsPerMapInput.Maximum = Math.Min(maximumAllowedMaxAnimalInputValue, wh);
+        }
+
+        private void heightOfMapInput_ValueChanged(object sender, EventArgs e)
+        {
+            int wh = (int)WidthOfMapInput.Value * (int)heightOfMapInput.Value;
+            AnimalsPerMapInput.Maximum = Math.Min(maximumAllowedMaxAnimalInputValue, wh);
+        }
+        #endregion
+
     }
 }

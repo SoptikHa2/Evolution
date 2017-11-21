@@ -25,14 +25,14 @@ namespace Evolution.Evolution
         public const int minMountain = 5;
         #endregion
         #region GenerationSettings
-        private const int generationTicks = 50;
+        private int generationTicks = 50;
         #endregion
         #region DrawSettings
         private const int savedImageWidth = 720;
         private const int savedImageHeight = 720;
         #endregion
         #region Settings
-        public const int numberOfAnimalsOnMap = 100;
+        public int numberOfAnimalsOnMap = 100;
         #endregion
 
         public MapGeneration.Map map;
@@ -50,10 +50,12 @@ namespace Evolution.Evolution
         public event EventHandler NextGeneration;
         public event EventHandler SpeciesExtinct;
 
-        public Simulation(Species[] species, int width = 100, int height = 100, Random rnd = null, int chanceToPosFood = 30, int minFood = 10, int maxFood = 15)
+        public Simulation(Species[] species, int width = 100, int height = 100, Random rnd = null, int chanceToPosFood = 30, int minFood = 10, int maxFood = 15, int animalsPerMap = 100, int generationTicks = 50)
         {
             this.width = width;
             this.height = height;
+            this.numberOfAnimalsOnMap = animalsPerMap;
+            this.generationTicks = generationTicks;
             dateTimeStarted = DateTime.Now;
             this.rnd = rnd ?? new Random();
             map = new MapGeneration.Map(this.rnd, width, height, chanceToPosFood, minFood, maxFood);
@@ -64,7 +66,7 @@ namespace Evolution.Evolution
 
         public Simulation() { }
 
-        public void SetOnLoad(MapGeneration.Map map, Species[] species, int generation, Random rnd)
+        public void SetOnLoad(MapGeneration.Map map, Species[] species, int generation, int generationTicks, Random rnd)
         {
             this.map = map;
             this.species = species;
@@ -73,6 +75,7 @@ namespace Evolution.Evolution
                 for (int a = 0; a < species[s].animals.Length; a++)
                     species[s].animals[a].simulation = this;
             this.generation = generation;
+            this.generationTicks = generationTicks;
             this.rnd = rnd;
         }
 
@@ -102,7 +105,7 @@ namespace Evolution.Evolution
                 // Save some data at beginning of generation
                 if (tick == 0)
                 {
-                    Serializer.BeforeGenerationSave(species, map, generation++, dateTimeStarted, rnd);
+                    Serializer.BeforeGenerationSave(species, map, generation++, generationTicks, dateTimeStarted, rnd);
                 }
 
                 // Tick all objects

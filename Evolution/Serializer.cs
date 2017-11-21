@@ -40,7 +40,7 @@ namespace Evolution
             System.Windows.Forms.Clipboard.SetText(GetExcelData());
         }
 
-        public static void BeforeGenerationSave(Evolution.Species[] species, MapGeneration.Map map, int generation, DateTime dateTimeStarted, Random rnd)
+        public static void BeforeGenerationSave(Evolution.Species[] species, MapGeneration.Map map, int generation, int ticksPerGeneration, DateTime dateTimeStarted, Random rnd)
         {
             try
             {
@@ -52,7 +52,7 @@ namespace Evolution
                 else
                     SaveSimulation(species, null, $"log\\{dateTimeStarted.ToString("dd-MM-yyyy--HH-mm-ss")}\\Generation {generation}\\", DateTime.Now.ToString("HH-mm-ss"), null);
 
-                File.WriteAllText($"log\\{ dateTimeStarted.ToString("dd-MM-yyyy--HH-mm-ss")}\\Generation {generation}\\sim.dat", $"{generation};{dateTimeStarted.ToBinary()}");
+                File.WriteAllText($"log\\{ dateTimeStarted.ToString("dd-MM-yyyy--HH-mm-ss")}\\Generation {generation}\\sim.dat", $"{generation};{dateTimeStarted.ToBinary()};{ticksPerGeneration}");
             }
             catch (Exception ex)
             {
@@ -214,7 +214,7 @@ namespace Evolution
                         MapGeneration.Map map = DeserializeObject(File.ReadAllText(mapSerialized[0])) as MapGeneration.Map;
                         result = new Evolution.Simulation(null, map.map.GetLength(0), map.map.GetLength(1));
                         string[] datFile = File.ReadAllText(pathToDirectory + "\\sim.dat").Split(';');
-                        result.SetOnLoad(map, DeserializeObject(File.ReadAllText(speciesSerialized[0])) as Evolution.Species[], int.Parse(datFile[0]), Serializer.DeserializeObject(File.ReadAllText(rndSerialized[0])) as Random);
+                        result.SetOnLoad(map, DeserializeObject(File.ReadAllText(speciesSerialized[0])) as Evolution.Species[], int.Parse(datFile[0]), int.Parse(datFile[2]), Serializer.DeserializeObject(File.ReadAllText(rndSerialized[0])) as Random);
                         return result;
                     }
                     catch (Exception ex)

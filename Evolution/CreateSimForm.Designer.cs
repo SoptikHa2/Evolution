@@ -33,7 +33,7 @@
             this.SpeciesRemoveBut = new System.Windows.Forms.Button();
             this.SpeciesLabel = new System.Windows.Forms.Label();
             this.OKbutton = new System.Windows.Forms.Button();
-            this.CancelButton = new System.Windows.Forms.Button();
+            this.cancelButton = new System.Windows.Forms.Button();
             this.SimulationSettingsLabel = new System.Windows.Forms.Label();
             this.PositionFoodPercentageInput = new System.Windows.Forms.NumericUpDown();
             this.MinimumFoodInput = new System.Windows.Forms.NumericUpDown();
@@ -51,12 +51,15 @@
             this.EditButton = new System.Windows.Forms.Button();
             this.RandomSeedInput = new System.Windows.Forms.TextBox();
             this.RandomSeedLabel = new System.Windows.Forms.Label();
+            this.tickPerGenerationInput = new System.Windows.Forms.NumericUpDown();
+            this.tickPerGenerationLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.PositionFoodPercentageInput)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MinimumFoodInput)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MaximumFoodInput)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.WidthOfMapInput)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.heightOfMapInput)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.AnimalsPerMapInput)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tickPerGenerationInput)).BeginInit();
             this.SuspendLayout();
             // 
             // speciesListBox
@@ -64,13 +67,13 @@
             this.speciesListBox.FormattingEnabled = true;
             this.speciesListBox.Location = new System.Drawing.Point(13, 26);
             this.speciesListBox.Name = "speciesListBox";
-            this.speciesListBox.Size = new System.Drawing.Size(120, 277);
+            this.speciesListBox.Size = new System.Drawing.Size(120, 316);
             this.speciesListBox.TabIndex = 0;
             // 
             // createNewSpeciesBut
             // 
             this.createNewSpeciesBut.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.createNewSpeciesBut.Location = new System.Drawing.Point(12, 309);
+            this.createNewSpeciesBut.Location = new System.Drawing.Point(12, 344);
             this.createNewSpeciesBut.Name = "createNewSpeciesBut";
             this.createNewSpeciesBut.Size = new System.Drawing.Size(29, 27);
             this.createNewSpeciesBut.TabIndex = 1;
@@ -81,7 +84,7 @@
             // SpeciesRemoveBut
             // 
             this.SpeciesRemoveBut.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.SpeciesRemoveBut.Location = new System.Drawing.Point(47, 309);
+            this.SpeciesRemoveBut.Location = new System.Drawing.Point(47, 344);
             this.SpeciesRemoveBut.Name = "SpeciesRemoveBut";
             this.SpeciesRemoveBut.Size = new System.Drawing.Size(29, 27);
             this.SpeciesRemoveBut.TabIndex = 2;
@@ -103,22 +106,22 @@
             // 
             this.OKbutton.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.OKbutton.Enabled = false;
-            this.OKbutton.Location = new System.Drawing.Point(167, 306);
+            this.OKbutton.Location = new System.Drawing.Point(167, 337);
             this.OKbutton.Name = "OKbutton";
             this.OKbutton.Size = new System.Drawing.Size(113, 34);
             this.OKbutton.TabIndex = 5;
             this.OKbutton.Text = "OK";
             this.OKbutton.UseVisualStyleBackColor = true;
             // 
-            // CancelButton
+            // cancelButton
             // 
-            this.CancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.CancelButton.Location = new System.Drawing.Point(286, 306);
-            this.CancelButton.Name = "CancelButton";
-            this.CancelButton.Size = new System.Drawing.Size(113, 34);
-            this.CancelButton.TabIndex = 6;
-            this.CancelButton.Text = "Cancel";
-            this.CancelButton.UseVisualStyleBackColor = true;
+            this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.cancelButton.Location = new System.Drawing.Point(286, 337);
+            this.cancelButton.Name = "cancelButton";
+            this.cancelButton.Size = new System.Drawing.Size(113, 34);
+            this.cancelButton.TabIndex = 6;
+            this.cancelButton.Text = "Cancel";
+            this.cancelButton.UseVisualStyleBackColor = true;
             // 
             // SimulationSettingsLabel
             // 
@@ -206,7 +209,7 @@
             this.warningLabel.AutoSize = true;
             this.warningLabel.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.warningLabel.ForeColor = System.Drawing.Color.Tomato;
-            this.warningLabel.Location = new System.Drawing.Point(167, 283);
+            this.warningLabel.Location = new System.Drawing.Point(167, 304);
             this.warningLabel.MaximumSize = new System.Drawing.Size(250, 0);
             this.warningLabel.Name = "warningLabel";
             this.warningLabel.Size = new System.Drawing.Size(205, 17);
@@ -239,6 +242,7 @@
             0,
             0,
             0});
+            this.WidthOfMapInput.ValueChanged += new System.EventHandler(this.WidthOfMapInput_ValueChanged);
             // 
             // heightOfMapInput
             // 
@@ -266,17 +270,18 @@
             0,
             0,
             0});
+            this.heightOfMapInput.ValueChanged += new System.EventHandler(this.heightOfMapInput_ValueChanged);
             // 
             // AnimalsPerMapInput
             // 
             this.AnimalsPerMapInput.Location = new System.Drawing.Point(279, 196);
             this.AnimalsPerMapInput.Maximum = new decimal(new int[] {
-            1000,
+            10000,
             0,
             0,
             0});
             this.AnimalsPerMapInput.Minimum = new decimal(new int[] {
-            50,
+            10,
             0,
             0,
             0});
@@ -322,7 +327,7 @@
             // EditButton
             // 
             this.EditButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.EditButton.Location = new System.Drawing.Point(82, 309);
+            this.EditButton.Location = new System.Drawing.Point(82, 344);
             this.EditButton.Name = "EditButton";
             this.EditButton.Size = new System.Drawing.Size(51, 27);
             this.EditButton.TabIndex = 21;
@@ -332,7 +337,7 @@
             // 
             // RandomSeedInput
             // 
-            this.RandomSeedInput.Location = new System.Drawing.Point(275, 251);
+            this.RandomSeedInput.Location = new System.Drawing.Point(275, 281);
             this.RandomSeedInput.Name = "RandomSeedInput";
             this.RandomSeedInput.Size = new System.Drawing.Size(131, 20);
             this.RandomSeedInput.TabIndex = 22;
@@ -340,23 +345,58 @@
             // RandomSeedLabel
             // 
             this.RandomSeedLabel.AutoSize = true;
-            this.RandomSeedLabel.Location = new System.Drawing.Point(167, 241);
+            this.RandomSeedLabel.Location = new System.Drawing.Point(167, 262);
             this.RandomSeedLabel.MaximumSize = new System.Drawing.Size(110, 0);
             this.RandomSeedLabel.Name = "RandomSeedLabel";
             this.RandomSeedLabel.Size = new System.Drawing.Size(102, 39);
             this.RandomSeedLabel.TabIndex = 23;
             this.RandomSeedLabel.Text = "Simulation seed (leave empty to use random seed)";
             // 
+            // tickPerGenerationInput
+            // 
+            this.tickPerGenerationInput.Location = new System.Drawing.Point(279, 222);
+            this.tickPerGenerationInput.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.tickPerGenerationInput.Minimum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.tickPerGenerationInput.Name = "tickPerGenerationInput";
+            this.tickPerGenerationInput.Size = new System.Drawing.Size(120, 20);
+            this.tickPerGenerationInput.TabIndex = 24;
+            this.tickPerGenerationInput.Value = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            // 
+            // tickPerGenerationLabel
+            // 
+            this.tickPerGenerationLabel.AutoSize = true;
+            this.tickPerGenerationLabel.Location = new System.Drawing.Point(166, 224);
+            this.tickPerGenerationLabel.MaximumSize = new System.Drawing.Size(110, 0);
+            this.tickPerGenerationLabel.Name = "tickPerGenerationLabel";
+            this.tickPerGenerationLabel.Size = new System.Drawing.Size(104, 13);
+            this.tickPerGenerationLabel.TabIndex = 25;
+            this.tickPerGenerationLabel.Text = "Ticks per generation";
+            // 
             // CreateSimForm
             // 
             this.AcceptButton = this.OKbutton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(418, 352);
+            this.CancelButton = this.cancelButton;
+            this.ClientSize = new System.Drawing.Size(418, 383);
+            this.Controls.Add(this.numberOfAnimalsLabel);
+            this.Controls.Add(this.tickPerGenerationLabel);
+            this.Controls.Add(this.tickPerGenerationInput);
             this.Controls.Add(this.RandomSeedLabel);
             this.Controls.Add(this.RandomSeedInput);
             this.Controls.Add(this.EditButton);
-            this.Controls.Add(this.numberOfAnimalsLabel);
             this.Controls.Add(this.HeightOfMapLabel);
             this.Controls.Add(this.WidthOfMapLabel);
             this.Controls.Add(this.AnimalsPerMapInput);
@@ -370,7 +410,7 @@
             this.Controls.Add(this.MinimumFoodInput);
             this.Controls.Add(this.PositionFoodPercentageInput);
             this.Controls.Add(this.SimulationSettingsLabel);
-            this.Controls.Add(this.CancelButton);
+            this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.OKbutton);
             this.Controls.Add(this.SpeciesLabel);
             this.Controls.Add(this.SpeciesRemoveBut);
@@ -389,6 +429,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.WidthOfMapInput)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.heightOfMapInput)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.AnimalsPerMapInput)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tickPerGenerationInput)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -401,7 +442,7 @@
         private System.Windows.Forms.Button SpeciesRemoveBut;
         private System.Windows.Forms.Label SpeciesLabel;
         private System.Windows.Forms.Button OKbutton;
-        private System.Windows.Forms.Button CancelButton;
+        private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Label SimulationSettingsLabel;
         private System.Windows.Forms.NumericUpDown PositionFoodPercentageInput;
         private System.Windows.Forms.NumericUpDown MinimumFoodInput;
@@ -419,5 +460,7 @@
         private System.Windows.Forms.Button EditButton;
         private System.Windows.Forms.TextBox RandomSeedInput;
         private System.Windows.Forms.Label RandomSeedLabel;
+        private System.Windows.Forms.NumericUpDown tickPerGenerationInput;
+        private System.Windows.Forms.Label tickPerGenerationLabel;
     }
 }

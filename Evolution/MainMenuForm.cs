@@ -59,8 +59,7 @@ namespace Evolution
                 return;
             Evolution.Simulation sim = Serializer.LoadSimulation(path);
             if (sim == null)
-                MessageBox.Show("Sorry, I tried, but I was unable to load simulation. Something went wrong. Try to load different save file." +
-                    "\n\nSelected directory path: " + path, "Loading simulation failed");
+                MessageBox.Show("Sorry, I tried, but I was unable to load simulation. Something went wrong. Try to load different save file.", "Loading simulation failed");
             else
             {
                 SimulationForm simulation = new SimulationForm(sim);
