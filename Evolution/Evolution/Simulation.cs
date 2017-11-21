@@ -37,8 +37,8 @@ namespace Evolution.Evolution
 
         public MapGeneration.Map map;
         public Species[] species;
+        public DateTime dateTimeStarted;
         private int width, height;
-        private DateTime dateTimeStarted;
         private bool extinct = false;
 
         public Random rnd;

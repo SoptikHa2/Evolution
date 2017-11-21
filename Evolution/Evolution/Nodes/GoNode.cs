@@ -21,14 +21,9 @@ namespace Evolution.Evolution.Nodes
 
         public override int Eval()
         {
-            try
-            {
-                return parentAnimal.Go(children[0].Eval());
-            }
-            catch
-            {
+            if (children[0] == null)
                 return 0;
-            }
+            return parentAnimal.Go(children[0].Eval());
         }
     }
 }
