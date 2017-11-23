@@ -64,6 +64,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Forms\ConfigurationManager.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ConfigurationManager.Designer.cs">
+      <DependentUpon>ConfigurationManager.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\CreateSimForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -88,6 +94,12 @@
     <Compile Include="Evolution\Nodes\Node.cs" />
     <Compile Include="Evolution\Simulation.cs" />
     <Compile Include="Evolution\Species.cs" />
+    <Compile Include="Forms\TextDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\TextDialog.Designer.cs">
+      <DependentUpon>TextDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Utilities\GraphViz.cs" />
     <Compile Include="Forms\LoadForm.cs">
       <SubType>Form</SubType>
@@ -125,6 +137,9 @@
     <Compile Include="Forms\VisualiseForm.Designer.cs">
       <DependentUpon>VisualiseForm.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Forms\ConfigurationManager.resx">
+      <DependentUpon>ConfigurationManager.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\CreateSimForm.resx">
       <DependentUpon>CreateSimForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -136,6 +151,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MainMenuForm.resx">
       <DependentUpon>MainMenuForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\TextDialog.resx">
+      <DependentUpon>TextDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -58,7 +58,7 @@ namespace Evolution.Evolution
 
         private Animal BreedNodeTree(Node partnerNodeTree, Animal newAnimal)
         {
-            Node newTree = Serializer.DeepClone<Node>(startNode) as Node;
+            Node newTree = Utilities.Serializer.DeepClone<Node>(startNode) as Node;
             SetNodeOwnership(newTree, newAnimal);
 
             // Get number of nodes in tree
@@ -84,7 +84,7 @@ namespace Evolution.Evolution
                 randomlyChosenSecondTreeNode = GetNode(partnerNodeTree, randomSecondTree);
             }
 
-            Node nodeFromTree2 = Serializer.DeepClone<Node>(randomlyChosenSecondTreeNode) as Node;
+            Node nodeFromTree2 = Utilities.Serializer.DeepClone<Node>(randomlyChosenSecondTreeNode) as Node;
             SetNodeOwnership(nodeFromTree2, newAnimal);
             randomlyChosenNode = randomlyChosenSecondTreeNode;
 
@@ -257,7 +257,7 @@ namespace Evolution.Evolution
 
         private Node CopyNodeTree(Node nodeTree, Animal newAnimal)
         {
-            Node copiedTree = Serializer.DeepClone<Node>(nodeTree) as Node;
+            Node copiedTree = Utilities.Serializer.DeepClone<Node>(nodeTree) as Node;
             SetNodeOwnership(copiedTree, newAnimal);
             return copiedTree;
         }

@@ -17,7 +17,7 @@ namespace Evolution
             string arg = args.Length > 0 ? args[0] : "";
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainMenuForm(arg));
+            Application.Run(new Forms.MainMenuForm(arg));
         }
     }
 }

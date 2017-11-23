@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Evolution
+namespace Evolution.Forms
 {
     public partial class CreateSimForm : Form
     {
@@ -91,5 +91,57 @@ namespace Evolution
         }
         #endregion
 
+        private void SaveLoadBut_Click(object sender, EventArgs e)
+        {
+            ConfigurationManager cm = new ConfigurationManager(CreateSimulationSettings());
+            DialogResult dr = cm.ShowDialog();
+
+            if(dr == DialogResult.OK)
+            {
+                LoadSimulationSettings(cm.settings);
+            }
+        }
+
+        private void LoadSimulationSettings(SimulationSettings load)
+        {
+            WidthOfMapInput.Value = load.width;
+            heightOfMapInput.Value = load.height;
+            PositionFoodPercentageInput.Value = load.foodPercentage;
+            MinimumFoodInput.Value = load.minFood;
+            MaximumFoodInput.Value = load.maxFood;
+            AnimalsPerMapInput.Value = load.animalsPerMap;
+            tickPerGenerationInput.Value = load.ticksPerGeneration;
+            RandomSeedInput.Text = load.randomSeed;
+            species = load.species.ToList();
+
+            UpdateList();
+        }
+
+        private SimulationSettings CreateSimulationSettings()
+        {
+            return new SimulationSettings((int)WidthOfMapInput.Value, (int)heightOfMapInput.Value, (int)PositionFoodPercentageInput.Value, (int)MinimumFoodInput.Value,
+                (int)MaximumFoodInput.Value, (int)AnimalsPerMapInput.Value, (int)tickPerGenerationInput.Value, RandomSeedInput.Text, this.species.ToArray());
+        }
+    }
+
+    [Serializable]
+    public class SimulationSettings
+    {
+        public int width, height, foodPercentage, minFood, maxFood, animalsPerMap, ticksPerGeneration;
+        public string randomSeed;
+        public SpeciesSettings[] species;
+
+        public SimulationSettings(int width, int height, int foodPercentage, int minFood, int maxFood, int animalsPerMap, int ticksPerGeneration, string randomSeed, SpeciesSettings[] species)
+        {
+            this.width = width;
+            this.height = height;
+            this.foodPercentage = foodPercentage;
+            this.minFood = minFood;
+            this.maxFood = maxFood;
+            this.animalsPerMap = animalsPerMap;
+            this.ticksPerGeneration = ticksPerGeneration;
+            this.randomSeed = randomSeed;
+            this.species = species;
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Evolution
+﻿namespace Evolution.Forms
 {
     partial class SimulationForm
     {

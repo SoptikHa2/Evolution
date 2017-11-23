@@ -105,7 +105,7 @@ namespace Evolution.Evolution
                 // Save some data at beginning of generation
                 if (tick == 0)
                 {
-                    Serializer.BeforeGenerationSave(species, map, generation++, generationTicks, dateTimeStarted, rnd);
+                    Utilities.Serializer.BeforeGenerationSave(species, map, generation++, generationTicks, dateTimeStarted, rnd);
                 }
 
                 // Tick all objects
@@ -145,7 +145,7 @@ namespace Evolution.Evolution
                     }
 
                     // Save some additional files to log
-                    Serializer.AfterGenerationSave(b, species, generation, dateTimeStarted);
+                    Utilities.Serializer.AfterGenerationSave(b, species, generation, dateTimeStarted);
 
                     // Calculate number of allowed animals for each species
                     Species.SetMaxNumberOfAnimalsForSpecies(species, numberOfAnimalsOnMap);

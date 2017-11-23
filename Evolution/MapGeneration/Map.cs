@@ -97,6 +97,10 @@ namespace Evolution.MapGeneration
             // Order results and pick the nearest one
             Animal result = possibleResults.OrderBy(q => getDistance(q.x, q.y, x, y)).FirstOrDefault();
 
+            // No enemy found
+            if (result == null)
+                return -1;
+
             if (result.x > x)
                 return 0;
             else if (result.y > y)

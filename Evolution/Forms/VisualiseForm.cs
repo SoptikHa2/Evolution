@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Evolution
+namespace Evolution.Forms
 {
     public partial class VisualiseForm : Form
     {
@@ -43,7 +43,7 @@ namespace Evolution
                 try
                 {
                     string file = Directory.GetFiles(pth, "*.species")[0];
-                    species = Serializer.DeserializeObject(File.ReadAllText(file)) as Evolution.Species[];
+                    species = Utilities.Serializer.DeserializeObject(File.ReadAllText(file)) as Evolution.Species[];
                     // Add species into combobox
                     speciesComboBox.Items.Clear();
                     speciesComboBox.Items.AddRange(species);
@@ -62,7 +62,7 @@ namespace Evolution
             if (animal == null)
                 animal = species[0].animals[0];
 
-            Image i = GraphViz.GetGraph(animal.GetNodes(animal.startNode).ToArray());
+            Image i = Utilities.GraphViz.GetGraph(animal.GetNodes(animal.startNode).ToArray());
             this.image = i;
             AnimalTreePictureBox.Image = ScaleImage(image, (int)(image.Width * (scaleBar.Value / 100d)), (int)(image.Height * (scaleBar.Value / 100d)));
         }

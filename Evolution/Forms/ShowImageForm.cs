@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Evolution
+namespace Evolution.Forms
 {
     public partial class ShowImageForm : Form
     {

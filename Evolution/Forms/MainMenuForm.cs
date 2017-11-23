@@ -8,7 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
-namespace Evolution
+namespace Evolution.Forms
 {
     public partial class MainMenuForm : Form
     {
@@ -57,7 +57,7 @@ namespace Evolution
         {
             if (path == "")
                 return;
-            Evolution.Simulation sim = Serializer.LoadSimulation(path);
+            Evolution.Simulation sim = Utilities.Serializer.LoadSimulation(path);
             if (sim == null)
                 MessageBox.Show("Sorry, I tried, but I was unable to load simulation. Something went wrong. Try to load different save file.", "Loading simulation failed");
             else

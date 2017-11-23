@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 
-namespace Evolution
+namespace Evolution.Forms
 {
     public partial class SimulationForm : Form
     {
@@ -53,20 +53,20 @@ namespace Evolution
             best.Points.Clear();
             average.Points.Clear();
 
-            int min = Math.Max(0, Serializer.bestEnergyData.Count - elements);
+            int min = Math.Max(0, Utilities.Serializer.bestEnergyData.Count - elements);
 
             int c = 0;
-            for (int i = min; i < Serializer.bestEnergyData.Count; i++)
+            for (int i = min; i < Utilities.Serializer.bestEnergyData.Count; i++)
             {
-                best.Points.Add(new DataPoint(c, Serializer.bestEnergyData[i]));
-                average.Points.Add(new DataPoint(c++, Serializer.averageEnergyData[i]));
+                best.Points.Add(new DataPoint(c, Utilities.Serializer.bestEnergyData[i]));
+                average.Points.Add(new DataPoint(c++, Utilities.Serializer.averageEnergyData[i]));
             }
             #endregion
 
             #region SpeciesChart
             speciesChart.Series.Clear();
-            int skip = Math.Max(Serializer.overallSpeciesAnimalNumbers.Count - elements * simulation.species.Length, 0);
-            List<int> points = Serializer.overallSpeciesAnimalNumbers.Skip(skip).ToList();
+            int skip = Math.Max(Utilities.Serializer.overallSpeciesAnimalNumbers.Count - elements * simulation.species.Length, 0);
+            List<int> points = Utilities.Serializer.overallSpeciesAnimalNumbers.Skip(skip).ToList();
 
             // Initialize series in chart
             for (int i = 0; i < simulation.species.Length; i++)
@@ -126,7 +126,7 @@ namespace Evolution
 
         private void saveExcelDataButton_Click(object sender, EventArgs e)
         {
-            Serializer.SaveExcelDataInClipboard();
+            Utilities.Serializer.SaveExcelDataInClipboard();
         }
 
         private void infoSimulationButton_Click(object sender, EventArgs e)

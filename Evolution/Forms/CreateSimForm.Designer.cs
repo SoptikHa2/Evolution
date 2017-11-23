@@ -1,4 +1,4 @@
-﻿namespace Evolution
+﻿namespace Evolution.Forms
 {
     partial class CreateSimForm
     {
@@ -54,6 +54,7 @@
             this.RandomSeedLabel = new System.Windows.Forms.Label();
             this.tickPerGenerationInput = new System.Windows.Forms.NumericUpDown();
             this.tickPerGenerationLabel = new System.Windows.Forms.Label();
+            this.SaveLoadBut = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.PositionFoodPercentageInput)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MinimumFoodInput)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.MaximumFoodInput)).BeginInit();
@@ -68,13 +69,13 @@
             this.speciesListBox.FormattingEnabled = true;
             this.speciesListBox.Location = new System.Drawing.Point(13, 26);
             this.speciesListBox.Name = "speciesListBox";
-            this.speciesListBox.Size = new System.Drawing.Size(120, 316);
+            this.speciesListBox.Size = new System.Drawing.Size(120, 329);
             this.speciesListBox.TabIndex = 0;
             // 
             // createNewSpeciesBut
             // 
             this.createNewSpeciesBut.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.createNewSpeciesBut.Location = new System.Drawing.Point(12, 344);
+            this.createNewSpeciesBut.Location = new System.Drawing.Point(12, 364);
             this.createNewSpeciesBut.Name = "createNewSpeciesBut";
             this.createNewSpeciesBut.Size = new System.Drawing.Size(29, 27);
             this.createNewSpeciesBut.TabIndex = 1;
@@ -85,7 +86,7 @@
             // SpeciesRemoveBut
             // 
             this.SpeciesRemoveBut.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.SpeciesRemoveBut.Location = new System.Drawing.Point(47, 344);
+            this.SpeciesRemoveBut.Location = new System.Drawing.Point(47, 364);
             this.SpeciesRemoveBut.Name = "SpeciesRemoveBut";
             this.SpeciesRemoveBut.Size = new System.Drawing.Size(29, 27);
             this.SpeciesRemoveBut.TabIndex = 2;
@@ -107,7 +108,7 @@
             // 
             this.OKbutton.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.OKbutton.Enabled = false;
-            this.OKbutton.Location = new System.Drawing.Point(167, 337);
+            this.OKbutton.Location = new System.Drawing.Point(167, 364);
             this.OKbutton.Name = "OKbutton";
             this.OKbutton.Size = new System.Drawing.Size(113, 34);
             this.OKbutton.TabIndex = 5;
@@ -117,7 +118,7 @@
             // cancelButton
             // 
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(286, 337);
+            this.cancelButton.Location = new System.Drawing.Point(286, 364);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(113, 34);
             this.cancelButton.TabIndex = 6;
@@ -128,7 +129,7 @@
             // 
             this.SimulationSettingsLabel.AutoSize = true;
             this.SimulationSettingsLabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.SimulationSettingsLabel.Location = new System.Drawing.Point(204, 2);
+            this.SimulationSettingsLabel.Location = new System.Drawing.Point(203, 2);
             this.SimulationSettingsLabel.Name = "SimulationSettingsLabel";
             this.SimulationSettingsLabel.Size = new System.Drawing.Size(145, 21);
             this.SimulationSettingsLabel.TabIndex = 7;
@@ -210,7 +211,7 @@
             this.warningLabel.AutoSize = true;
             this.warningLabel.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.warningLabel.ForeColor = System.Drawing.Color.Tomato;
-            this.warningLabel.Location = new System.Drawing.Point(167, 304);
+            this.warningLabel.Location = new System.Drawing.Point(164, 304);
             this.warningLabel.MaximumSize = new System.Drawing.Size(250, 0);
             this.warningLabel.Name = "warningLabel";
             this.warningLabel.Size = new System.Drawing.Size(205, 17);
@@ -328,7 +329,7 @@
             // EditButton
             // 
             this.EditButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.EditButton.Location = new System.Drawing.Point(82, 344);
+            this.EditButton.Location = new System.Drawing.Point(82, 364);
             this.EditButton.Name = "EditButton";
             this.EditButton.Size = new System.Drawing.Size(51, 27);
             this.EditButton.TabIndex = 21;
@@ -338,7 +339,7 @@
             // 
             // RandomSeedInput
             // 
-            this.RandomSeedInput.Location = new System.Drawing.Point(275, 281);
+            this.RandomSeedInput.Location = new System.Drawing.Point(279, 263);
             this.RandomSeedInput.Name = "RandomSeedInput";
             this.RandomSeedInput.Size = new System.Drawing.Size(131, 20);
             this.RandomSeedInput.TabIndex = 22;
@@ -346,7 +347,7 @@
             // RandomSeedLabel
             // 
             this.RandomSeedLabel.AutoSize = true;
-            this.RandomSeedLabel.Location = new System.Drawing.Point(167, 262);
+            this.RandomSeedLabel.Location = new System.Drawing.Point(167, 253);
             this.RandomSeedLabel.MaximumSize = new System.Drawing.Size(110, 0);
             this.RandomSeedLabel.Name = "RandomSeedLabel";
             this.RandomSeedLabel.Size = new System.Drawing.Size(102, 39);
@@ -385,13 +386,24 @@
             this.tickPerGenerationLabel.TabIndex = 25;
             this.tickPerGenerationLabel.Text = "Ticks per generation";
             // 
+            // SaveLoadBut
+            // 
+            this.SaveLoadBut.Location = new System.Drawing.Point(167, 328);
+            this.SaveLoadBut.Name = "SaveLoadBut";
+            this.SaveLoadBut.Size = new System.Drawing.Size(232, 30);
+            this.SaveLoadBut.TabIndex = 26;
+            this.SaveLoadBut.Text = "Save / Load Settings";
+            this.SaveLoadBut.UseVisualStyleBackColor = true;
+            this.SaveLoadBut.Click += new System.EventHandler(this.SaveLoadBut_Click);
+            // 
             // CreateSimForm
             // 
             this.AcceptButton = this.OKbutton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(418, 383);
+            this.ClientSize = new System.Drawing.Size(418, 410);
+            this.Controls.Add(this.SaveLoadBut);
             this.Controls.Add(this.numberOfAnimalsLabel);
             this.Controls.Add(this.tickPerGenerationLabel);
             this.Controls.Add(this.tickPerGenerationInput);
@@ -463,5 +475,6 @@
         private System.Windows.Forms.Label RandomSeedLabel;
         private System.Windows.Forms.NumericUpDown tickPerGenerationInput;
         private System.Windows.Forms.Label tickPerGenerationLabel;
+        private System.Windows.Forms.Button SaveLoadBut;
     }
 }

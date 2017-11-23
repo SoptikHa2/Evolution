@@ -1,4 +1,4 @@
-﻿namespace Evolution
+﻿namespace Evolution.Forms
 {
     partial class VisualiseForm
     {
@@ -112,7 +112,7 @@
             this.Controls.Add(this.AnimalsListBox);
             this.Controls.Add(this.speciesComboBox);
             this.Controls.Add(this.ListBoxGenerations);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "VisualiseForm";
