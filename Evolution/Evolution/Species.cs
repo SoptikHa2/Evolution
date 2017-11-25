@@ -22,6 +22,10 @@ namespace Evolution.Evolution
         public int fightEnergy = -2;
         public int fightSuccEnergy = 10;
         public int killBonusEnergy = 0;
+        public int searchTerrainTypeEnergy = -1;
+        public bool allowMovementLand = true;
+        public bool allowMovementWater = true;
+        public bool allowMovementMountains = true;
 
         public int attackStrength = 1;
         public int maximumHealth = 10;
@@ -35,7 +39,7 @@ namespace Evolution.Evolution
         private int animalNumber = 0;
         public int maxAnimals;
 
-        public Species(string name, Simulation simulation, int speciesColor, int totalNumberOfSpecies, Random rnd, int attackStrength, int maximumHealth, int mutationChance = 5, int baseMoveEnergy = 0, int waterMoveEnergy = 0, int mountainMoveEnergy = 0, int eatEnergy = -1, int foodGainEnergy = 1, int searchFoodEnergy = 0, int searchEnemyEnergy = 0, int fightEnergy = -2, int fightSuccEnergy = 10, int killBonusEnergy = 0)
+        public Species(string name, Simulation simulation, int speciesColor, int totalNumberOfSpecies, Random rnd, int attackStrength, int maximumHealth, int mutationChance = 5, int baseMoveEnergy = 0, int waterMoveEnergy = 0, int mountainMoveEnergy = 0, int eatEnergy = -1, int foodGainEnergy = 1, int searchFoodEnergy = 0, int searchEnemyEnergy = 0, int fightEnergy = -2, int fightSuccEnergy = 10, int killBonusEnergy = 0, int searchTerrainTypeEnergy = 0, bool allowMovementLand = true, bool allowMovementWater = true, bool allowMovementMountains = true)
         {
             this.name = name;
             int numberOfAnimals = simulation.numberOfAnimalsOnMap / totalNumberOfSpecies;
@@ -57,6 +61,10 @@ namespace Evolution.Evolution
             this.killBonusEnergy = killBonusEnergy;
             this.attackStrength = attackStrength;
             this.maximumHealth = maximumHealth;
+            this.searchTerrainTypeEnergy = searchTerrainTypeEnergy;
+            this.allowMovementLand = allowMovementLand;
+            this.allowMovementWater = allowMovementWater;
+            this.allowMovementMountains = allowMovementMountains;
             #endregion
             for (int i = 0; i < numberOfAnimals; i++)
             {

@@ -58,7 +58,7 @@ namespace Evolution.Forms
             return new SpeciesSettings(NameInput.Text, (Color)selectedColor, (int)EatEnergyNumberInput.Value, (int)SearchFoodEnergyNumberInput.Value, (int)SearchEnemyEnergyNumberInput.Value,
                                 (int)FightEnergyNumberInput.Value, (int)FightSuccEnergyNumberInput.Value, (int)KillBonusEnergyNumberInput.Value, (int)AttackStrengthNumberInput.Value,
                                 (int)MaximumHealthNumberInput.Value, (int)MutationChanceNumberInput.Value, (int)BaseMoveEnergyNumberInput.Value, (int)WaterMoveEnergyNumberInput.Value,
-                                (int)MountainMoveEnergyNumberInput.Value, (int)FoodEnergyGainInput.Value, AllowMovementLandCheckbox.Checked, AllowMovementWaterCheckbox.Checked, AllowMovementMountainsCheckbox.Checked);
+                                (int)MountainMoveEnergyNumberInput.Value, (int)FoodEnergyGainInput.Value, (int)GetTerrainTypeEnergyInput.Value, AllowMovementLandCheckbox.Checked, AllowMovementWaterCheckbox.Checked, AllowMovementMountainsCheckbox.Checked);
         }
 
         private Color? selectedColor = Color.Black;
@@ -85,10 +85,11 @@ namespace Evolution.Forms
         public readonly int color;
         public readonly int eatEnergy, searchFoodEnergy, searchEnemyEnergy, fightEnergy,
                     biteEnergy, killEnergy, attStrength, health, mutationChance,
-                    energyPerMoveLand, energyPerMoveWater, energyPerMoveMountain, foodGainEnergy;
+                    energyPerMoveLand, energyPerMoveWater, energyPerMoveMountain, foodGainEnergy,
+                    terrainSearchEnergy;
         public readonly bool movementLand, movementWater, movementMountain;
 
-        public SpeciesSettings(string name, Color color, int eatEnergy, int searchFoodEnergy, int searchEnemyEnergy, int fightEnergy, int biteEnergy, int killEnergy, int attStrength, int health, int mutationChance, int energyPerMoveLand, int energyPerMoveWater, int energyPerMoveMountain, int foodGainEnergy, bool movementLand, bool movementWater, bool movementMountain)
+        public SpeciesSettings(string name, Color color, int eatEnergy, int searchFoodEnergy, int searchEnemyEnergy, int fightEnergy, int biteEnergy, int killEnergy, int attStrength, int health, int mutationChance, int energyPerMoveLand, int energyPerMoveWater, int energyPerMoveMountain, int foodGainEnergy, int terrainSearchEnergy, bool movementLand, bool movementWater, bool movementMountain)
         {
             this.name = name;
             this.color = color.ToArgb();
@@ -108,12 +109,14 @@ namespace Evolution.Forms
             this.movementLand = movementLand;
             this.movementWater = movementWater;
             this.movementMountain = movementMountain;
+            this.terrainSearchEnergy = terrainSearchEnergy;
         }
 
         public Evolution.Species ToSpecies(Evolution.Simulation simulation, Random rnd, int totalNumberOfSpecies)
         {
             return new Evolution.Species(name, simulation, color, totalNumberOfSpecies, rnd, attStrength, health, mutationChance, energyPerMoveLand,
-                                         energyPerMoveWater, energyPerMoveMountain, eatEnergy, foodGainEnergy, searchFoodEnergy, searchEnemyEnergy, fightEnergy, biteEnergy, killEnergy);
+                                         energyPerMoveWater, energyPerMoveMountain, eatEnergy, foodGainEnergy, searchFoodEnergy, searchEnemyEnergy, fightEnergy, biteEnergy, killEnergy,
+                                         terrainSearchEnergy, movementLand, movementWater, movementMountain);
         }
 
         public override string ToString()

@@ -148,7 +148,8 @@ namespace Evolution.Evolution
 
         private Node RandomNode(bool allowNoChildNodes)
         {
-            int rand = rnd.Next(allowNoChildNodes ? 0 : 6, 8);
+            // Random number: If all nodes: 0 to 8, if only nodes with >= 1 children:  6 to 8
+            int rand = rnd.Next(allowNoChildNodes ? 0 : 6, 9);
 
             switch (rand)
             {
@@ -168,6 +169,8 @@ namespace Evolution.Evolution
                     return new GoNode(this);
                 case 7:
                     return new IfNode(this);
+                case 8:
+                    return new TerrainNode(this);
                 default:
                     throw new Exception("Node type selected by random number does not exist.");
             }
@@ -303,6 +306,12 @@ namespace Evolution.Evolution
             if (x + dX < 0 || y + dY < 0 || x + dX >= simulation.map.map.GetLength(0) || y + dY >= simulation.map.map.GetLength(0))
                 return 0;
 
+            int nextTile = simulation.map.map[x + dX, y + dY].level;
+            if ((nextTile <= Simulation.minSea && !species.allowMovementWater) ||
+               (nextTile >= Simulation.minMountain && !species.allowMovementMountains) ||
+               (nextTile > Simulation.minSea && nextTile < Simulation.minMountain && !species.allowMovementLand))
+                return -1;
+
             x += dX;
             y += dY;
 
@@ -364,6 +373,49 @@ namespace Evolution.Evolution
             simulation.map.map[x, y].food = 0;
             energy += food * species.foodGainEnergy + species.eatEnergy;
             return food;
+        }
+
+        public int GetTerrainType(int direction)
+        {
+            int dX = 0;
+            int dY = 0;
+            energy += species.searchTerrainTypeEnergy;
+
+            switch (direction)
+            {
+                case 0:
+                    dX = 1;
+                    dY = 0;
+                    break;
+                case 1:
+                    dX = 0;
+                    dY = 1;
+                    break;
+                case 2:
+                    dX = -1;
+                    dY = 0;
+                    break;
+                case 3:
+                    dX = 0;
+                    dY = -1;
+                    break;
+                default:
+                    return -1;
+            }
+
+            if (x + dX < 0 || x + dX >= simulation.map.map.GetLength(0) ||
+               y + dY < 0 || y + dY >= simulation.map.map.GetLength(1))
+                return -1;
+
+
+            int tile = simulation.map.map[x + dX, y + dY].level;
+
+            if (tile <= Simulation.minSea)
+                return 0;
+            else if (tile >= Simulation.minMountain)
+                return 2;
+            else
+                return 1;
         }
         #endregion
 
