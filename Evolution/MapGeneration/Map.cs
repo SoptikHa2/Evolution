@@ -10,16 +10,20 @@ namespace Evolution.MapGeneration
     [Serializable]
     public class Map
     {
-        public int chanceToPosFood = 30;
+        public int chanceToPosFoodLand = 30;
+        public int chanceToPosFoodMountain = 30;
+        public int chanceToPosFoodSea = 30;
         public int minFood = 10;
         public int maxFood = 15;
 
         public MapObject[,] map { get; private set; }
         private Random rnd;
 
-        public Map(Random random, int width = 100, int height = 100, int chanceToPosFood = 30, int minFood = 10, int maxFood = 15)
+        public Map(Random random, int width = 100, int height = 100, int chanceToPosFoodLand = 30, int chanceToPosFoodMountain = 30, int chanceToPosFoodSea = 30, int minFood = 10, int maxFood = 15)
         {
-            this.chanceToPosFood = chanceToPosFood;
+            this.chanceToPosFoodLand = chanceToPosFoodLand;
+            this.chanceToPosFoodMountain = chanceToPosFoodMountain;
+            this.chanceToPosFoodSea = chanceToPosFoodSea;
             this.minFood = minFood;
             this.maxFood = maxFood;
             rnd = random;
@@ -37,7 +41,15 @@ namespace Evolution.MapGeneration
             {
                 for (int j = 0; j < height; j++)
                 {
-                    newMap[i, j] = new MapObject { x = i, y = j, level = map[i, j], food = rnd.Next(101) <= chanceToPosFood ? rnd.Next(minFood, maxFood + 1) : 0 };
+                    int tile = map[i, j];
+                    int food = 0;
+                    if (tile < Simulation.minSea) // Sea
+                        food = rnd.Next(101) < chanceToPosFoodSea ? rnd.Next(minFood, maxFood + 1) : 0;
+                    else if (tile >= Simulation.minMountain) // Mountain
+                        food = rnd.Next(101) < chanceToPosFoodMountain ? rnd.Next(minFood, maxFood + 1) : 0;
+                    else // Land
+                        food = rnd.Next(101) < chanceToPosFoodLand ? rnd.Next(minFood, maxFood + 1) : 0;
+                    newMap[i, j] = new MapObject { x = i, y = j, level = map[i, j], food = food };
                 }
             }
 

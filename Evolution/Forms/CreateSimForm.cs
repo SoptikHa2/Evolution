@@ -67,7 +67,8 @@ namespace Evolution.Forms
         public Evolution.Simulation CreateSimulation()
         {
             Random rnd = RandomSeedInput.Text == "" ? new Random() : new Random(RandomSeedInput.Text.GetHashCode());
-            Evolution.Simulation sim = new Evolution.Simulation(null, (int)WidthOfMapInput.Value, (int)heightOfMapInput.Value, rnd, (int)PositionFoodPercentageInput.Value, (int)MinimumFoodInput.Value, (int)MaximumFoodInput.Value, (int)AnimalsPerMapInput.Value, (int)tickPerGenerationInput.Value);
+            Evolution.Simulation sim = new Evolution.Simulation(null, (int)WidthOfMapInput.Value, (int)heightOfMapInput.Value, rnd, (int)PositionFoodLandPercentageInput.Value,
+                (int)PositionFoodMountainPercentageInput.Value, (int)PositionFoodWaterPercentageInput.Value, (int)MinimumFoodInput.Value, (int)MaximumFoodInput.Value, (int)AnimalsPerMapInput.Value, (int)tickPerGenerationInput.Value);
             sim.species = species.Select(x => x.ToSpecies(sim, rnd, species.Count)).ToArray();
             return sim;
         }
@@ -106,7 +107,9 @@ namespace Evolution.Forms
         {
             WidthOfMapInput.Value = load.width;
             heightOfMapInput.Value = load.height;
-            PositionFoodPercentageInput.Value = load.foodPercentage;
+            PositionFoodLandPercentageInput.Value = load.foodPercentageLand;
+            PositionFoodMountainPercentageInput.Value = load.foodPercentageMountain;
+            PositionFoodWaterPercentageInput.Value = load.foodPercentageSea;
             MinimumFoodInput.Value = load.minFood;
             MaximumFoodInput.Value = load.maxFood;
             AnimalsPerMapInput.Value = load.animalsPerMap;
@@ -119,7 +122,7 @@ namespace Evolution.Forms
 
         private SimulationSettings CreateSimulationSettings()
         {
-            return new SimulationSettings((int)WidthOfMapInput.Value, (int)heightOfMapInput.Value, (int)PositionFoodPercentageInput.Value, (int)MinimumFoodInput.Value,
+            return new SimulationSettings((int)WidthOfMapInput.Value, (int)heightOfMapInput.Value, (int)PositionFoodLandPercentageInput.Value, (int)PositionFoodMountainPercentageInput.Value, (int)PositionFoodWaterPercentageInput.Value, (int)MinimumFoodInput.Value,
                 (int)MaximumFoodInput.Value, (int)AnimalsPerMapInput.Value, (int)tickPerGenerationInput.Value, RandomSeedInput.Text, this.species.ToArray());
         }
     }
@@ -127,15 +130,17 @@ namespace Evolution.Forms
     [Serializable]
     public class SimulationSettings
     {
-        public int width, height, foodPercentage, minFood, maxFood, animalsPerMap, ticksPerGeneration;
+        public int width, height, foodPercentageLand, foodPercentageMountain, foodPercentageSea, minFood, maxFood, animalsPerMap, ticksPerGeneration;
         public string randomSeed;
         public SpeciesSettings[] species;
 
-        public SimulationSettings(int width, int height, int foodPercentage, int minFood, int maxFood, int animalsPerMap, int ticksPerGeneration, string randomSeed, SpeciesSettings[] species)
+        public SimulationSettings(int width, int height, int foodPercentageLand, int foodPercentageMountain, int foodPercentageSea, int minFood, int maxFood, int animalsPerMap, int ticksPerGeneration, string randomSeed, SpeciesSettings[] species)
         {
             this.width = width;
             this.height = height;
-            this.foodPercentage = foodPercentage;
+            this.foodPercentageLand = foodPercentageLand;
+            this.foodPercentageMountain = foodPercentageMountain;
+            this.foodPercentageSea = foodPercentageSea;
             this.minFood = minFood;
             this.maxFood = maxFood;
             this.animalsPerMap = animalsPerMap;

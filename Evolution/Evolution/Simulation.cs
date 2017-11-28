@@ -50,7 +50,7 @@ namespace Evolution.Evolution
         public event EventHandler NextGeneration;
         public event EventHandler SpeciesExtinct;
 
-        public Simulation(Species[] species, int width = 100, int height = 100, Random rnd = null, int chanceToPosFood = 30, int minFood = 10, int maxFood = 15, int animalsPerMap = 100, int generationTicks = 50)
+        public Simulation(Species[] species, int width = 100, int height = 100, Random rnd = null, int chanceToPosFoodLand = 30, int chanceToPosFoodMountain = 30, int chanceToPosFoodSea = 30, int minFood = 10, int maxFood = 15, int animalsPerMap = 100, int generationTicks = 50)
         {
             this.width = width;
             this.height = height;
@@ -58,7 +58,7 @@ namespace Evolution.Evolution
             this.generationTicks = generationTicks;
             dateTimeStarted = DateTime.Now;
             this.rnd = rnd ?? new Random();
-            map = new MapGeneration.Map(this.rnd, width, height, chanceToPosFood, minFood, maxFood);
+            map = new MapGeneration.Map(this.rnd, width, height, chanceToPosFoodLand, chanceToPosFoodMountain, chanceToPosFoodSea, minFood, maxFood);
             this.species = species;
             tickThread = new Thread(Tick);
             tickThread.Name = "Simulation Tick Thread";
@@ -124,7 +124,18 @@ namespace Evolution.Evolution
                     // Add new food to tiles
                     for (int i = 0; i < map.map.GetLength(0); i++)
                         for (int j = 0; j < map.map.GetLength(1); j++)
-                            map.map[i, j].food = rnd.Next(101) <= map.chanceToPosFood ? rnd.Next(map.minFood, map.maxFood) : 0;
+                        {
+                            //map.map[i, j].food = rnd.Next(101) <= map.chanceToPosFood ? rnd.Next(map.minFood, map.maxFood) : 0;
+                            int tile = map.map[i, j].level;
+                            int food = 0;
+                            if (tile < Simulation.minSea) // Sea
+                                food = rnd.Next(101) < map.chanceToPosFoodSea ? rnd.Next(map.minFood, map.maxFood + 1) : 0;
+                            else if (tile >= Simulation.minMountain) // Mountain
+                                food = rnd.Next(101) < map.chanceToPosFoodMountain ? rnd.Next(map.minFood, map.maxFood + 1) : 0;
+                            else // Land
+                                food = rnd.Next(101) < map.chanceToPosFoodLand ? rnd.Next(map.minFood, map.maxFood + 1) : 0;
+                            map.map[i, j].food = food;
+                        }
 
                     // Save image of end of previous generation
                     Bitmap b = new Bitmap(savedImageWidth, savedImageHeight);

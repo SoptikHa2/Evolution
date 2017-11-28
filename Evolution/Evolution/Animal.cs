@@ -97,7 +97,7 @@ namespace Evolution.Evolution
             List<Node> toReplace = new List<Node>();
             for (int i = 0; i < allNodes.Count; i++)
             {
-                if (rnd.Next(101) <= mutationChance)
+                if (rnd.Next(101) < mutationChance)
                     toReplace.Add(allNodes[i]);
             }
 
